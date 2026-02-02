@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>client</title>
+</head>
+
+<body>
+  <div id="root" style="padding: 20px; font-family: sans-serif; color: #555;">
+    Loading Application... <br><br>
+    <span id="status">Initializing...</span>
+    <div id="error-log"
+      style="color: red; margin-top: 20px; font-family: monospace; font-size: 12px; background: #ffeeee; padding: 10px; border: 1px solid red; display:none;">
+    </div>
+  </div>
+  <script>
+    // GLOBAL ERROR HANDLER
+    function logError(msg) {
+      const el = document.getElementById('error-log');
+      el.style.display = 'block';
+      el.innerHTML += `<div>${msg}</div>`;
+    }
+    window.onerror = function (message, source, lineno, colno, error) {
+      logError(`<strong>RUNTIME ERROR:</strong> ${message}<br>at ${source}:${lineno}`);
+    };
+    window.addEventListener('unhandledrejection', function (event) {
+      logError(`<strong>PROMISE REJECTION:</strong> ${event.reason}`);
+    });
+
+    document.getElementById('status').innerText = "HTML Loaded. Fetching JS...";
+    fetch('/src/main.jsx').then(() => {
+      document.getElementById('status').innerText = "JS File Found. Waiting for React...";
+    }).catch(err => {
+      document.getElementById('status').innerHTML = "<strong style='color:red'>ERROR: Cannot load JS files. FIREWALL BLOCKING.</strong><br>Details: " + err.message;
+    });
+
+    setTimeout(() => {
+      if (document.getElementById('root').innerText.includes("Waiting for React")) {
+        document.getElementById('status').innerHTML += "<br><strong style='color:orange'>WARNING: JS Loaded but React not starting. Check Error Log below.</strong>";
+      }
+    }, 5000);
+  </script>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>

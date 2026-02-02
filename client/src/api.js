@@ -3,6 +3,9 @@ import axios from 'axios';
 // 1. Check for Environment Variable (Set in .env.production for Android/Cloud)
 // 2. Fallback to Localhost:3000 if on Dev Port 5173
 // 3. Fallback to Relative/Origin if served from same domain
+// 1. Check for Environment Variable (Set in .env.production for Android/Cloud)
+// 2. Fallback to Localhost:3000 if on Dev Port 5173
+// 3. Fallback to Relative/Origin if served from same domain
 let STATIC_BASE_URL = '';
 
 if (import.meta.env.VITE_API_BASE_URL) {

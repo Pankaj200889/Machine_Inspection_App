@@ -40,11 +40,12 @@ router.post('/register', async (req, res) => {
 
 // Login User
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body; // Client still sends 'email' key, but we treat it as identifier
 
-    const sql = `SELECT * FROM users WHERE email = ?`;
+    // Allow login by Email OR Username
+    const sql = `SELECT * FROM users WHERE email = ? OR username = ?`;
     try {
-        const result = await db.query(sql, [email]);
+        const result = await db.query(sql, [email, email]);
         const user = result.rows[0];
 
         if (!user) return res.status(400).json({ error: 'Invalid credentials' });

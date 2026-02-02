@@ -8,11 +8,33 @@ import {
 } from 'recharts';
 import {
     Activity, ClipboardList, Download, Settings, Building,
-    LogOut, User, ChevronDown
+    LogOut, User, ChevronDown, X
 } from 'lucide-react';
 import api, { STATIC_BASE_URL } from '../api';
 
 const socket = io(STATIC_BASE_URL);
+
+// --- Optimized Components (Defined Outside) ---
+const GlassCard = React.memo(({ children, className = "" }) => (
+    <div className={`relative bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-6 transform-gpu transition-all duration-300 ${className}`}>
+        {children}
+    </div>
+));
+
+const NavItem = React.memo(({ name, onClick, active, hasGap }) => (
+    <button
+        onClick={onClick}
+        className={`
+            px-5 py-2 text-sm font-bold rounded-full transition-all duration-300 whitespace-nowrap active:scale-95
+            ${active
+                ? 'bg-blue-600/10 text-blue-700 shadow-inner'
+                : 'text-gray-500 hover:text-gray-900 hover:bg-white/50'}
+            ${hasGap ? 'mr-12' : ''}
+        `}
+    >
+        {name}
+    </button>
+));
 
 const Home = () => {
     const { user, logout } = useAuth();
@@ -190,31 +212,8 @@ const Home = () => {
         }
     };
 
-    // --- Glassy UI Components ---
-
-    const GlassCard = ({ children, className = "" }) => (
-        <div className={`relative bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-6 ${className}`}>
-            {children}
-        </div>
-    );
-
-    const NavItem = ({ name, onClick, active, hasGap }) => (
-        <button
-            onClick={onClick}
-            className={`
-                px-5 py-2 text-sm font-bold rounded-full transition-all duration-300
-                ${active
-                    ? 'bg-blue-600/10 text-blue-700 shadow-inner'
-                    : 'text-gray-500 hover:text-gray-900 hover:bg-white/50'}
-                ${hasGap ? 'mr-12' : ''}
-            `}
-        >
-            {name}
-        </button>
-    );
-
     return (
-        <div className="min-h-screen bg-[#F0F2F5] font-sans selection:bg-blue-100 overflow-x-hidden relative">
+        <div className="min-h-screen bg-[#F0F2F5] font-sans selection:bg-blue-100 overflow-x-hidden relative pb-24 safe-area-inset-bottom">
 
             {/* Background Gradients for Glass Effect */}
             <div className="fixed inset-0 pointer-events-none z-0">
@@ -222,6 +221,30 @@ const Home = () => {
                 <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-200/40 rounded-full blur-[120px] mix-blend-multiply opacity-70 animate-blob animation-delay-2000"></div>
                 <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] bg-pink-200/40 rounded-full blur-[120px] mix-blend-multiply opacity-70 animate-blob animation-delay-4000"></div>
             </div>
+
+            {/* Report Options Modal */}
+            {isExportOpen && (
+                <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in">
+                    <div className="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-sm p-6 space-y-4 animate-in slide-in-from-bottom shadow-2xl">
+                        <div className="flex justify-between items-center mb-2">
+                            <h3 className="text-xl font-black text-gray-800">Export Reports</h3>
+                            <button onClick={() => setIsExportOpen(false)} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"><X className="w-5 h-5" /></button>
+                        </div>
+                        <p className="text-gray-500 text-sm mb-4">Select a dataset to download as CSV.</p>
+
+                        <button onClick={() => downloadCSV('machines')} className="w-full flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-2xl transition-all font-bold">
+                            <span>Machine List</span>
+                            <Download className="w-5 h-5" />
+                        </button>
+                        <button onClick={() => downloadCSV('checklists')} className="w-full flex items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-2xl transition-all font-bold">
+                            <span>Checklist Data</span>
+                            <Download className="w-5 h-5" />
+                        </button>
+
+                        <button onClick={() => setIsExportOpen(false)} className="mt-4 w-full py-3 bg-white border border-gray-200 text-gray-500 rounded-xl font-bold hover:bg-gray-50">Cancel</button>
+                    </div>
+                </div>
+            )}
 
             {/* Edit Modal */}
             {editingChecklist && (
@@ -253,46 +276,52 @@ const Home = () => {
             )}
 
             {/* Navbar */}
-            <div className="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-sm transition-all saturate-150">
-                <div className="max-w-[1600px] mx-auto px-6 h-20 flex items-center justify-between">
-                    {/* Brand */}
-                    <Link to="/organization" className="flex items-center gap-6 group cursor-pointer">
-                        {orgProfile?.logo_url ? (
-                            <img src={orgProfile.logo_url.startsWith('http') ? orgProfile.logo_url : `${STATIC_BASE_URL}/${orgProfile.logo_url}`} alt="Siddhi Logo" className="h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform" />
-                        ) : (
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                                <Building className="w-5 h-5" />
-                            </div>
-                        )}
-                        {/* Fallback text if needed, or remove if logo contains text. Logo seems to have text 'SIDDHI', so maybe hide text? Keeping for now but styling elegantly. */}
-                        <div className="hidden lg:block ml-0.5">
-                            <h1 className="text-xl font-extrabold text-gray-900 tracking-tight leading-none">
-                                {orgProfile?.company_name || 'MachineCheck'}
-                            </h1>
-                        </div>
-                    </Link>
+            <div className="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-sm transition-all saturate-150 pt-[env(safe-area-inset-top)]">
+                <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-2 md:h-20 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0">
 
-                    {/* Navigation Pills */}
-                    <div className="hidden md:flex items-center gap-2 bg-gray-100/50 p-1.5 rounded-full border border-gray-200/50 shadow-inner">
-                        <NavItem name="Summary" active={activeTab === 'Home'} onClick={() => setActiveTab('Home')} />
-                        {user?.role === 'admin' && <NavItem name="Analytics" active={activeTab === 'Analytics'} onClick={() => setActiveTab('Analytics')} />}
-                        {user?.role === 'admin' && <NavItem name="Machines" active={false} onClick={() => navigate('/machines')} />}
-                        {user?.role === 'admin' && (
-                            <div className="relative" ref={reportsRef}>
-                                <button onClick={() => setIsExportOpen(!isExportOpen)} className={`px-5 py-2 text-sm font-bold rounded-full transition-all ${isExportOpen ? 'bg-gray-200 text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>Reports <ChevronDown className="w-3 h-3 inline ml-1" /></button>
-                                {isExportOpen && (
-                                    <div className="absolute top-12 left-0 w-48 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/50 rounded-2xl p-2 z-50 animate-in fade-in zoom-in-95">
-                                        <button onClick={() => downloadCSV('machines')} className="block w-full text-left px-4 py-3 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-colors">All Machines</button>
-                                        <button onClick={() => downloadCSV('checklists')} className="block w-full text-left px-4 py-3 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-colors">All Checklists</button>
-                                    </div>
-                                )}
+                    {/* Top Row: Brand & Profile */}
+                    <div className="flex items-center justify-between w-full md:w-auto">
+                        {/* Brand */}
+                        <Link to="/organization" className="flex items-center gap-3 group cursor-pointer">
+                            {orgProfile?.logo_url ? (
+                                <img src={orgProfile.logo_url.startsWith('http') ? orgProfile.logo_url : `${STATIC_BASE_URL}/${orgProfile.logo_url}`} alt="Siddhi Logo" className="h-10 md:h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform" />
+                            ) : (
+                                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
+                                    <Building className="w-5 h-5" />
+                                </div>
+                            )}
+                            <div className="ml-0.5">
+                                <h1 className="text-lg md:text-xl font-extrabold text-gray-900 tracking-tight leading-none block">
+                                    {orgProfile?.company_name || 'Machine Inspection App'}
+                                </h1>
                             </div>
-                        )}
-                        <NavItem name="Scan QR" active={false} onClick={() => navigate('/scanner')} />
+                        </Link>
+
+                        {/* Mobile Profile (Visible on right) */}
+                        <div className="flex md:hidden items-center gap-3">
+                            <button onClick={logout} className="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500">
+                                <LogOut className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
-                    {/* User Profile */}
-                    <div className="flex items-center gap-4 pl-8 border-l border-gray-200/50">
-                        <div className="text-right hidden sm:block">
+
+                    {/* Navigation Pills (Scrollable Row) */}
+                    <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+                        <div className="flex items-center gap-2 bg-gray-100/50 p-1 rounded-xl md:rounded-full border border-gray-200/50 shadow-inner min-w-max">
+                            <NavItem name="Summary" active={activeTab === 'Home'} onClick={() => setActiveTab('Home')} />
+                            {user?.role === 'admin' && <NavItem name="Analytics" active={activeTab === 'Analytics'} onClick={() => setActiveTab('Analytics')} />}
+                            {user?.role === 'admin' && <NavItem name="Machines" active={false} onClick={() => navigate('/machines')} />}
+                            {user?.role === 'admin' && (
+                                <button onClick={() => setIsExportOpen(true)} className="px-5 py-2 text-sm font-bold rounded-full transition-all whitespace-nowrap text-gray-500 hover:text-gray-900 hover:bg-white/50">Reports</button>
+
+                            )}
+                            <NavItem name="Scan QR" active={false} onClick={() => navigate('/scanner')} />
+                        </div>
+                    </div>
+
+                    {/* Desktop Profile */}
+                    <div className="hidden md:flex items-center gap-4 pl-8 border-l border-gray-200/50">
+                        <div className="text-right">
                             <div className="text-sm font-bold text-gray-800">{user?.username}</div>
                             <div className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">{user?.role || 'Operator'}</div>
                         </div>
@@ -316,30 +345,121 @@ const Home = () => {
                                 <p className="text-sm text-gray-500 font-medium">Real-time visual insights for the last 7 days.</p>
                             </div>
                             <div className="text-right">
-                                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold shadow-sm">
-                                    <span className="relative flex h-2 w-2">
+                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-green-200/50 shadow-lg shadow-green-500/10 backdrop-blur-md">
+                                    <span className="relative flex h-2.5 w-2.5">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500 shadow-sm"></span>
                                     </span>
-                                    System Online
-                                </span>
+                                    <span className="text-[10px] font-black text-green-700 uppercase tracking-widest leading-none pt-0.5">Live</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8">
 
-                            {/* Left Column: Charts */}
-                            <div className="lg:col-span-8 space-y-8">
+                            {/* RIGHT COLUMN (KPIs): Mobile Priority (First) */}
+                            <div className="lg:col-span-4 space-y-8 order-1 lg:order-2">
+                                {/* Hero KPI */}
+                                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-[2.5rem] shadow-2xl shadow-blue-900/20 text-white relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-700"></div>
+                                    <h3 className="text-blue-100 text-xs font-bold uppercase tracking-widest mb-2 relative z-10">Total OK Production</h3>
+                                    <div className="text-5xl font-black tracking-tight mb-4 relative z-10">{kpi.total_ok.toLocaleString()}</div>
+
+                                    <div className="grid grid-cols-2 gap-4 relative z-10">
+                                        <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
+                                            <div className="text-xs text-blue-200 mb-1">Target</div>
+                                            <div className="font-bold tracking-tight">{kpi.total_plan.toLocaleString()}</div>
+                                        </div>
+                                        <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
+                                            <div className="text-xs text-blue-200 mb-1">Achieved</div>
+                                            <div className="font-bold tracking-tight">{(kpi.total_plan > 0 ? (kpi.total_ok / kpi.total_plan * 100).toFixed(0) : 0)}%</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Secondary KPIs */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <GlassCard className="p-5 flex flex-col items-center justify-center text-center !rounded-2xl hover:scale-[1.02] transition-transform shadow-lg shadow-gray-200/50">
+                                        <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center mb-2">
+                                            <Activity className="w-5 h-5" />
+                                        </div>
+                                        <div className="text-2xl font-black text-gray-800 tracking-tight">{kpi.total_ng}</div>
+                                        <div className="text-xs font-bold text-gray-400 uppercase tracking-wide">Total NG</div>
+                                    </GlassCard>
+                                    <GlassCard className="p-5 flex flex-col items-center justify-center text-center !rounded-2xl hover:scale-[1.02] transition-transform shadow-lg shadow-gray-200/50">
+                                        <div className="w-10 h-10 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mb-2">
+                                            <Settings className="w-5 h-5" />
+                                        </div>
+                                        <div className="text-2xl font-black text-gray-800 tracking-tight">{kpi.avg_bekido}%</div>
+                                        <div className="text-xs font-bold text-gray-400 uppercase tracking-wide">Avg Yield</div>
+                                    </GlassCard>
+                                </div>
+
+                                {/* Live Feed */}
+                                <GlassCard className="h-[460px] flex flex-col !p-0 overflow-hidden shadow-xl shadow-gray-200/60">
+                                    <div className="p-6 border-b border-gray-100 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+                                        <h3 className="font-bold text-gray-800 tracking-tight">Recent Activity</h3>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto p-2 custom-scrollbar space-y-2">
+                                        {recentChecks.map((check) => (
+                                            <div key={check.id} className="p-3 mx-2 rounded-xl hover:bg-blue-50/50 transition flex items-center gap-3 group">
+                                                <div className="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden shadow-sm shrink-0 border border-gray-200 group-hover:border-blue-200 transition-colors">
+                                                    {check.image_path ? (
+                                                        <img src={`${STATIC_BASE_URL}/${check.image_path}`} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center text-gray-300"><Activity className="w-5 h-5" /></div>
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex justify-between items-center mb-1">
+                                                        <span className="font-bold text-sm text-gray-800 group-hover:text-blue-700 transition-colors">{check.machine_no}</span>
+                                                        <div className="flex items-center gap-2">
+                                                            {check.edit_count > 0 && <span className="text-[10px] font-bold text-amber-500 bg-amber-50 px-1.5 rounded border border-amber-100">Edited ({check.edit_count}/3)</span>}
+                                                            <span className="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{new Date(check.submitted_at).toLocaleString(undefined, { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-xs text-gray-500 flex items-center gap-2">
+                                                        <span className="font-medium bg-gray-100 px-1.5 rounded">Shift {check.shift}</span>
+                                                        <span>•</span>
+                                                        <span className="text-green-600 font-bold">OK: {check.ok_quantity}</span>
+                                                        <span className="text-red-500 font-bold">NG: {check.ng_quantity}</span>
+                                                    </div>
+                                                </div>
+                                                {user?.role === 'admin' && (check.edit_count || 0) < 3 && (
+                                                    <button onClick={() => handleEditClick(check)} className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Edit Record">
+                                                        <ClipboardList className="w-4 h-4" />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </GlassCard>
+                            </div>
+
+
+                            {/* LEFT COLUMN (Charts): Moved for Desktop (Second Dom element -> order-1 on Desktop puts it left) */}
+                            {/* Wait, standard flow is:
+                                Mobile (Stack): Element 1 (Top), Element 2 (Bottom).
+                                Desktop (Grid): Element 1 (Col-4), Element 2 (Col-8).
+                                If I want Charts on Left (Desk) and Bottom (Mobile):
+                                Charts should be SECOND in DOM if using default block flow... but wait.
+                                Grid:
+                                    Col 1 (KPIs - First in DOM) -> lg:col-start-9 lg:col-span-4 (Right)
+                                    Col 2 (Charts - Second in DOM) -> lg:col-start-1 lg:col-span-8 (Left)
+                                This way KPIs are naturally first on mobile.
+                            */}
+
+                            <div className="lg:col-span-8 space-y-8 order-2 lg:order-1"> {/* order-2 on mobile (after KPIs) */}
 
                                 {/* Production Trend */}
-                                <GlassCard className="h-[340px]">
+                                <GlassCard className="h-[340px] shadow-xl shadow-blue-900/5">
                                     <div className="flex justify-between items-start mb-6">
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-800">Total Output</h3>
+                                            <h3 className="text-lg font-bold text-gray-800 tracking-tight">Total Output</h3>
                                             <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Daily Volume Trend</p>
                                         </div>
                                         <div className="text-right">
-                                            <div className="text-3xl font-black text-gray-900">{trendData.reduce((acc, c) => acc + c.Total, 0).toLocaleString()}</div>
+                                            <div className="text-3xl font-black text-gray-900 tracking-tight">{trendData.reduce((acc, c) => acc + c.Total, 0).toLocaleString()}</div>
                                             <div className="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-lg inline-block mt-1">+12.5% vs Last Week</div>
                                         </div>
                                     </div>
@@ -353,7 +473,7 @@ const Home = () => {
                                                     </linearGradient>
                                                 </defs>
                                                 <Tooltip
-                                                    contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(8px)', border: 'none', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+                                                    contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)', border: 'none', borderRadius: '16px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)', padding: '12px' }}
                                                     itemStyle={{ color: '#1F2937', fontWeight: 'bold' }}
                                                 />
                                                 <Area type="monotone" dataKey="Total" stroke="#3B82F6" strokeWidth={4} fill="url(#colorTotalGlass)" animationDuration={1000} />
@@ -364,8 +484,8 @@ const Home = () => {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     {/* Efficiency Donut */}
-                                    <GlassCard className="flex flex-col items-center justify-center relative min-h-[300px]">
-                                        <h3 className="absolute top-6 left-6 text-lg font-bold text-gray-800">Efficiency Breakdown</h3>
+                                    <GlassCard className="flex flex-col items-center justify-center relative min-h-[300px] shadow-lg shadow-gray-200/50">
+                                        <h3 className="absolute top-6 left-6 text-lg font-bold text-gray-800 tracking-tight">Efficiency Breakdown</h3>
                                         <div className="w-[200px] h-[200px] relative z-10">
                                             <ResponsiveContainer width="100%" height="100%">
                                                 <PieChart>
@@ -381,16 +501,21 @@ const Home = () => {
                                                 </PieChart>
                                             </ResponsiveContainer>
                                             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                                <span className="text-4xl font-black text-gray-800">{kpi.avg_bekido}%</span>
+                                                <span className="text-4xl font-black text-gray-800 tracking-tighter">{kpi.avg_bekido}%</span>
                                                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">YIELD PASS</span>
                                             </div>
+                                        </div>
+                                        <div className="flex gap-4 mt-6">
+                                            <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-emerald-500"></div><span className="text-xs font-bold text-gray-500">OK</span></div>
+                                            <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-red-500"></div><span className="text-xs font-bold text-gray-500">NG</span></div>
+                                            <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-amber-500"></div><span className="text-xs font-bold text-gray-500">LOSS</span></div>
                                         </div>
                                     </GlassCard>
 
                                     {/* Machine List */}
-                                    <GlassCard className="flex flex-col max-h-[340px] overflow-hidden">
+                                    <GlassCard className="flex flex-col max-h-[340px] overflow-hidden shadow-lg shadow-gray-200/50">
                                         <div className="sticky top-0 bg-white/80 backdrop-blur-sm z-10 pb-4 border-b border-gray-50">
-                                            <h3 className="text-lg font-bold text-gray-800">Top Performers</h3>
+                                            <h3 className="text-lg font-bold text-gray-800 tracking-tight">Top Performers</h3>
                                         </div>
                                         <div className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar pt-4">
                                             {efficiencyData.slice(0, 5).map((m, idx) => {
@@ -417,84 +542,6 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            {/* Right Column: KPIs & Feed */}
-                            <div className="lg:col-span-4 space-y-8">
-                                {/* Hero KPI */}
-                                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-[2.5rem] shadow-2xl shadow-blue-900/20 text-white relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-700"></div>
-                                    <h3 className="text-blue-100 text-xs font-bold uppercase tracking-widest mb-2 relative z-10">Total OK Production</h3>
-                                    <div className="text-5xl font-black tracking-tight mb-4 relative z-10">{kpi.total_ok.toLocaleString()}</div>
-
-                                    <div className="grid grid-cols-2 gap-4 relative z-10">
-                                        <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
-                                            <div className="text-xs text-blue-200 mb-1">Target</div>
-                                            <div className="font-bold">{kpi.total_plan.toLocaleString()}</div>
-                                        </div>
-                                        <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
-                                            <div className="text-xs text-blue-200 mb-1">Achieved</div>
-                                            <div className="font-bold">{(kpi.total_plan > 0 ? (kpi.total_ok / kpi.total_plan * 100).toFixed(0) : 0)}%</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Secondary KPIs */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    <GlassCard className="p-5 flex flex-col items-center justify-center text-center !rounded-2xl hover:scale-[1.02] transition-transform">
-                                        <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center mb-2">
-                                            <Activity className="w-5 h-5" />
-                                        </div>
-                                        <div className="text-2xl font-black text-gray-800">{kpi.total_ng}</div>
-                                        <div className="text-xs font-bold text-gray-400 uppercase tracking-wide">Total NG</div>
-                                    </GlassCard>
-                                    <GlassCard className="p-5 flex flex-col items-center justify-center text-center !rounded-2xl hover:scale-[1.02] transition-transform">
-                                        <div className="w-10 h-10 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mb-2">
-                                            <Settings className="w-5 h-5" />
-                                        </div>
-                                        <div className="text-2xl font-black text-gray-800">{kpi.avg_bekido}%</div>
-                                        <div className="text-xs font-bold text-gray-400 uppercase tracking-wide">Avg Yield</div>
-                                    </GlassCard>
-                                </div>
-
-                                {/* Live Feed */}
-                                <GlassCard className="h-[460px] flex flex-col !p-0 overflow-hidden">
-                                    <div className="p-6 border-b border-gray-100 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
-                                        <h3 className="font-bold text-gray-800">Recent Activity</h3>
-                                    </div>
-                                    <div className="flex-1 overflow-y-auto p-2 custom-scrollbar space-y-2">
-                                        {recentChecks.map((check) => (
-                                            <div key={check.id} className="p-3 mx-2 rounded-xl hover:bg-blue-50/50 transition flex items-center gap-3 group">
-                                                <div className="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden shadow-sm shrink-0 border border-gray-200 group-hover:border-blue-200 transition-colors">
-                                                    {check.image_path ? (
-                                                        <img src={`${STATIC_BASE_URL}/${check.image_path}`} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-gray-300"><Activity className="w-5 h-5" /></div>
-                                                    )}
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex justify-between items-center mb-1">
-                                                        <span className="font-bold text-sm text-gray-800 group-hover:text-blue-700 transition-colors">{check.machine_no}</span>
-                                                        <div className="flex items-center gap-2">
-                                                            {check.edit_count > 0 && <span className="text-[10px] font-bold text-amber-500 bg-amber-50 px-1.5 rounded border border-amber-100">Edited ({check.edit_count}/3)</span>}
-                                                            <span className="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{new Date(check.submitted_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-xs text-gray-500 flex items-center gap-2">
-                                                        <span className="font-medium bg-gray-100 px-1.5 rounded">Shift {check.shift}</span>
-                                                        <span>•</span>
-                                                        <span className="text-green-600 font-bold">OK: {check.ok_quantity}</span>
-                                                        <span className="text-red-500 font-bold">NG: {check.ng_quantity}</span>
-                                                    </div>
-                                                </div>
-                                                {user?.role === 'admin' && (check.edit_count || 0) < 3 && (
-                                                    <button onClick={() => handleEditClick(check)} className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Edit Record">
-                                                        <ClipboardList className="w-4 h-4" />
-                                                    </button>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </GlassCard>
-                            </div>
                         </div>
                     </div>
                 )}
@@ -504,10 +551,10 @@ const Home = () => {
                     <div className="space-y-8 animate-in slide-in-from-bottom-8 duration-700">
                         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                             <div>
-                                <h2 className="text-4xl font-black text-gray-800 mb-1">Deep Dive Analytics</h2>
+                                <h2 className="text-4xl font-black text-gray-800 mb-1 tracking-tight">Deep Dive Analytics</h2>
                                 <p className="text-sm text-gray-500 font-medium">Advanced operational metrics and shift analysis.</p>
                             </div>
-                            <button onClick={() => downloadCSV('checklists')} className="px-6 py-3 bg-gray-900 text-white rounded-2xl font-bold shadow-lg shadow-gray-900/20 hover:scale-105 transition-transform flex items-center gap-2">
+                            <button onClick={() => downloadCSV('checklists')} className="px-6 py-3 bg-gray-900 text-white rounded-2xl font-bold shadow-lg shadow-gray-900/20 active:scale-95 transition-transform flex items-center gap-2">
                                 <Download className="w-5 h-5" /> Generate Weekly Report
                             </button>
                         </div>
@@ -517,16 +564,16 @@ const Home = () => {
                             {[
                                 { label: 'Overall Yield', val: `${kpi.avg_bekido}%`, sub: '+2.4%', color: 'text-gray-800', bar: 'bg-blue-500' },
                                 { label: 'Quality Rate', val: `${((kpi.total_ok / (kpi.total_actual || 1)) * 100).toFixed(1)}%`, sub: '-0.5%', color: 'text-gray-800', bar: 'bg-emerald-500' },
-                                { label: 'Defect Rate', val: `${((kpi.total_ng / (kpi.total_actual || 1)) * 100).toFixed(2)}%`, sub: 'Stable', color: 'text-gray-800', bar: 'bg-red-500' },
+                                { label: 'Rejection Rate', val: `${((kpi.total_ng / (kpi.total_actual || 1)) * 100).toFixed(2)}%`, sub: 'Stable', color: 'text-gray-800', bar: 'bg-red-500' },
                                 { label: 'Utilisation', val: kpi.total_plan > 0 ? `${((kpi.total_actual / kpi.total_plan) * 100).toFixed(1)}%` : '0%', sub: 'High', color: 'text-gray-800', bar: 'bg-purple-500' }
                             ].map((s, i) => (
-                                <GlassCard key={i} className="!p-5 flex flex-col justify-between h-32 group hover:-translate-y-1 transition-transform">
+                                <GlassCard key={i} className="!p-5 flex flex-col justify-between h-32 group hover:-translate-y-1 transition-transform shadow-lg shadow-gray-200/50">
                                     <div className="flex justify-between items-start">
                                         <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{s.label}</span>
                                         <div className={`w-2 h-2 rounded-full ${s.bar}`}></div>
                                     </div>
                                     <div>
-                                        <div className={`text-3xl font-black ${s.color}`}>{s.val}</div>
+                                        <div className={`text-3xl font-black ${s.color} tracking-tight`}>{s.val}</div>
                                         <div className="text-xs font-bold text-gray-400 mt-1">{s.sub} vs Target</div>
                                     </div>
                                     <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
@@ -538,8 +585,8 @@ const Home = () => {
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             {/* Shift Radar */}
-                            <GlassCard className="flex flex-col items-center min-h-[400px]">
-                                <h3 className="text-lg font-bold text-gray-800 self-start mb-4">Shift Performance Matrix</h3>
+                            <GlassCard className="flex flex-col items-center min-h-[400px] shadow-lg shadow-gray-200/50">
+                                <h3 className="text-lg font-bold text-gray-800 self-start mb-4 tracking-tight">Shift Performance Matrix</h3>
                                 <div className="w-full flex-1">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <RadarChart cx="50%" cy="50%" outerRadius="70%" data={shiftRadarData}>
@@ -620,13 +667,13 @@ const Home = () => {
                             <p className="text-gray-500 mb-10">Select an action to get started.</p>
 
                             <div className="flex flex-col sm:flex-row justify-center gap-6">
-                                <button onClick={() => navigate('/scanner')} className="group relative px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-600/30 hover:scale-105 transition-all overflow-hidden">
+                                <button onClick={() => navigate('/scanner')} className="group relative px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-600/30 active:scale-95 transition-all overflow-hidden">
                                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
                                     <div className="relative flex items-center justify-center gap-3">
                                         <ClipboardList className="w-6 h-6" /> Start New Scan
                                     </div>
                                 </button>
-                                <button onClick={() => navigate('/history')} className="px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl font-bold hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center justify-center gap-3">
+                                <button onClick={() => navigate('/history')} className="px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl font-bold hover:bg-gray-50 hover:border-gray-300 active:scale-95 transition-all flex items-center justify-center gap-3">
                                     <Activity className="w-6 h-6" /> View History
                                 </button>
                             </div>

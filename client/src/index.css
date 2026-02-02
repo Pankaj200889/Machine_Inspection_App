@@ -3,4 +3,32 @@
 body {
   background-color: #f3f4f6;
   color: #1f2937;
+  /* Ensure scrolling works on mobile webview */
+  min-height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Performance Hacks */
+  -webkit-tap-highlight-color: transparent;
+  /* Remove grey tap box */
+  touch-action: manipulation;
+  /* Improve click delay */
+}
+
+/* Force GPU Layer for Glass Elements */
+.glass-panel {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }

@@ -1,0 +1,72 @@
+# Task Checklist
+
+- [x] **Project Setup & Environment**
+    - [x] Install Node.js & npm (Verified v18+)
+    - [x] Initialize Git Repository
+    - [x] Configure Tailwind CSS
+    - [x] Set up Project Structure (Client/Server Monorepo)
+
+- [x] **Core Features (MVP)**
+    - [x] Database Schema (Users, Machines, Checklists)
+    - [x] Authentication (JWT, Register/Login)
+    - [x] Machine Management (CRUD)
+    - [x] QR Code Generation
+    - [x] Checklist Submission (Mobile-First)
+    - [x] Dashboard (Real-time Stats)
+    - [x] Image Capture & Upload (Camera Access)
+
+- [x] **V1.0 Polish & Deployment**
+    - [x] Verify `client/vite.config.js` has `host: true`
+    - [x] Verify `server/server.js` listens on correct port
+    - [ ] Notify user about how to access the app
+    - [x] Implement Audit Logging (Max 3 edits, track user/time)
+    - [x] Fix Logo (Use uploaded asset)
+    - [x] Restore "Remove Logo" functionality
+    - [x] Refine Heatmap (Grid + Color Scale)
+    - [x] Sticky Headers (Recent Activity & Machine List)
+    - [/] **Cloud Architecture**: Transitioning from Local to Cloud
+        - [x] Migrate `database.js` to PostgreSQL (Code Ready)
+        - [x] Refactor Routes for Postgres Syntax ($1 vs ?)
+        - [x] **Deploy**: Push to GitHub & Connect to Railway
+        - [x] **Config**: Point App to `machineinspectionapp-production.up.railway.app`
+        - [x] **Data**: Seed Cloud Database (Admin User)
+    - [/] **Security**: Implement Free Trial Logic (Backend)
+        - [x] [URGENT] Fix "Error saving machine" (Trial Limit Issue)
+        - [x] Secure "Forgot Password" Flow (Mock Impl) <!-- id: 4 -->
+        - [x] Enforce Strong Passwords Enforcement + UI Hint
+        - [x] **Auth**: Restrict Login to "Email Only" (UX Update)
+        - [x] **Mobile**: Add "Exit App" Functionality (Capacitor)
+        - [ ] **Doc**: Security Whitepaper (Enterprise Trust)
+    - [x] [URGENT] Fix Mobile "Exit App" Button (Syntax Error in Home.jsx)
+    - [x] Automate APK Build (GitHub Actions) <!-- id: 6 -->
+        - [x] Debug CI Failure (CRLF/Node/JDK)
+        - [x] [URGENT] Fix APK Connection (Inject Prod URL in CI)
+    - [x] **Responsiveness & Mobile UX** (Verified via Code Review)
+        - [x] Verify "Cards" View for Machines (Mobile)
+        - [x] Align Charts for Mobile Suitability
+    - [x] **Security Whitepaper** (Done)
+        - [x] Draft "Enterprise Trust" Document
+    - [x] **Bug Fixes - Round 2** (Current Focus)
+        - [x] **Mobile**: Fix "Retaken Photo" Upload Fail (Added 'uploads' dir check)
+        - [x] **Admin**: Fix "Weekly Report" Generation Fail (Updated Headers/SQL)
+        - [x] **Admin**: Fix "Export Reports" Fail (Updated Headers/SQL)
+        - [x] **System**: Fix "Server Crash" (Syntax Error)
+        - [x] **System**: Fix "Photo Display" (Relative Path Fix)
+    - [/] **Feature Requests - Round 1** (Completed)
+        - [x] **Schema**: Add `remarks` and `approval_proof_path`
+        - [x] **Admin**: Enhance Edit Modal (View-First, Photo Upload, Proofs)
+        - [x] **System**: Fix Image Path Storage (Relative vs Absolute)
+        - [x] **Operator**: View Details Modal (Read-Only)
+        - [x] **Operator**: Add Remarks during Submission
+
+    - [x] **Bug Fixes - Final Round** (Completed)
+        - [x] **Logo**: Fix Path Storage & Admin Crash
+        - [x] **Retake Photo**: User ID Type Mismatch Fix
+        - [x] **Stability**: Export Limits (5000 rows)
+        - [x] **Stability**: Socket Debouncing (2s)
+        - [x] **Docs**: STABILITY.md Created
+
+- [x] **V1.0 Maintenance & Docs** (Completed)
+    - [x] Update Guides (Include Automation)
+    - [x] Finalize "How to Access" Guide
+    - [x] Scalability Plan (500k Users) <!-- id: 45 -->

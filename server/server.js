@@ -16,6 +16,14 @@ const io = new Server(server, {
 
 app.use(cors());
 app.use(express.json());
+const fs = require('fs');
+
+// Ensure Uploads Directory Exists
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
 app.use('/uploads', express.static('uploads'));
 
 // Routes (Imports)

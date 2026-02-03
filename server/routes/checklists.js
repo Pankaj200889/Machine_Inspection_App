@@ -8,8 +8,17 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
 
 // Multer Setup for Images
+const fs = require('fs');
+
+// Multer Setup
 const storage = multer.diskStorage({
-    destination: path.join(__dirname, '../uploads/'),
+    destination: function (req, file, cb) {
+        const uploadPath = path.join(__dirname, '../uploads/');
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+        }
+        cb(null, uploadPath);
+    },
     filename: function (req, file, cb) {
         cb(null, 'check-' + Date.now() + path.extname(file.originalname));
     }

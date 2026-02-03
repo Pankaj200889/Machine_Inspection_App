@@ -97,7 +97,7 @@ const SubmissionHistory = () => {
             fetchHistory();
         } catch (err) {
             console.error("Upload failed", err);
-            alert("Failed to upload photo.");
+            alert(`Failed to upload photo: ${err.response?.data?.error || err.message}`);
         } finally {
             setUploading(false);
         }

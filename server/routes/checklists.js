@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
 
 // Multer Setup for Images
 const storage = multer.diskStorage({
-    destination: './uploads/',
+    destination: path.join(__dirname, '../uploads/'),
     filename: function (req, file, cb) {
         cb(null, 'check-' + Date.now() + path.extname(file.originalname));
     }

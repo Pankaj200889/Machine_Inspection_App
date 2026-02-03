@@ -177,7 +177,7 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
 
     // No Trial Expiry Check (Paid Entry Model)
 
-    const image_path = req.file ? req.file.path.replace(/\\/g, '/') : null;
+    const image_path = req.file ? 'uploads/' + req.file.filename : null;
     const user_id = req.user.id;
     const shift = getShift();
 
@@ -225,8 +225,8 @@ router.put('/:id', verifyUser, upload.fields([{ name: 'image', maxCount: 1 }, { 
     const checklistId = req.params.id;
 
     // File logic
-    const new_image_path = req.files && req.files['image'] ? req.files['image'][0].path.replace(/\\/g, '/') : null;
-    const new_proof_path = req.files && req.files['proof'] ? req.files['proof'][0].path.replace(/\\/g, '/') : null;
+    const new_image_path = req.files && req.files['image'] ? 'uploads/' + req.files['image'][0].filename : null;
+    const new_proof_path = req.files && req.files['proof'] ? 'uploads/' + req.files['proof'][0].filename : null;
 
     try {
         const cRes = await db.query("SELECT * FROM checklists WHERE id = ?", [checklistId]);

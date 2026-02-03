@@ -159,7 +159,7 @@ router.put('/:id/image', verifyUser, upload.single('image'), async (req, res) =>
         const row = checkResult.rows[0];
 
         if (!row) return res.status(404).json({ error: 'Checklist not found' });
-        if (row.user_id !== req.user.id && req.user.role !== 'admin') {
+        if (String(row.user_id) !== String(req.user.id) && req.user.role !== 'admin') {
             return res.status(403).json({ error: 'Unauthorized to edit this checklist' });
         }
 

@@ -46,16 +46,17 @@ router.get('/checklists', verifyAdmin, async (req, res) => {
                  c.shift, c.location, c.ok_quantity, c.ng_quantity, c.total_quantity, 
                  c.avg_ng_percent, c.bekido_percent, c.submitted_at, c.device_info 
                  FROM checklists c 
-                 JOIN machines m ON c.machine_id = m.id 
+                 LEFT JOIN machines m ON c.machine_id = m.id 
                  LEFT JOIN users u ON c.user_id = u.id 
                  ORDER BY c.submitted_at DESC`;
     try {
         const result = await db.query(sql);
         const csv = toCSV(result.rows);
-        res.header('Content-Type', 'text/csv');
-        res.attachment('checklists_export.csv');
-        res.send(csv);
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="checklists_export.csv"');
+        res.status(200).send(csv);
     } catch (err) {
+        console.error("Export Error:", err);
         res.status(500).json({ error: err.message });
     }
 });

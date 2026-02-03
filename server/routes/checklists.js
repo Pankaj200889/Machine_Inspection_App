@@ -151,23 +151,24 @@ router.get('/my-submissions', verifyUser, async (req, res) => {
 });
 
 // Update Checklist Image (Retake)
+router.put('/:id/image', verifyUser, upload.single('image'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
-if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+    try {
+        const checkResult = await db.query("SELECT user_id FROM checklists WHERE id = ?", [req.params.id]);
+        const row = checkResult.rows[0];
 
-try {
-    const checkResult = await db.query("SELECT user_id FROM checklists WHERE id = ?", [req.params.id]);
-    const row = checkResult.rows[0];
+        if (!row) return res.status(404).json({ error: 'Checklist not found' });
+        if (row.user_id !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'Unauthorized to edit this checklist' });
+        }
 
-    if (!row) return res.status(404).json({ error: 'Checklist not found' });
-    if (row.user_id !== req.user.id && req.user.role !== 'admin') {
-        return res.status(403).json({ error: 'Unauthorized to edit this checklist' });
+        const relativePath = 'uploads/' + req.file.filename;
+        await db.query(`UPDATE checklists SET image_path = ? WHERE id = ?`, [relativePath, req.params.id]);
+        res.json({ message: 'Image updated successfully', image_path: relativePath });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    await db.query(`UPDATE checklists SET image_path = ? WHERE id = ?`, [req.file.path.replace(/\\/g, '/'), req.params.id]);
-    res.json({ message: 'Image updated successfully', image_path: req.file.path });
-} catch (err) {
-    res.status(500).json({ error: err.message });
-}
 });
 
 // Submit Checklist

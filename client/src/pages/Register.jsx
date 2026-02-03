@@ -85,6 +85,9 @@ const Register = () => {
                                 required
                             />
                         </div>
+                        <p className="text-xs text-gray-500 mt-1 ml-1">
+                            Min 8 chars, 1 number, 1 special char (e.g., !@#$)
+                        </p>
                     </div>
 
                     <div>

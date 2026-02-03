@@ -14,6 +14,15 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
+    // START: Password Complexity Check
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({
+            error: 'Password must be at least 8 characters long and include at least one number and one special character.'
+        });
+    }
+    // END: Password Complexity Check
+
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
     const userRole = role === 'admin' ? 'admin' : 'operator';
@@ -21,17 +30,6 @@ router.post('/register', async (req, res) => {
     const sql = `INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)`;
     try {
         const result = await db.query(sql, [username, email, hash, userRole]);
-        // For Postgres, we might need 'RETURNING id' in the SQL if lastID isn't reliable across drivers,
-        // but our wrapper tries to handle it. For safety in PG, let's query the user back or trust the wrapper?
-        // Our wrapper handles lastID for SQLite. for PG it returns rows[0].id if RETURNING is used?
-        // Wait, my wrapper for PG does: `resolve({ ..., lastID: res.rows[0]?.id })`. 
-        // So I MUST add `RETURNING id` to the SQL for Postgres to return the ID.
-        // But SQLite doesn't support RETURNING (in older versions). 
-        // This is a "Unified" problem.
-        // Quick Fix: For this specific app, I'll rely on the username being unique and just return success, 
-        // or fetch it back if needed. 
-        // Actually, SQLite 3.35+ supports RETURNING. 
-        // Let's assume standard behavior: just return success.
         res.status(201).json({ message: 'User registered', username, role: userRole });
     } catch (err) {
         return res.status(400).json({ error: err.message });
@@ -40,7 +38,7 @@ router.post('/register', async (req, res) => {
 
 // Login User
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body; // Client still sends 'email' key, but we treat it as identifier
+    const { email, password } = req.body;
 
     // Allow login by Email OR Username
     const sql = `SELECT * FROM users WHERE email = ? OR username = ?`;
@@ -57,6 +55,41 @@ router.post('/login', async (req, res) => {
         res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
     } catch (err) {
         return res.status(500).json({ error: err.message });
+    }
+});
+
+// Forgot Password (MVP: Log Token)
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    try {
+        const result = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+        const user = result.rows[0];
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        // Generate Token (1 Hour)
+        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
+
+        // Log to Console (MVP Email Service)
+        console.log(`[EMAIL MOCK] To: ${email} | Subject: Password Reset | Link: /reset-password?token=${token}`);
+
+        res.json({ message: 'Password reset link "sent" (check console)' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Reset Password
+router.post('/reset-password', async (req, res) => {
+    const { token, newPassword } = req.body;
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(newPassword, salt);
+
+        await db.query("UPDATE users SET password_hash = ? WHERE id = ?", [hash, decoded.id]);
+        res.json({ message: 'Password updated successfully' });
+    } catch (err) {
+        res.status(400).json({ error: 'Invalid or expired token' });
     }
 });
 

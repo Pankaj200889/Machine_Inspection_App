@@ -32,13 +32,13 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-gray-700 text-sm font-semibold mb-2">Email or Username</label>
+                        <label className="block text-gray-700 text-sm font-semibold mb-2">Email Address</label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
                             <input
-                                type="text"
+                                type="email"
                                 className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="username or email"
+                                placeholder="name@company.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -47,7 +47,10 @@ const Login = () => {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-sm font-semibold mb-2">Password</label>
+                        <div className="flex justify-between items-center mb-2">
+                            <label className="block text-gray-700 text-sm font-semibold">Password</label>
+                            <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-800">Forgot Password?</Link>
+                        </div>
                         <div className="relative">
                             <Lock className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
                             <input

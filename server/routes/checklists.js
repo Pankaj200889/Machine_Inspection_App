@@ -259,6 +259,7 @@ router.put('/:id', verifyUser, upload.fields([{ name: 'image', maxCount: 1 }, { 
         const newOk = parseInt(ok_quantity) || row.ok_quantity;
         const newNg = parseInt(ng_quantity) || row.ng_quantity;
         const newTotal = parseInt(total_quantity) || (newOk + newNg);
+        const newRemarks = req.body.remarks !== undefined ? req.body.remarks : (row.remarks || '');
 
         const newAvgNg = newTotal > 0 ? (newNg / newTotal) * 100 : 0;
         let newBekido = 0;
@@ -268,20 +269,21 @@ router.put('/:id', verifyUser, upload.fields([{ name: 'image', maxCount: 1 }, { 
         }
 
         const finalImage = new_image_path || row.image_path;
-        const finalProof = new_proof_path || row.approval_proof_path; // Assume column exists
+        const finalProof = new_proof_path || row.approval_proof_path;
 
         const sql = `
             UPDATE checklists 
             SET ok_quantity = ?, ng_quantity = ?, total_quantity = ?, 
                 avg_ng_percent = ?, bekido_percent = ?,
                 image_path = ?, approval_proof_path = ?,
+                remarks = ?,
                 revised_by = ?, revised_at = CURRENT_TIMESTAMP,
                 edit_count = edit_count + 1,
                 edit_history = ?
             WHERE id = ?
         `;
 
-        await db.query(sql, [newOk, newNg, newTotal, newAvgNg.toFixed(2), newBekido.toFixed(2), finalImage, finalProof, req.user.id, JSON.stringify(history), checklistId]);
+        await db.query(sql, [newOk, newNg, newTotal, newAvgNg.toFixed(2), newBekido.toFixed(2), finalImage, finalProof, newRemarks, req.user.id, JSON.stringify(history), checklistId]);
 
         // Audit Log
         const logAction = new_image_path ? 'UPDATE_PHOTO' : 'REVISE_CHECKLIST';

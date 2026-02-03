@@ -28,18 +28,20 @@ const toCSV = (data) => {
 };
 
 // Export Machines
-router.get('/machines', verifyAdmin, (req, res) => {
-    db.all("SELECT * FROM machines", [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        const csv = toCSV(rows);
+router.get('/machines', verifyAdmin, async (req, res) => {
+    try {
+        const result = await db.query("SELECT * FROM machines");
+        const csv = toCSV(result.rows);
         res.header('Content-Type', 'text/csv');
         res.attachment('machines_export.csv');
         res.send(csv);
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Export Checklists
-router.get('/checklists', verifyAdmin, (req, res) => {
+router.get('/checklists', verifyAdmin, async (req, res) => {
     const sql = `SELECT c.id, m.machine_no, m.model, u.id as user_id, u.username as operator, 
                  c.shift, c.location, c.ok_quantity, c.ng_quantity, c.total_quantity, 
                  c.avg_ng_percent, c.bekido_percent, c.submitted_at, c.device_info 
@@ -47,29 +49,33 @@ router.get('/checklists', verifyAdmin, (req, res) => {
                  JOIN machines m ON c.machine_id = m.id 
                  LEFT JOIN users u ON c.user_id = u.id 
                  ORDER BY c.submitted_at DESC`;
-    db.all(sql, [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        const csv = toCSV(rows);
+    try {
+        const result = await db.query(sql);
+        const csv = toCSV(result.rows);
         res.header('Content-Type', 'text/csv');
         res.attachment('checklists_export.csv');
         res.send(csv);
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Export Audit Logs
-router.get('/audits', verifyAdmin, (req, res) => {
+router.get('/audits', verifyAdmin, async (req, res) => {
     const sql = `SELECT a.id, u.username as user, a.action, a.table_name, a.target_id, 
                  a.old_values, a.new_values, a.location, a.device_info, a.timestamp 
                  FROM audit_logs a 
                  LEFT JOIN users u ON a.user_id = u.id 
                  ORDER BY a.timestamp DESC`;
-    db.all(sql, [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        const csv = toCSV(rows);
+    try {
+        const result = await db.query(sql);
+        const csv = toCSV(result.rows);
         res.header('Content-Type', 'text/csv');
         res.attachment('audit_logs_export.csv');
         res.send(csv);
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 module.exports = router;

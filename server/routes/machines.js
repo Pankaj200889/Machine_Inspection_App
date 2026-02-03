@@ -52,9 +52,10 @@ router.post('/', verifyAdmin, async (req, res) => {
     }
     // END: Trial Limit Check
 
-    const sql = "INSERT INTO machines (machine_no, line_no, model, prod_plan, prod_plan_actual, mct, working_hours) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const sql = "INSERT INTO machines (machine_no, line_no, model, prod_plan, prod_plan_actual, mct, working_hours) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
     try {
         const result = await db.query(sql, [machine_no, line_no, model, prod_plan, prod_plan_actual || 0, mct || 0, working_hours || 8]);
+        // result.lastID is handled by our database.js wrapper for both PG (via RETURNING) and SQLite
         res.json({ id: result.lastID, machine_no, line_no, model, prod_plan, prod_plan_actual, mct, working_hours });
     } catch (err) {
         res.status(400).json({ error: err.message });

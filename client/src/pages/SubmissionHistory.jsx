@@ -166,6 +166,12 @@ const SubmissionHistory = () => {
                                             </div>
                                         </div>
 
+                                        {item.remarks && (
+                                            <div className="mt-3 text-xs bg-yellow-50 text-gray-600 p-2 rounded border border-yellow-100 italic">
+                                                "{item.remarks}"
+                                            </div>
+                                        )}
+
                                         {/* Camera Logic Inline */}
                                         {editingId === item.id && (
                                             <div className="mt-4 p-4 bg-gray-900 rounded-lg border border-gray-800 animate-in slide-in-from-top-2 relative">

@@ -147,6 +147,12 @@ function initSqlite() {
             db.run(`ALTER TABLE organization_settings ADD COLUMN ${col} ${type}`, (err) => { });
         });
 
+        // Migration for Admin Features (Remarks & Proof)
+        const checklistCols = ['remarks', 'approval_proof_path'];
+        checklistCols.forEach(col => {
+            db.run(`ALTER TABLE checklists ADD COLUMN ${col} TEXT`, (err) => { });
+        });
+
         seedData();
     });
 }
@@ -192,8 +198,16 @@ async function initPg() {
             revised_at TIMESTAMP,
             edit_count INTEGER DEFAULT 0,
             edit_history TEXT,
+            remarks TEXT,
+            approval_proof_path TEXT,
             submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
+
+        // Migration for existing Postgres tables (Safe Add)
+        try {
+            await query(`ALTER TABLE checklists ADD COLUMN IF NOT EXISTS remarks TEXT`);
+            await query(`ALTER TABLE checklists ADD COLUMN IF NOT EXISTS approval_proof_path TEXT`);
+        } catch (e) { console.log("Cols exist or error", e.message); }
 
         await query(`CREATE TABLE IF NOT EXISTS audit_logs (
             id SERIAL PRIMARY KEY,

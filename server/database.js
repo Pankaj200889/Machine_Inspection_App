@@ -245,6 +245,17 @@ async function seedData() {
             ['admin', 'admin@example.com', hash, 'admin']);
         console.log("Seeded admin user");
     }
+
+    // Seed Operator (Standard Testing Account)
+    const operators = await query("SELECT * FROM users WHERE username = 'operator'");
+    if (operators.rows.length === 0) {
+        const password = 'operator123';
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(password, salt);
+        await query("INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)",
+            ['operator', 'operator@example.com', hash, 'operator']);
+        console.log("Seeded operator user");
+    }
 }
 
 module.exports = { query };

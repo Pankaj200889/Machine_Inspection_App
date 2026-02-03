@@ -59,11 +59,24 @@ const Home = () => {
     const [orgProfile, setOrgProfile] = useState(null);
     const [isExportOpen, setIsExportOpen] = useState(false);
 
+    const refreshTimeoutRef = useRef(null);
+
     useEffect(() => {
         fetchOrgProfile();
         refreshAllData();
-        socket.on('new_checklist', () => refreshAllData());
-        return () => socket.off('new_checklist');
+
+        socket.on('new_checklist', () => {
+            // Debounce updates: Wait 2 seconds of silence before refreshing
+            if (refreshTimeoutRef.current) clearTimeout(refreshTimeoutRef.current);
+            refreshTimeoutRef.current = setTimeout(() => {
+                refreshAllData();
+            }, 2000);
+        });
+
+        return () => {
+            socket.off('new_checklist');
+            if (refreshTimeoutRef.current) clearTimeout(refreshTimeoutRef.current);
+        };
     }, [user.role]);
 
     const refreshAllData = () => {

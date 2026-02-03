@@ -30,7 +30,7 @@ const toCSV = (data) => {
 // Export Machines
 router.get('/machines', verifyAdmin, async (req, res) => {
     try {
-        const result = await db.query("SELECT * FROM machines");
+        const result = await db.query("SELECT * FROM machines LIMIT 5000"); // Safety limit
         const csv = toCSV(result.rows);
         res.setHeader('Content-Type', 'text/csv');
         res.setHeader('Content-Disposition', 'attachment; filename="machines_export.csv"');
@@ -41,8 +41,7 @@ router.get('/machines', verifyAdmin, async (req, res) => {
     }
 });
 
-// Export Checklists
-// ... (Already updated) ...
+// ...
 
 // Export Audit Logs
 router.get('/audits', verifyAdmin, async (req, res) => {
@@ -50,7 +49,7 @@ router.get('/audits', verifyAdmin, async (req, res) => {
                  a.old_values, a.new_values, a.location, a.device_info, a.timestamp 
                  FROM audit_logs a 
                  LEFT JOIN users u ON a.user_id = u.id 
-                 ORDER BY a.timestamp DESC`;
+                 ORDER BY a.timestamp DESC LIMIT 5000`; // Safety limit
     try {
         const result = await db.query(sql);
         const csv = toCSV(result.rows);

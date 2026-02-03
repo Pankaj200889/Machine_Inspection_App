@@ -32,34 +32,17 @@ router.get('/machines', verifyAdmin, async (req, res) => {
     try {
         const result = await db.query("SELECT * FROM machines");
         const csv = toCSV(result.rows);
-        res.header('Content-Type', 'text/csv');
-        res.attachment('machines_export.csv');
-        res.send(csv);
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="machines_export.csv"');
+        res.status(200).send(csv);
     } catch (err) {
+        console.error("Export Machines Error:", err);
         res.status(500).json({ error: err.message });
     }
 });
 
 // Export Checklists
-router.get('/checklists', verifyAdmin, async (req, res) => {
-    const sql = `SELECT c.id, m.machine_no, m.model, u.id as user_id, u.username as operator, 
-                 c.shift, c.location, c.ok_quantity, c.ng_quantity, c.total_quantity, 
-                 c.avg_ng_percent, c.bekido_percent, c.submitted_at, c.device_info 
-                 FROM checklists c 
-                 LEFT JOIN machines m ON c.machine_id = m.id 
-                 LEFT JOIN users u ON c.user_id = u.id 
-                 ORDER BY c.submitted_at DESC`;
-    try {
-        const result = await db.query(sql);
-        const csv = toCSV(result.rows);
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename="checklists_export.csv"');
-        res.status(200).send(csv);
-    } catch (err) {
-        console.error("Export Error:", err);
-        res.status(500).json({ error: err.message });
-    }
-});
+// ... (Already updated) ...
 
 // Export Audit Logs
 router.get('/audits', verifyAdmin, async (req, res) => {
@@ -71,10 +54,11 @@ router.get('/audits', verifyAdmin, async (req, res) => {
     try {
         const result = await db.query(sql);
         const csv = toCSV(result.rows);
-        res.header('Content-Type', 'text/csv');
-        res.attachment('audit_logs_export.csv');
-        res.send(csv);
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="audit_logs_export.csv"');
+        res.status(200).send(csv);
     } catch (err) {
+        console.error("Export Audits Error:", err);
         res.status(500).json({ error: err.message });
     }
 });

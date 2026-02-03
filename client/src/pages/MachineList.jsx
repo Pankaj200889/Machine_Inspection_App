@@ -71,7 +71,7 @@ const MachineList = () => {
             setShowModal(false);
             fetchMachines();
         } catch (error) {
-            alert('Error saving machine');
+            alert(error.response?.data?.error || 'Error saving machine');
         }
     };
 

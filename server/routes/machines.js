@@ -41,9 +41,9 @@ router.post('/', verifyAdmin, async (req, res) => {
         if (plan === 'trial') {
             const countRes = await db.query("SELECT COUNT(*) as count FROM machines");
             const count = parseInt(countRes.rows[0].count);
-            if (count >= 1) {
+            if (count >= 10) {
                 return res.status(403).json({
-                    error: 'Trial Limit Reached. You can only create 1 machine in the Trial Plan. Please Upgrade.'
+                    error: 'Trial Limit Reached. You can only create 10 machines in the Trial Plan. Please Upgrade.'
                 });
             }
         }

@@ -9,7 +9,7 @@ import {
 import { App as CapacitorApp } from '@capacitor/app';
 import {
     Activity, ClipboardList, Download, Settings, Building,
-    LogOut, User, ChevronDown, X, Power
+    LogOut, User, ChevronDown, X, Power, Camera
 } from 'lucide-react';
 import api, { STATIC_BASE_URL } from '../api';
 
@@ -198,16 +198,14 @@ const Home = () => {
         e.preventDefault();
         try {
             const formData = new FormData(e.target);
-            const updates = {
-                ok_quantity: formData.get('ok'),
-                ng_quantity: formData.get('ng'),
-                total_quantity: formData.get('total')
-            };
+            // formData automatically contains all inputs: ok, ng, total, remarks, image, proof
 
-            await api.put(`/checklists/${editingChecklist.id}`, updates);
+            await api.put(`/checklists/${editingChecklist.id}`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
             setEditingChecklist(null);
             refreshAllData();
-            alert("Record updated successfully.");
+            alert("Record updated successfully. Actions logged.");
         } catch (err) {
             alert(err.response?.data?.error || "Update failed");
         }
@@ -251,31 +249,148 @@ const Home = () => {
                 </div>
             )}
 
-            {/* Edit Modal */}
+            {/* Edit Modal (Admin) */}
             {editingChecklist && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in">
-                    <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md relative">
-                        <button onClick={() => setEditingChecklist(null)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><LogOut className="w-5 h-5 rotate-45" /></button>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in">
+                    <div className="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-lg relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+                        <button onClick={() => setEditingChecklist(null)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><X className="w-6 h-6" /></button>
                         <h3 className="text-2xl font-black text-gray-800 mb-1">Edit Record</h3>
                         <p className="text-sm text-gray-500 mb-6">Modifying Machine {editingChecklist.machine_no} (Shift {editingChecklist.shift})</p>
 
                         <form onSubmit={submitEdit} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">OK Quantity</label>
-                                <input name="ok" type="number" defaultValue={editingChecklist.ok_quantity} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+                            {/* Visual Evidence Section */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Machine Photo</label>
+                                    <div className="h-32 bg-gray-100 rounded-xl overflow-hidden border border-gray-200 relative group">
+                                        {editingChecklist.image_path ? (
+                                            <img src={`${STATIC_BASE_URL}/${editingChecklist.image_path}`} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">No Photo</div>
+                                        )}
+                                        <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-200 cursor-pointer">
+                                            <span className="text-white text-xs font-bold bg-black/50 px-2 py-1 rounded">Change</span>
+                                            <input type="file" name="image" className="hidden" accept="image/*" />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Approval Proof</label>
+                                    <div className="h-32 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:bg-gray-100 transition cursor-pointer relative">
+                                        {editingChecklist.approval_proof_path ? (
+                                            <div className="text-center">
+                                                <div className="text-xs font-bold text-green-600 mb-1">Proof Uploaded</div>
+                                                <a href={`${STATIC_BASE_URL}/${editingChecklist.approval_proof_path}`} target="_blank" className="text-[10px] underline text-blue-500 relative z-10">View</a>
+                                            </div>
+                                        ) : (
+                                            <div className="text-center pointer-events-none">
+                                                <Download className="w-5 h-5 mx-auto mb-1 opacity-50" />
+                                                <span className="text-[10px]">Upload Doc/Email</span>
+                                            </div>
+                                        )}
+                                        <input type="file" name="proof" className="absolute inset-0 opacity-0 cursor-pointer" />
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">NG Quantity</label>
-                                <input name="ng" type="number" defaultValue={editingChecklist.ng_quantity} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+
+                            {/* Quantities */}
+                            <div className="grid grid-cols-3 gap-3">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">OK</label>
+                                    <input name="ok" type="number" defaultValue={editingChecklist.ok_quantity} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 font-bold text-gray-800 focus:ring-2 focus:ring-blue-500" required />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">NG</label>
+                                    <input name="ng" type="number" defaultValue={editingChecklist.ng_quantity} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 font-bold text-gray-800 focus:ring-2 focus:ring-blue-500" required />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Total</label>
+                                    <input name="total" type="number" defaultValue={editingChecklist.total_quantity} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 font-bold text-gray-800 focus:ring-2 focus:ring-blue-500" required />
+                                </div>
                             </div>
+
+                            {/* Remarks */}
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Total Quantity</label>
-                                <input name="total" type="number" defaultValue={editingChecklist.total_quantity} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Remarks / Justification</label>
+                                <textarea name="remarks" defaultValue={editingChecklist.remarks || ''} rows="2" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 focus:ring-2 focus:ring-blue-500" placeholder="Reason for edit..." required></textarea>
                             </div>
+
+                            {/* Edit History (Read Only) */}
+                            {editingChecklist.edit_history && (
+                                <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">History</div>
+                                    <div className="space-y-2 max-h-24 overflow-y-auto custom-scrollbar">
+                                        {JSON.parse(editingChecklist.edit_history).map((h, i) => (
+                                            <div key={i} className="text-xs text-gray-500 flex justify-between">
+                                                <span>{new Date(h.edited_at).toLocaleDateString()}</span>
+                                                <span>OK: {h.ok} / NG: {h.ng}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="pt-2">
                                 <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-500/30">Save Changes</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* View Details Modal (Operator/All) */}
+            {selectedImage && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in" onClick={() => setSelectedImage(null)}>
+                    <div className="bg-white rounded-3xl overflow-hidden w-full max-w-md relative" onClick={e => e.stopPropagation()}>
+                        <div className="relative h-64 bg-gray-100">
+                            {selectedImage.image_path ? (
+                                <img src={`${STATIC_BASE_URL}/${selectedImage.image_path}`} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-300"><Activity className="w-12 h-12" /></div>
+                            )}
+                            <button onClick={() => setSelectedImage(null)} className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 backdrop-blur-sm"><X className="w-4 h-4" /></button>
+                        </div>
+                        <div className="p-6">
+                            <h3 className="text-2xl font-black text-gray-800 mb-1">{selectedImage.machine_no}</h3>
+                            <div className="flex items-center gap-2 mb-4">
+                                <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">Shift {selectedImage.shift}</span>
+                                <span className="text-xs text-gray-400">{new Date(selectedImage.submitted_at).toLocaleString()}</span>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-2 mb-6">
+                                <div className="bg-emerald-50 p-3 rounded-xl text-center">
+                                    <div className="text-lg font-black text-emerald-600">{selectedImage.ok_quantity}</div>
+                                    <div className="text-[10px] font-bold text-emerald-400 uppercase">OK</div>
+                                </div>
+                                <div className="bg-red-50 p-3 rounded-xl text-center">
+                                    <div className="text-lg font-black text-red-500">{selectedImage.ng_quantity}</div>
+                                    <div className="text-[10px] font-bold text-red-400 uppercase">NG</div>
+                                </div>
+                                <div className="bg-gray-50 p-3 rounded-xl text-center">
+                                    <div className="text-lg font-black text-gray-600">{selectedImage.total_quantity}</div>
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase">Total</div>
+                                </div>
+                            </div>
+
+                            {selectedImage.remarks && (
+                                <div className="bg-yellow-50/50 p-4 rounded-xl border border-yellow-100 mb-2">
+                                    <div className="text-[10px] font-bold text-yellow-600 uppercase tracking-widest mb-1">Remarks</div>
+                                    <p className="text-sm font-medium text-gray-700">{selectedImage.remarks}</p>
+                                </div>
+                            )}
+
+                            {/* Retake Photo Action (Operator Only) */}
+                            {user && user.id === selectedImage.user_id && (
+                                <div className="mt-4 pt-4 border-t border-gray-100">
+                                    <p className="text-xs text-center text-gray-400 mb-3">Photo incorrect? You can retake it.</p>
+                                    <label className="flex items-center justify-center gap-2 w-full py-3 bg-gray-900 text-white rounded-xl font-bold cursor-pointer hover:bg-black transition shadow-lg shadow-gray-900/20">
+                                        <Camera className="w-4 h-4" />
+                                        <span>Retake Photo</span>
+                                        {/* Note: Reuse existing handleFileChange logic if accessible, or impl here */}
+                                    </label>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
@@ -412,7 +527,7 @@ const Home = () => {
                                     </div>
                                     <div className="flex-1 overflow-y-auto p-2 custom-scrollbar space-y-2">
                                         {recentChecks.map((check) => (
-                                            <div key={check.id} className="p-3 mx-2 rounded-xl hover:bg-blue-50/50 transition flex items-center gap-3 group">
+                                            <div key={check.id} onClick={() => setSelectedImage(check)} className="p-3 mx-2 rounded-xl hover:bg-blue-50/50 transition flex items-center gap-3 group cursor-pointer">
                                                 <div className="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden shadow-sm shrink-0 border border-gray-200 group-hover:border-blue-200 transition-colors">
                                                     {check.image_path ? (
                                                         <img src={`${STATIC_BASE_URL}/${check.image_path}`} className="w-full h-full object-cover" />

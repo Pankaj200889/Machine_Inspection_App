@@ -12,7 +12,8 @@ const ChecklistForm = () => {
         ok_quantity: 0,
         ng_quantity: 0,
         total_quantity: 0,
-        image: null
+        image: null,
+        remarks: ''
     });
     const [preview, setPreview] = useState(null);
     const [location, setLocation] = useState(null);
@@ -154,6 +155,7 @@ const ChecklistForm = () => {
         data.append('ok_quantity', okQty);
         data.append('ng_quantity', ngQty);
         data.append('total_quantity', totalQty);
+        data.append('remarks', formData.remarks || '');
 
         // Device Info
         const deviceInfo = `${navigator.platform} - ${navigator.userAgent}`;
@@ -225,6 +227,17 @@ const ChecklistForm = () => {
                     <div className="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
                         <span className="font-semibold text-gray-700">Total Quantity</span>
                         <span className="text-xl font-bold text-gray-900">{formData.total_quantity}</span>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Remarks</label>
+                        <textarea
+                            className="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+                            rows="3"
+                            placeholder="Optional notes..."
+                            value={formData.remarks}
+                            onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
+                        ></textarea>
                     </div>
 
                     {/* Camera / Photo Section */}

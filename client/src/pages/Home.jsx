@@ -266,7 +266,10 @@ const Home = () => {
                                         {editingChecklist.image_path ? (
                                             <img src={`${STATIC_BASE_URL}/${editingChecklist.image_path}`} className="w-full h-full object-cover" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">No Photo</div>
+                                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs flex-col gap-1">
+                                                <Activity className="w-8 h-8 opacity-50" />
+                                                <span>No Photo</span>
+                                            </div>
                                         )}
                                         <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-200 cursor-pointer">
                                             <span className="text-white text-xs font-bold bg-black/50 px-2 py-1 rounded">Change</span>
@@ -338,56 +341,111 @@ const Home = () => {
                 </div>
             )}
 
-            {/* View Details Modal (Operator/All) */}
+            {/* View Details Modal */}
             {selectedImage && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in" onClick={() => setSelectedImage(null)}>
-                    <div className="bg-white rounded-3xl overflow-hidden w-full max-w-md relative" onClick={e => e.stopPropagation()}>
-                        <div className="relative h-64 bg-gray-100">
+                    <div className="bg-white rounded-3xl overflow-hidden w-full max-w-lg relative shadow-2xl" onClick={e => e.stopPropagation()}>
+
+                        {/* Header Image */}
+                        <div className="relative h-64 bg-gray-100 group">
                             {selectedImage.image_path ? (
                                 <img src={`${STATIC_BASE_URL}/${selectedImage.image_path}`} className="w-full h-full object-cover" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-300"><Activity className="w-12 h-12" /></div>
+                                <div className="w-full h-full flex items-center justify-center text-gray-300 flex-col gap-2">
+                                    <Activity className="w-12 h-12 opacity-50" />
+                                    <span className="text-xs font-bold uppercase tracking-widest opacity-50">No Photo</span>
+                                </div>
                             )}
-                            <button onClick={() => setSelectedImage(null)} className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 backdrop-blur-sm"><X className="w-4 h-4" /></button>
+                            <button onClick={() => setSelectedImage(null)} className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 backdrop-blur-sm transition"><X className="w-5 h-5" /></button>
+
+                            {/* Admin Edit Action Overlay */}
+                            {user?.role === 'admin' && (selectedImage.edit_count || 0) < 3 && (
+                                <div className="absolute top-4 left-4">
+                                    <button
+                                        onClick={() => {
+                                            setSelectedImage(null);
+                                            handleEditClick(selectedImage);
+                                        }}
+                                        className="flex items-center gap-2 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-lg text-blue-600 font-bold text-sm hover:scale-105 active:scale-95 transition-all"
+                                    >
+                                        <ClipboardList className="w-4 h-4" /> Edit Record
+                                    </button>
+                                </div>
+                            )}
                         </div>
-                        <div className="p-6">
-                            <h3 className="text-2xl font-black text-gray-800 mb-1">{selectedImage.machine_no}</h3>
-                            <div className="flex items-center gap-2 mb-4">
-                                <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">Shift {selectedImage.shift}</span>
-                                <span className="text-xs text-gray-400">{new Date(selectedImage.submitted_at).toLocaleString()}</span>
+
+                        <div className="p-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                            <h3 className="text-3xl font-black text-gray-800 mb-2">{selectedImage.machine_no}</h3>
+                            <div className="flex items-center gap-3 mb-6">
+                                <span className="text-xs font-bold bg-blue-50 text-blue-600 px-3 py-1 rounded-lg uppercase tracking-wide">Shift {selectedImage.shift}</span>
+                                <span className="text-xs font-bold text-gray-400">{new Date(selectedImage.submitted_at).toLocaleString()}</span>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-2 mb-6">
-                                <div className="bg-emerald-50 p-3 rounded-xl text-center">
-                                    <div className="text-lg font-black text-emerald-600">{selectedImage.ok_quantity}</div>
-                                    <div className="text-[10px] font-bold text-emerald-400 uppercase">OK</div>
+                            {/* Stats Grid */}
+                            <div className="grid grid-cols-3 gap-3 mb-6">
+                                <div className="bg-emerald-50 p-4 rounded-2xl text-center">
+                                    <div className="text-2xl font-black text-emerald-600">{selectedImage.ok_quantity}</div>
+                                    <div className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">OK</div>
                                 </div>
-                                <div className="bg-red-50 p-3 rounded-xl text-center">
-                                    <div className="text-lg font-black text-red-500">{selectedImage.ng_quantity}</div>
-                                    <div className="text-[10px] font-bold text-red-400 uppercase">NG</div>
+                                <div className="bg-red-50 p-4 rounded-2xl text-center">
+                                    <div className="text-2xl font-black text-red-500">{selectedImage.ng_quantity}</div>
+                                    <div className="text-[10px] font-bold text-red-400 uppercase tracking-wider">NG</div>
                                 </div>
-                                <div className="bg-gray-50 p-3 rounded-xl text-center">
-                                    <div className="text-lg font-black text-gray-600">{selectedImage.total_quantity}</div>
-                                    <div className="text-[10px] font-bold text-gray-400 uppercase">Total</div>
+                                <div className="bg-gray-50 p-4 rounded-2xl text-center">
+                                    <div className="text-2xl font-black text-gray-600">{selectedImage.total_quantity}</div>
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total</div>
                                 </div>
                             </div>
 
-                            {selectedImage.remarks && (
-                                <div className="bg-yellow-50/50 p-4 rounded-xl border border-yellow-100 mb-2">
-                                    <div className="text-[10px] font-bold text-yellow-600 uppercase tracking-widest mb-1">Remarks</div>
-                                    <p className="text-sm font-medium text-gray-700">{selectedImage.remarks}</p>
-                                </div>
-                            )}
+                            {/* Remarks & Proof */}
+                            <div className="space-y-4">
+                                {selectedImage.remarks && (
+                                    <div className="bg-yellow-50 p-4 rounded-2xl border border-yellow-100">
+                                        <div className="text-[10px] font-bold text-yellow-600 uppercase tracking-widest mb-2">Remarks</div>
+                                        <p className="text-sm font-medium text-gray-700 leading-relaxed">"{selectedImage.remarks}"</p>
+                                    </div>
+                                )}
+
+                                {selectedImage.approval_proof_path && (
+                                    <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex items-center justify-between">
+                                        <div>
+                                            <div className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-1">Approval Proof</div>
+                                            <span className="text-xs text-blue-800 font-medium">Document attached</span>
+                                        </div>
+                                        <a
+                                            href={`${STATIC_BASE_URL}/${selectedImage.approval_proof_path}`}
+                                            target="_blank"
+                                            className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition flex items-center gap-2"
+                                        >
+                                            <Download className="w-4 h-4" /> Download
+                                        </a>
+                                    </div>
+                                )}
+
+                                {/* Edit History */}
+                                {selectedImage.edit_history && (
+                                    <div className="mt-6 pt-6 border-t border-gray-100">
+                                        <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Edit History</div>
+                                        <div className="space-y-2">
+                                            {JSON.parse(selectedImage.edit_history).map((h, i) => (
+                                                <div key={i} className="text-xs bg-gray-50 p-2 rounded-lg flex justify-between items-center text-gray-500">
+                                                    <span>{new Date(h.edited_at).toLocaleDateString()}</span>
+                                                    <span className="font-mono">OK:{h.ok} NG:{h.ng}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
 
                             {/* Retake Photo Action (Operator Only) */}
-                            {user && user.id === selectedImage.user_id && (
-                                <div className="mt-4 pt-4 border-t border-gray-100">
-                                    <p className="text-xs text-center text-gray-400 mb-3">Photo incorrect? You can retake it.</p>
-                                    <label className="flex items-center justify-center gap-2 w-full py-3 bg-gray-900 text-white rounded-xl font-bold cursor-pointer hover:bg-black transition shadow-lg shadow-gray-900/20">
+                            {user && user.id === selectedImage.user_id && user.role !== 'admin' && (
+                                <div className="mt-6 pt-6 border-t border-gray-100">
+                                    <p className="text-xs text-center text-gray-400 mb-3">Need to update the verification photo?</p>
+                                    <button className="flex items-center justify-center gap-2 w-full py-3 bg-gray-900 text-white rounded-xl font-bold hover:bg-black transition shadow-lg shadow-gray-900/20">
                                         <Camera className="w-4 h-4" />
                                         <span>Retake Photo</span>
-                                        {/* Note: Reuse existing handleFileChange logic if accessible, or impl here */}
-                                    </label>
+                                    </button>
                                 </div>
                             )}
                         </div>
@@ -550,11 +608,6 @@ const Home = () => {
                                                         <span className="text-red-500 font-bold">NG: {check.ng_quantity}</span>
                                                     </div>
                                                 </div>
-                                                {user?.role === 'admin' && (check.edit_count || 0) < 3 && (
-                                                    <button onClick={() => handleEditClick(check)} className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Edit Record">
-                                                        <ClipboardList className="w-4 h-4" />
-                                                    </button>
-                                                )}
                                             </div>
                                         ))}
                                     </div>
@@ -658,145 +711,150 @@ const Home = () => {
 
                         </div>
                     </div>
-                )}
+                )
+                }
 
                 {/* ---------------- ANALYTICS TAB ---------------- */}
-                {activeTab === 'Analytics' && user?.role === 'admin' && (
-                    <div className="space-y-8 animate-in slide-in-from-bottom-8 duration-700">
-                        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-                            <div>
-                                <h2 className="text-4xl font-black text-gray-800 mb-1 tracking-tight">Deep Dive Analytics</h2>
-                                <p className="text-sm text-gray-500 font-medium">Advanced operational metrics and shift analysis.</p>
+                {
+                    activeTab === 'Analytics' && user?.role === 'admin' && (
+                        <div className="space-y-8 animate-in slide-in-from-bottom-8 duration-700">
+                            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                                <div>
+                                    <h2 className="text-4xl font-black text-gray-800 mb-1 tracking-tight">Deep Dive Analytics</h2>
+                                    <p className="text-sm text-gray-500 font-medium">Advanced operational metrics and shift analysis.</p>
+                                </div>
+                                <button onClick={() => downloadCSV('checklists')} className="px-6 py-3 bg-gray-900 text-white rounded-2xl font-bold shadow-lg shadow-gray-900/20 active:scale-95 transition-transform flex items-center gap-2">
+                                    <Download className="w-5 h-5" /> Generate Weekly Report
+                                </button>
                             </div>
-                            <button onClick={() => downloadCSV('checklists')} className="px-6 py-3 bg-gray-900 text-white rounded-2xl font-bold shadow-lg shadow-gray-900/20 active:scale-95 transition-transform flex items-center gap-2">
-                                <Download className="w-5 h-5" /> Generate Weekly Report
-                            </button>
-                        </div>
 
-                        {/* Top Stats Row */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            {[
-                                { label: 'Overall Yield', val: `${kpi.avg_bekido}%`, sub: '+2.4%', color: 'text-gray-800', bar: 'bg-blue-500' },
-                                { label: 'Quality Rate', val: `${((kpi.total_ok / (kpi.total_actual || 1)) * 100).toFixed(1)}%`, sub: '-0.5%', color: 'text-gray-800', bar: 'bg-emerald-500' },
-                                { label: 'Rejection Rate', val: `${((kpi.total_ng / (kpi.total_actual || 1)) * 100).toFixed(2)}%`, sub: 'Stable', color: 'text-gray-800', bar: 'bg-red-500' },
-                                { label: 'Utilisation', val: kpi.total_plan > 0 ? `${((kpi.total_actual / kpi.total_plan) * 100).toFixed(1)}%` : '0%', sub: 'High', color: 'text-gray-800', bar: 'bg-purple-500' }
-                            ].map((s, i) => (
-                                <GlassCard key={i} className="!p-5 flex flex-col justify-between h-32 group hover:-translate-y-1 transition-transform shadow-lg shadow-gray-200/50">
-                                    <div className="flex justify-between items-start">
-                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{s.label}</span>
-                                        <div className={`w-2 h-2 rounded-full ${s.bar}`}></div>
-                                    </div>
-                                    <div>
-                                        <div className={`text-3xl font-black ${s.color} tracking-tight`}>{s.val}</div>
-                                        <div className="text-xs font-bold text-gray-400 mt-1">{s.sub} vs Target</div>
-                                    </div>
-                                    <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
-                                        <div className={`h-full ${s.bar} w-[70%]`}></div>
+                            {/* Top Stats Row */}
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                {[
+                                    { label: 'Overall Yield', val: `${kpi.avg_bekido}%`, sub: '+2.4%', color: 'text-gray-800', bar: 'bg-blue-500' },
+                                    { label: 'Quality Rate', val: `${((kpi.total_ok / (kpi.total_actual || 1)) * 100).toFixed(1)}%`, sub: '-0.5%', color: 'text-gray-800', bar: 'bg-emerald-500' },
+                                    { label: 'Rejection Rate', val: `${((kpi.total_ng / (kpi.total_actual || 1)) * 100).toFixed(2)}%`, sub: 'Stable', color: 'text-gray-800', bar: 'bg-red-500' },
+                                    { label: 'Utilisation', val: kpi.total_plan > 0 ? `${((kpi.total_actual / kpi.total_plan) * 100).toFixed(1)}%` : '0%', sub: 'High', color: 'text-gray-800', bar: 'bg-purple-500' }
+                                ].map((s, i) => (
+                                    <GlassCard key={i} className="!p-5 flex flex-col justify-between h-32 group hover:-translate-y-1 transition-transform shadow-lg shadow-gray-200/50">
+                                        <div className="flex justify-between items-start">
+                                            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{s.label}</span>
+                                            <div className={`w-2 h-2 rounded-full ${s.bar}`}></div>
+                                        </div>
+                                        <div>
+                                            <div className={`text-3xl font-black ${s.color} tracking-tight`}>{s.val}</div>
+                                            <div className="text-xs font-bold text-gray-400 mt-1">{s.sub} vs Target</div>
+                                        </div>
+                                        <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                                            <div className={`h-full ${s.bar} w-[70%]`}></div>
+                                        </div>
+                                    </GlassCard>
+                                ))}
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                {/* Shift Radar */}
+                                <GlassCard className="flex flex-col items-center min-h-[400px] shadow-lg shadow-gray-200/50">
+                                    <h3 className="text-lg font-bold text-gray-800 self-start mb-4 tracking-tight">Shift Performance Matrix</h3>
+                                    <div className="w-full flex-1">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <RadarChart cx="50%" cy="50%" outerRadius="70%" data={shiftRadarData}>
+                                                <PolarGrid stroke="#E5E7EB" strokeDasharray="4 4" />
+                                                <PolarAngleAxis dataKey="subject" tick={{ fill: '#6B7280', fontSize: 12, fontWeight: 700 }} />
+                                                <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                                                <Radar name="Quality" dataKey="Quality" stroke="#10B981" strokeWidth={3} fill="#10B981" fillOpacity={0.3} />
+                                                <Radar name="Volume" dataKey="Volume" stroke="#3B82F6" strokeWidth={3} fill="#3B82F6" fillOpacity={0.3} />
+                                                <Legend wrapperStyle={{ fontSize: '12px', fontWeight: 'bold', paddingTop: '20px' }} />
+                                                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }} />
+                                            </RadarChart>
+                                        </ResponsiveContainer>
                                     </div>
                                 </GlassCard>
-                            ))}
-                        </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {/* Shift Radar */}
-                            <GlassCard className="flex flex-col items-center min-h-[400px] shadow-lg shadow-gray-200/50">
-                                <h3 className="text-lg font-bold text-gray-800 self-start mb-4 tracking-tight">Shift Performance Matrix</h3>
-                                <div className="w-full flex-1">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <RadarChart cx="50%" cy="50%" outerRadius="70%" data={shiftRadarData}>
-                                            <PolarGrid stroke="#E5E7EB" strokeDasharray="4 4" />
-                                            <PolarAngleAxis dataKey="subject" tick={{ fill: '#6B7280', fontSize: 12, fontWeight: 700 }} />
-                                            <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                                            <Radar name="Quality" dataKey="Quality" stroke="#10B981" strokeWidth={3} fill="#10B981" fillOpacity={0.3} />
-                                            <Radar name="Volume" dataKey="Volume" stroke="#3B82F6" strokeWidth={3} fill="#3B82F6" fillOpacity={0.3} />
-                                            <Legend wrapperStyle={{ fontSize: '12px', fontWeight: 'bold', paddingTop: '20px' }} />
-                                            <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }} />
-                                        </RadarChart>
-                                    </ResponsiveContainer>
+                                {/* Stacked Bar with Rounded Corners & Gradients */}
+                                <GlassCard className="min-h-[400px]">
+                                    <h3 className="text-lg font-bold text-gray-800 mb-6">Daily Shift Distribution</h3>
+                                    <div className="w-full h-[320px]">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart layout="vertical" data={trendData} margin={{ top: 0, right: 30, left: 20, bottom: 0 }} barSize={32}>
+                                                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E5E7EB" />
+                                                <XAxis type="number" hide />
+                                                <YAxis dataKey="date" type="category" tick={{ fill: '#6B7280', fontSize: 11, fontWeight: 'bold' }} width={70} />
+                                                <Tooltip cursor={{ fill: 'rgba(243, 244, 246, 0.5)' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }} />
+                                                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontWeight: 'bold' }} />
+                                                <Bar dataKey="Shift A" stackId="a" fill="#3B82F6" radius={[4, 0, 0, 4]} />
+                                                <Bar dataKey="Shift B" stackId="a" fill="#10B981" radius={[0, 0, 0, 0]} />
+                                                <Bar dataKey="Shift C" stackId="a" fill="#F59E0B" radius={[0, 4, 4, 0]} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </GlassCard>
+                            </div>
+
+                            {/* Heatmap with Tighter Grid & Color Scale */}
+                            <GlassCard>
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="text-lg font-bold text-gray-800">Machine Efficiency Heatmap</h3>
+                                    <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
+                                        <span className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded-sm"></div> &lt;70%</span>
+                                        <span className="flex items-center gap-1"><div className="w-3 h-3 bg-yellow-400 rounded-sm"></div> 70-85%</span>
+                                        <span className="flex items-center gap-1"><div className="w-3 h-3 bg-emerald-500 rounded-sm"></div> &gt;85%</span>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-1">
+                                    {efficiencyData.map((m, idx) => {
+                                        const pct = m.avg_bekido || 0;
+                                        let colorClass = 'bg-red-500 text-white';
+                                        if (pct >= 95) colorClass = 'bg-emerald-600 text-white';
+                                        else if (pct >= 90) colorClass = 'bg-emerald-500 text-white';
+                                        else if (pct >= 85) colorClass = 'bg-emerald-400 text-white';
+                                        else if (pct >= 80) colorClass = 'bg-yellow-400 text-white';
+                                        else if (pct >= 75) colorClass = 'bg-yellow-500 text-white';
+                                        else if (pct >= 70) colorClass = 'bg-orange-500 text-white';
+
+                                        return (
+                                            <div key={idx}
+                                                title={`Machine ${m.machine_no}: ${Math.round(pct)}%`}
+                                                className={`aspect-square rounded-md flex items-center justify-center cursor-help transition-all hover:scale-110 hover:z-10 shadow-sm ${colorClass}`}>
+                                                <span className="text-[10px] font-bold">{m.machine_no}</span>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </GlassCard>
-
-                            {/* Stacked Bar with Rounded Corners & Gradients */}
-                            <GlassCard className="min-h-[400px]">
-                                <h3 className="text-lg font-bold text-gray-800 mb-6">Daily Shift Distribution</h3>
-                                <div className="w-full h-[320px]">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart layout="vertical" data={trendData} margin={{ top: 0, right: 30, left: 20, bottom: 0 }} barSize={32}>
-                                            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E5E7EB" />
-                                            <XAxis type="number" hide />
-                                            <YAxis dataKey="date" type="category" tick={{ fill: '#6B7280', fontSize: 11, fontWeight: 'bold' }} width={70} />
-                                            <Tooltip cursor={{ fill: 'rgba(243, 244, 246, 0.5)' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }} />
-                                            <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontWeight: 'bold' }} />
-                                            <Bar dataKey="Shift A" stackId="a" fill="#3B82F6" radius={[4, 0, 0, 4]} />
-                                            <Bar dataKey="Shift B" stackId="a" fill="#10B981" radius={[0, 0, 0, 0]} />
-                                            <Bar dataKey="Shift C" stackId="a" fill="#F59E0B" radius={[0, 4, 4, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                </div>
-                            </GlassCard>
                         </div>
-
-                        {/* Heatmap with Tighter Grid & Color Scale */}
-                        <GlassCard>
-                            <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-lg font-bold text-gray-800">Machine Efficiency Heatmap</h3>
-                                <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
-                                    <span className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded-sm"></div> &lt;70%</span>
-                                    <span className="flex items-center gap-1"><div className="w-3 h-3 bg-yellow-400 rounded-sm"></div> 70-85%</span>
-                                    <span className="flex items-center gap-1"><div className="w-3 h-3 bg-emerald-500 rounded-sm"></div> &gt;85%</span>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-1">
-                                {efficiencyData.map((m, idx) => {
-                                    const pct = m.avg_bekido || 0;
-                                    let colorClass = 'bg-red-500 text-white';
-                                    if (pct >= 95) colorClass = 'bg-emerald-600 text-white';
-                                    else if (pct >= 90) colorClass = 'bg-emerald-500 text-white';
-                                    else if (pct >= 85) colorClass = 'bg-emerald-400 text-white';
-                                    else if (pct >= 80) colorClass = 'bg-yellow-400 text-white';
-                                    else if (pct >= 75) colorClass = 'bg-yellow-500 text-white';
-                                    else if (pct >= 70) colorClass = 'bg-orange-500 text-white';
-
-                                    return (
-                                        <div key={idx}
-                                            title={`Machine ${m.machine_no}: ${Math.round(pct)}%`}
-                                            className={`aspect-square rounded-md flex items-center justify-center cursor-help transition-all hover:scale-110 hover:z-10 shadow-sm ${colorClass}`}>
-                                            <span className="text-[10px] font-bold">{m.machine_no}</span>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </GlassCard>
-                    </div>
-                )}
+                    )
+                }
 
                 {/* OPERATOR HOME VIEW */}
-                {(!user?.role || user?.role !== 'admin') && (activeTab === 'Home') && (
-                    <div className="max-w-2xl mx-auto mt-20">
-                        <GlassCard className="text-center p-12">
-                            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600">
-                                <User className="w-10 h-10" />
-                            </div>
-                            <h2 className="text-3xl font-black text-gray-800 mb-2">Welcome, {user?.username}</h2>
-                            <p className="text-gray-500 mb-10">Select an action to get started.</p>
+                {
+                    (!user?.role || user?.role !== 'admin') && (activeTab === 'Home') && (
+                        <div className="max-w-2xl mx-auto mt-20">
+                            <GlassCard className="text-center p-12">
+                                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600">
+                                    <User className="w-10 h-10" />
+                                </div>
+                                <h2 className="text-3xl font-black text-gray-800 mb-2">Welcome, {user?.username}</h2>
+                                <p className="text-gray-500 mb-10">Select an action to get started.</p>
 
-                            <div className="flex flex-col sm:flex-row justify-center gap-6">
-                                <button onClick={() => navigate('/scanner')} className="group relative px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-600/30 active:scale-95 transition-all overflow-hidden">
-                                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
-                                    <div className="relative flex items-center justify-center gap-3">
-                                        <ClipboardList className="w-6 h-6" /> Start New Scan
-                                    </div>
-                                </button>
-                                <button onClick={() => navigate('/history')} className="px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl font-bold hover:bg-gray-50 hover:border-gray-300 active:scale-95 transition-all flex items-center justify-center gap-3">
-                                    <Activity className="w-6 h-6" /> View History
-                                </button>
-                            </div>
-                        </GlassCard>
-                    </div>
-                )}
+                                <div className="flex flex-col sm:flex-row justify-center gap-6">
+                                    <button onClick={() => navigate('/scanner')} className="group relative px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-600/30 active:scale-95 transition-all overflow-hidden">
+                                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+                                        <div className="relative flex items-center justify-center gap-3">
+                                            <ClipboardList className="w-6 h-6" /> Start New Scan
+                                        </div>
+                                    </button>
+                                    <button onClick={() => navigate('/history')} className="px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl font-bold hover:bg-gray-50 hover:border-gray-300 active:scale-95 transition-all flex items-center justify-center gap-3">
+                                        <Activity className="w-6 h-6" /> View History
+                                    </button>
+                                </div>
+                            </GlassCard>
+                        </div>
+                    )
+                }
 
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

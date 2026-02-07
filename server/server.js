@@ -11,7 +11,7 @@ const io = new Server(server, {
     cors: {
         origin: [
             "http://localhost:5173",
-            "https://checklist.siddhiss.com",
+            "https://machine.siddhiss.com",
             "https://machineinspectionapp-production.up.railway.app"
         ],
         methods: ["GET", "POST"]
@@ -21,7 +21,7 @@ const io = new Server(server, {
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://checklist.siddhiss.com",
+        "https://machine.siddhiss.com",
         "https://machineinspectionapp-production.up.railway.app"
     ],
     credentials: true

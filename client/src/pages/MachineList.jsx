@@ -116,7 +116,7 @@ const MachineList = () => {
         <div className="p-8 max-w-7xl mx-auto">
             <div className="flex items-center justify-between mb-6 md:mb-8 sticky top-0 bg-[#F3F4F6] z-30 py-2">
                 <div className="flex items-center gap-3 md:gap-4">
-                    <Link to="/" className="p-2 bg-white border border-gray-200 rounded-full hover:bg-gray-100 transition shadow-sm">
+                    <Link to="/dashboard" className="p-2 bg-white border border-gray-200 rounded-full hover:bg-gray-100 transition shadow-sm">
                         <ArrowLeft className="w-5 h-5 text-gray-600" />
                     </Link>
                     <h1 className="text-xl md:text-3xl font-black text-gray-800 tracking-tight">Machines</h1>

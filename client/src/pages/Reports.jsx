@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api, { STATIC_BASE_URL } from '../api';
+import { Link } from 'react-router-dom';
 import { Download, Search, Filter, Calendar, FileText, CheckCircle, AlertCircle, X, ChevronDown, Activity, ArrowLeft } from 'lucide-react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -61,6 +62,44 @@ const Reports = () => {
         }
 
         setFilteredData(temp);
+    };
+
+    const resetFilters = () => {
+        setSearch('');
+        setShiftFilter('All');
+        setDateRange({ start: '', end: '' });
+    };
+
+    const exportToExcel = () => {
+        if (!filteredData.length) return alert("No data to export");
+
+        const headers = ["Machine No", "Model", "Shift", "Inspector", "Date", "OK Qty", "NG Qty", "Total Qty", "Efficiency %", "Remarks"];
+
+        // Convert data to CSV format
+        const csvContent = [
+            headers.join(","),
+            ...filteredData.map(item => [
+                item.machine_no,
+                item.model || '-',
+                item.shift,
+                item.username || 'Unknown',
+                new Date(item.submitted_at).toLocaleDateString(),
+                item.ok_quantity,
+                item.ng_quantity,
+                item.total_quantity,
+                item.bekido_percent || 0,
+                `"${(item.remarks || '').replace(/"/g, '""')}"` // Escape quotes
+            ].join(","))
+        ].join("\n");
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Inspection_Report_${new Date().toISOString().slice(0, 10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const generatePDF = async (submission) => {
@@ -156,11 +195,29 @@ const Reports = () => {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                    <div>
-                        <h1 className="text-3xl font-black text-slate-800 tracking-tight">Inspection Reports</h1>
-                        <p className="text-slate-500 font-medium">View, filter, and export detailed inspection records.</p>
+                    <div className="flex items-center gap-3">
+                        <Link to="/dashboard" className="p-2 bg-white border border-gray-200 rounded-full hover:bg-gray-100 transition shadow-sm">
+                            <ArrowLeft className="w-5 h-5 text-gray-600" />
+                        </Link>
+                        <div>
+                            <h1 className="text-3xl font-black text-slate-800 tracking-tight">Inspection Reports</h1>
+                            <p className="text-slate-500 font-medium">View, filter, and export detailed inspection records.</p>
+                        </div>
                     </div>
-                    {/* Add back button or dashboard link if needed */}
+                    <div className="flex gap-2">
+                        <button
+                            onClick={resetFilters}
+                            className="px-4 py-2 bg-white border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition flex items-center gap-2"
+                        >
+                            <Filter className="w-4 h-4" /> Reset Filters
+                        </button>
+                        <button
+                            onClick={exportToExcel}
+                            className="px-4 py-2 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition flex items-center gap-2 shadow-lg shadow-green-500/20"
+                        >
+                            <FileText className="w-4 h-4" /> Export Excel
+                        </button>
+                    </div>
                 </div>
 
                 {/* Filters Bar */}

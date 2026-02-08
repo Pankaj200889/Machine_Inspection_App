@@ -743,10 +743,10 @@ const Home = () => {
                             {/* Top Stats Row */}
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                                 {[
-                                    { label: 'Overall Yield', val: `${kpi.avg_bekido}%`, sub: '+2.4%', color: 'text-gray-800', bar: 'bg-blue-500' },
-                                    { label: 'Quality Rate', val: `${((kpi.total_ok / (kpi.total_actual || 1)) * 100).toFixed(1)}%`, sub: '-0.5%', color: 'text-gray-800', bar: 'bg-emerald-500' },
-                                    { label: 'Rejection Rate', val: `${((kpi.total_ng / (kpi.total_actual || 1)) * 100).toFixed(2)}%`, sub: 'Stable', color: 'text-gray-800', bar: 'bg-red-500' },
-                                    { label: 'Utilisation', val: kpi.total_plan > 0 ? `${((kpi.total_actual / kpi.total_plan) * 100).toFixed(1)}%` : '0%', sub: 'High', color: 'text-gray-800', bar: 'bg-purple-500' }
+                                    { label: 'Overall Yield', val: `${(Number(kpi.avg_bekido) || 0).toFixed(1)}%`, sub: '+2.4%', color: 'text-gray-800', bar: 'bg-blue-500' },
+                                    { label: 'Quality Rate', val: `${(((kpi.total_ok || 0) / (kpi.total_actual || 1)) * 100).toFixed(1)}%`, sub: '-0.5%', color: 'text-gray-800', bar: 'bg-emerald-500' },
+                                    { label: 'Rejection Rate', val: `${(((kpi.total_ng || 0) / (kpi.total_actual || 1)) * 100).toFixed(2)}%`, sub: 'Stable', color: 'text-gray-800', bar: 'bg-red-500' },
+                                    { label: 'Utilisation', val: kpi.total_plan > 0 ? `${(((kpi.total_actual || 0) / kpi.total_plan) * 100).toFixed(1)}%` : '0%', sub: 'High', color: 'text-gray-800', bar: 'bg-purple-500' }
                                 ].map((s, i) => (
                                     <GlassCard key={i} className="!p-5 flex flex-col justify-between h-32 group hover:-translate-y-1 transition-transform shadow-lg shadow-gray-200/50">
                                         <div className="flex justify-between items-start">

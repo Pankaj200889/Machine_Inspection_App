@@ -10,7 +10,7 @@ const PrivateRoute = ({ roles }) => {
     }
 
     if (roles && !roles.includes(user.role)) {
-        return <Navigate to="/" replace />; // Redirect to Home if unauthorized
+        return <Navigate to="/dashboard" replace />; // Redirect to Dashboard if unauthorized
     }
 
     return <Outlet />;

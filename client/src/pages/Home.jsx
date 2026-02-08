@@ -505,9 +505,7 @@ const Home = () => {
                             <NavItem name="Summary" active={activeTab === 'Home'} onClick={() => setActiveTab('Home')} />
                             {user?.role === 'admin' && <NavItem name="Analytics" active={activeTab === 'Analytics'} onClick={() => setActiveTab('Analytics')} />}
                             {user?.role === 'admin' && <NavItem name="Machines" active={false} onClick={() => navigate('/machines')} />}
-                            {user?.role === 'admin' && (
-                                <button onClick={() => setIsExportOpen(true)} className="px-5 py-2 text-sm font-bold rounded-full transition-all whitespace-nowrap text-gray-500 hover:text-gray-900 hover:bg-white/50">Reports</button>
-                            )}
+                            {user?.role === 'admin' && <NavItem name="Reports" active={false} onClick={() => navigate('/reports')} />}
                             <NavItem name="Scan QR" active={false} onClick={() => navigate('/scanner')} />
                         </div>
                     </div>

@@ -14,7 +14,9 @@ const Login = () => {
         e.preventDefault();
         const res = await login(email, password);
         if (res.success) {
-            navigate('/dashboard');
+            const params = new URLSearchParams(window.location.search);
+            const redirect = params.get('redirect');
+            navigate(redirect || '/dashboard');
         } else {
             setError(res.error);
         }

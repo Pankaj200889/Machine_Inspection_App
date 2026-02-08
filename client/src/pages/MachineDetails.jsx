@@ -87,8 +87,8 @@ const MachineDetails = () => {
 
                         <div className="mt-8 pt-8 border-t border-slate-100 text-center">
                             <p className="text-slate-500 mb-6 text-sm">Authorized personnel can perform inspections on this machine.</p>
-                            <Link to="/login" className="block w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition shadow-lg shadow-slate-900/20">
-                                Officer Login
+                            <Link to={`/login?redirect=/checklist/${id}`} className="block w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition shadow-lg shadow-slate-900/20">
+                                Officer Login & Inspect
                             </Link>
                         </div>
                     </div>

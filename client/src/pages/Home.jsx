@@ -112,11 +112,11 @@ const Home = () => {
             rawTrend.forEach(row => {
                 // Ensure Date + Shift keys exist
                 if (!trendMap[row.date]) trendMap[row.date] = { date: row.date, Total: 0, 'Shift A': 0, 'Shift B': 0, 'Shift C': 0 };
-                trendMap[row.date].Total += (row.total || 0);
+                trendMap[row.date].Total += Number(row.total || 0);
 
                 const shiftKey = `Shift ${row.shift}`;
                 if (trendMap[row.date][shiftKey] !== undefined) {
-                    trendMap[row.date][shiftKey] += (row.total || 0);
+                    trendMap[row.date][shiftKey] += Number(row.total || 0);
                 }
             });
             // Convert to array and take last 7 days
@@ -124,10 +124,10 @@ const Home = () => {
             setTrendData(trendArr);
 
             // 2. KPIs
-            const total_ok = effRes.data.reduce((sum, m) => sum + (m.total_ok || 0), 0);
-            const total_ng = effRes.data.reduce((sum, m) => sum + (m.total_ng || 0), 0);
-            const daily_std_plan = effRes.data.reduce((sum, m) => sum + (m.prod_plan || 0), 0);
-            const avg_bekido = effRes.data.length > 0 ? (effRes.data.reduce((sum, m) => sum + (m.avg_bekido || 0), 0) / effRes.data.length).toFixed(1) : 0;
+            const total_ok = effRes.data.reduce((sum, m) => sum + Number(m.total_ok || 0), 0);
+            const total_ng = effRes.data.reduce((sum, m) => sum + Number(m.total_ng || 0), 0);
+            const daily_std_plan = effRes.data.reduce((sum, m) => sum + Number(m.prod_plan || 0), 0);
+            const avg_bekido = effRes.data.length > 0 ? (effRes.data.reduce((sum, m) => sum + Number(m.avg_bekido || 0), 0) / effRes.data.length).toFixed(1) : 0;
 
             setKpi({
                 total_ok, total_ng, avg_bekido,

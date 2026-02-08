@@ -52,7 +52,6 @@ const Login = () => {
                     <div>
                         <div className="flex justify-between items-center mb-2">
                             <label className="block text-gray-700 text-sm font-semibold">Password</label>
-                            <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-800">Forgot Password?</Link>
                         </div>
                         <div className="relative">
                             <Lock className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
@@ -75,10 +74,7 @@ const Login = () => {
                     </button>
                 </form>
 
-                <p className="mt-6 text-center text-sm text-gray-600">
-                    Don't have an account?
-                    <Link to="/register" className="text-blue-600 hover:underline ml-1 font-semibold">Sign up</Link>
-                </p>
+
             </div>
         </div>
     );

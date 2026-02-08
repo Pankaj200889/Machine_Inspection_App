@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
-import { Trash2, UserPlus, Users as UsersIcon, Shield, Mail, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Trash2, UserPlus, Users as UsersIcon, Shield, Mail, X, ArrowLeft } from 'lucide-react';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -60,9 +61,14 @@ const Users = () => {
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                    <div>
-                        <h1 className="text-3xl font-black text-slate-800 tracking-tight">User Management</h1>
-                        <p className="text-slate-500 font-medium">Manage system access and roles.</p>
+                    <div className="flex items-center gap-3">
+                        <Link to="/dashboard" className="p-2 bg-white border border-slate-200 rounded-full hover:bg-slate-100 transition shadow-sm">
+                            <ArrowLeft className="w-5 h-5 text-slate-600" />
+                        </Link>
+                        <div>
+                            <h1 className="text-3xl font-black text-slate-800 tracking-tight">User Management</h1>
+                            <p className="text-slate-500 font-medium">Manage system access and roles.</p>
+                        </div>
                     </div>
                     <button
                         onClick={() => setShowAddModal(true)}

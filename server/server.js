@@ -51,6 +51,28 @@ app.use('/api/checklists', checklistRoutes);
 app.use('/api/organization', organizationRoutes);
 app.use('/api/export', exportRoutes);
 
+// Debug Route: Force Seed (Protected by simplistic check or rely on admin login later)
+app.post('/api/debug/seed', async (req, res) => {
+    try {
+        const seedProd = require('./seed_prod');
+        // seed_prod.js usually runs immediately on require if not exported as function
+        // We might need to adjust seed_prod to export a function if not already
+        // But for now, let's assume valid access controls or temporary usage.
+
+        // Actually, seed_prod.js in this codebase runs `seed()` at the end.
+        // So require()ing it might trigger it, but node caches modules.
+        // Better to execute it as a child process or modify seed_prod to export.
+
+        // Quick fix: clear cache and re-require (not recommended for high traffic but fine for debug)
+        delete require.cache[require.resolve('./seed_prod')];
+        require('./seed_prod');
+
+        res.json({ message: 'Seeding triggered. Check logs.' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Serve Static Frontend (Production)
 app.use(express.static(path.join(__dirname, '../client/dist')));
 

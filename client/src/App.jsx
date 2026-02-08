@@ -14,6 +14,7 @@ import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import SubmissionHistory from './pages/SubmissionHistory';
 import LandingPage from './pages/LandingPage';
 import Reports from './pages/Reports';
+import Users from './pages/Users';
 
 import ChecklistEdit from './pages/ChecklistEdit';
 import PrivateRoute from './components/PrivateRoute';
@@ -41,6 +42,7 @@ function App() {
                     <Route path="/analytics" element={<AnalyticsDashboard />} />
                     <Route path="/machines" element={<MachineList />} />
                     <Route path="/organization" element={<OrganizationProfile />} />
+                    <Route path="/users" element={<Users />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/checklist/:id/edit" element={<ChecklistEdit />} />
                 </Route>

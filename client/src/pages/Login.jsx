@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Lock, Mail } from 'lucide-react';
+import { Lock, Mail, ArrowLeft } from 'lucide-react';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -23,7 +23,10 @@ const Login = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
             <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 transform transition-all hover:scale-105">
-                <div className="text-center mb-8">
+                <div className="text-center mb-8 relative">
+                    <Link to="/" className="absolute left-0 top-0 text-gray-400 hover:text-gray-600 transition">
+                        <ArrowLeft className="w-6 h-6" />
+                    </Link>
                     <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
                     <p className="text-gray-500 mt-2">Sign in to your account</p>
                 </div>

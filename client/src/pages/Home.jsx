@@ -505,6 +505,7 @@ const Home = () => {
                             <NavItem name="Summary" active={activeTab === 'Home'} onClick={() => setActiveTab('Home')} />
                             {user?.role === 'admin' && <NavItem name="Analytics" active={activeTab === 'Analytics'} onClick={() => setActiveTab('Analytics')} />}
                             {user?.role === 'admin' && <NavItem name="Machines" active={false} onClick={() => navigate('/machines')} />}
+                            {user?.role === 'admin' && <NavItem name="Users" active={false} onClick={() => navigate('/users')} />}
                             {user?.role === 'admin' && <NavItem name="Reports" active={false} onClick={() => navigate('/reports')} />}
                             <NavItem name="Scan QR" active={false} onClick={() => navigate('/scanner')} />
                         </div>

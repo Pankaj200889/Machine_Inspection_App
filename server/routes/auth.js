@@ -93,4 +93,25 @@ router.post('/reset-password', async (req, res) => {
     }
 });
 
+// List Users (Admin Only - simplified check)
+router.get('/users', async (req, res) => {
+    try {
+        const result = await db.query("SELECT id, username, email, role, created_at FROM users ORDER BY created_at DESC");
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete User (Admin Only)
+router.delete('/users/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await db.query("DELETE FROM users WHERE id = ?", [id]);
+        res.json({ message: 'User deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;

@@ -33,12 +33,12 @@ const LandingPage = () => {
                     </span>
                     Next-Gen Machine Inspection System
                 </div>
-                
+
                 <h1 className="text-5xl md:text-7xl font-black tracking-tight text-slate-900 mb-6 max-w-4xl animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-                    Ensure Safety with <br/>
+                    Ensure Safety with <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Precision & Speed</span>
                 </h1>
-                
+
                 <p className="text-lg md:text-xl text-slate-500 max-w-2xl mb-10 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
                     A cloud-based solution for real-time machine inspection, checklist management, and safety compliance. Accessible anywhere, anytime.
                 </p>
@@ -89,15 +89,44 @@ const LandingPage = () => {
                 </div>
             </section>
 
+            {/* How It Works */}
+            <section id="how-it-works" className="py-20 bg-slate-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-black text-slate-900 mb-4">How It Works</h2>
+                        <p className="text-slate-500 max-w-2xl mx-auto">Three simple steps to maintain safety and compliance across your facility.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                        {/* Connector Line (Desktop) */}
+                        <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-slate-200 -z-0"></div>
+
+                        {[
+                            { step: "01", title: "Scan QR Code", desc: "Locate the QR tag on the machine and scan it with your device." },
+                            { step: "02", title: "Perform Inspection", desc: "Complete the digital checklist and capture photos of any issues." },
+                            { step: "03", title: "Submit Report", desc: "Data is instantly synced to the cloud and reports are generated." }
+                        ].map((item, idx) => (
+                            <div key={idx} className="relative z-10 flex flex-col items-center text-center">
+                                <div className="w-24 h-24 rounded-full bg-white border-4 border-blue-50 text-blue-600 font-black text-2xl flex items-center justify-center shadow-lg mb-6">
+                                    {item.step}
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
+                                <p className="text-slate-500 leading-relaxed">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* CTA Section */}
             <section className="py-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-5xl mx-auto bg-slate-900 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl -ml-16 -mb-16"></div>
-                    
+
                     <h2 className="text-3xl md:text-5xl font-black text-white mb-6 relative z-10">Ready to modernize your safety protocols?</h2>
                     <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto relative z-10">Join leading industrial solutions in maintaining high safety standards with our cloud-based inspection system.</p>
-                    
+
                     <Link to="/login" className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-500 transition shadow-xl shadow-blue-900/50 relative z-10">
                         Get Started Now
                         <ArrowRight className="w-5 h-5" />

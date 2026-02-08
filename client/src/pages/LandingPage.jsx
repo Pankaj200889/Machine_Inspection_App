@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ShieldCheck, ArrowRight, ScanLine, Activity, CheckCircle, BarChart3 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const LandingPage = () => {
+    const { user, logout } = useAuth();
+
     return (
         <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-blue-100 selection:text-blue-900">
             {/* Navbar */}
@@ -17,9 +17,20 @@ const LandingPage = () => {
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
                         <a href="#features" className="hover:text-blue-600 transition">Features</a>
                         <a href="#how-it-works" className="hover:text-blue-600 transition">How it Works</a>
-                        <Link to="/login" className="px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-slate-800 transition shadow-lg shadow-slate-900/20">
-                            Officer Login
-                        </Link>
+                        {user ? (
+                            <div className="flex items-center gap-4">
+                                <Link to="/dashboard" className="font-semibold text-blue-600 hover:text-blue-800">
+                                    Dashboard
+                                </Link>
+                                <button onClick={logout} className="px-5 py-2.5 bg-slate-200 text-slate-700 rounded-full hover:bg-slate-300 transition">
+                                    Logout
+                                </button>
+                            </div>
+                        ) : (
+                            <Link to="/login" className="px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-slate-800 transition shadow-lg shadow-slate-900/20">
+                                Officer Login
+                            </Link>
+                        )}
                     </div>
                 </div>
             </nav>
@@ -44,9 +55,9 @@ const LandingPage = () => {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
-                    <Link to="/login" className="group relative px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-blue-600/30 hover:shadow-2xl hover:shadow-blue-600/40 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 overflow-hidden">
+                    <Link to={user ? "/dashboard" : "/login"} className="group relative px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-blue-600/30 hover:shadow-2xl hover:shadow-blue-600/40 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 overflow-hidden">
                         <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
-                        <span>Officer Portal</span>
+                        <span>{user ? "Go to Dashboard" : "Officer Portal"}</span>
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
                     <Link to="/scanner" className="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 hover:border-slate-300 transition flex items-center justify-center gap-2">

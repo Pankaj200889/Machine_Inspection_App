@@ -7,6 +7,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Home from './pages/Home';
 import Scanner from './pages/Scanner';
+import MachineDetails from './pages/MachineDetails';
 import MachineList from './pages/MachineList';
 import ChecklistForm from './pages/ChecklistForm';
 import OrganizationProfile from './pages/OrganizationProfile';
@@ -29,10 +30,12 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
 
+                <Route path="/machine/:id" element={<MachineDetails />} />
+                <Route path="/scanner" element={<Scanner />} />
+
                 {/* Protected Routes */}
                 <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<Home />} />
-                    <Route path="/scanner" element={<Scanner />} />
                     <Route path="/checklist/:machineId" element={<ChecklistForm />} />
                     <Route path="/history" element={<SubmissionHistory />} />
                 </Route>

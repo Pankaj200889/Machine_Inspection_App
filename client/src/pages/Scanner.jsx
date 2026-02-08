@@ -2,9 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { useNavigate } from 'react-router-dom';
 import { Camera, AlertTriangle, Loader2 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Scanner = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [isScanning, setIsScanning] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
@@ -105,7 +107,11 @@ const Scanner = () => {
             // Use window.location.href instead of navigate to force a clean page load
             // This ensures all camera resources are definitely released by the browser
             if (data.id) {
-                window.location.href = `/checklist/${data.id}`;
+                if (user) {
+                    window.location.href = `/checklist/${data.id}`;
+                } else {
+                    window.location.href = `/machine/${data.id}`;
+                }
             } else if (data.no) {
                 alert("Scanned: " + data.no);
                 window.location.href = '/';

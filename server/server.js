@@ -12,9 +12,11 @@ const io = new Server(server, {
         origin: [
             "http://localhost:5173",
             "https://machine.siddhiss.com",
-            "https://machineinspectionapp-production.up.railway.app"
+            "https://machineinspectionapp-production.up.railway.app",
+            "https://machine-inspection-app-cyan.vercel.app"
         ],
-        methods: ["GET", "POST"]
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
@@ -22,7 +24,8 @@ app.use(cors({
     origin: [
         "http://localhost:5173",
         "https://machine.siddhiss.com",
-        "https://machineinspectionapp-production.up.railway.app"
+        "https://machineinspectionapp-production.up.railway.app",
+        "https://machine-inspection-app-cyan.vercel.app"
     ],
     credentials: true
 }));

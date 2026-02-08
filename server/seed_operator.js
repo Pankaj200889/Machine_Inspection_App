@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 
 async function seedOperator() {
     console.log("Seeding Operator...");
-    const username = 'operator';
-    const email = 'operator@example.com';
+    const username = 'operator@test.com';
+    const email = 'operator@test.com'; // Using same for simplicity as requested
     const password = 'operator123';
 
     // Check if exists

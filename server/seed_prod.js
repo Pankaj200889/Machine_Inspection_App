@@ -22,7 +22,7 @@ const seed = () => {
         // 2. Create Admin User
         console.log('👤 Creating Default Admin...');
 
-        db.run(`INSERT INTO users (username, password_hash, role) VALUES ('admin', ?, 'admin')`, [hashedPassword], function (err) {
+        db.run(`INSERT INTO users (username, password_hash, role) VALUES ('admin@example.com', ?, 'admin')`, [hashedPassword], function (err) {
             if (err) return console.error("Error creating admin:", err.message);
             const adminId = this.lastID;
             console.log(`__ Admin Created (ID: ${adminId})`);

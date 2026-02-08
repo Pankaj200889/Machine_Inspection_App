@@ -9,12 +9,23 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*", // Allow all origins for local network testing
+        origin: [
+            "http://localhost:5173",
+            "https://machine.siddhiss.com",
+            "https://machineinspectionapp-production.up.railway.app"
+        ],
         methods: ["GET", "POST"]
     }
 });
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://machine.siddhiss.com",
+        "https://machineinspectionapp-production.up.railway.app"
+    ],
+    credentials: true
+}));
 app.use(express.json());
 const fs = require('fs');
 

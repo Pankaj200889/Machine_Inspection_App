@@ -21,6 +21,7 @@ const toCSV = (data) => {
     const header = keys.join(',') + '\n';
     const rows = data.map(obj => keys.map(key => {
         let val = obj[key] === null || obj[key] === undefined ? '' : obj[key];
+        if (val instanceof Date) val = val.toISOString(); // Format Dates
         val = String(val).replace(/"/g, '""'); // Escape quotes
         return `"${val}"`;
     }).join(',')).join('\n');
@@ -41,7 +42,39 @@ router.get('/machines', verifyAdmin, async (req, res) => {
     }
 });
 
-// ...
+// Export Checklists
+router.get('/checklists', verifyAdmin, async (req, res) => {
+    const sql = `
+        SELECT 
+            c.id, 
+            m.machine_no, 
+            m.model, 
+            u.username as operator, 
+            c.shift, 
+            c.ok_quantity, 
+            c.ng_quantity, 
+            c.total_quantity, 
+            c.avg_ng_percent, 
+            c.bekido_percent, 
+            c.remarks, 
+            c.submitted_at 
+        FROM checklists c
+        JOIN machines m ON c.machine_id = m.id
+        LEFT JOIN users u ON c.user_id = u.id
+        ORDER BY c.submitted_at DESC
+        LIMIT 5000
+    `;
+    try {
+        const result = await db.query(sql);
+        const csv = toCSV(result.rows);
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="production_report.csv"');
+        res.status(200).send(csv);
+    } catch (err) {
+        console.error("Export Checklists Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // Export Audit Logs
 router.get('/audits', verifyAdmin, async (req, res) => {

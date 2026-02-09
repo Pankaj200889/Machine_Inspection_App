@@ -57,7 +57,6 @@ const Home = () => {
     });
     const [selectedImage, setSelectedImage] = useState(null);
     const [orgProfile, setOrgProfile] = useState(null);
-    const [orgProfile, setOrgProfile] = useState(null);
     const [isExportOpen, setIsExportOpen] = useState(false);
     const [showFormulaInfo, setShowFormulaInfo] = useState(false);
 

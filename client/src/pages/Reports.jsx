@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import api, { STATIC_BASE_URL } from '../api';
 import { Link } from 'react-router-dom';
-import { Download, Search, Filter, Calendar, FileText, CheckCircle, AlertCircle, X, ChevronDown, Activity, ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import { Download, Search, Filter, Calendar, FileText, CheckCircle, AlertCircle, X, ChevronDown, Activity, ArrowLeft, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { useAuth } from '../context/AuthContext';
 
 const Reports = () => {
+    const { user } = useAuth();
     const [submissions, setSubmissions] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -69,6 +71,29 @@ const Reports = () => {
         setSearch('');
         setShiftFilter('All');
         setDateRange({ start: '', end: '' });
+    };
+
+    const deleteSubmission = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this inspection record? This action cannot be undone.")) {
+            return;
+        }
+
+        try {
+            await api.delete(`/checklists/${id}`);
+
+            // Update local state
+            const newSubmissions = submissions.filter(s => s.id !== id);
+            setSubmissions(newSubmissions);
+
+            // Re-apply filters will happen automatically via useEffect, or we can explicit setFilteredData for speed
+            // But since useEffect depends on `submissions`, it will run.
+            // However, we might want to close the modal first.
+            setSelectedSubmission(null);
+            alert("Record deleted successfully.");
+        } catch (err) {
+            console.error("Delete failed", err);
+            alert("Failed to delete record: " + (err.response?.data?.error || err.message));
+        }
     };
 
     const exportToCSV = () => {
@@ -468,6 +493,15 @@ const Reports = () => {
                             )}
 
                             <div className="mt-8 flex gap-3">
+                                {user?.role === 'admin' && (
+                                    <button
+                                        onClick={() => deleteSubmission(selectedSubmission.id)}
+                                        className="px-4 py-3 bg-red-50 text-red-600 rounded-xl font-bold hover:bg-red-100 transition flex items-center gap-2"
+                                        title="Delete Record"
+                                    >
+                                        <Trash2 className="w-5 h-5" />
+                                    </button>
+                                )}
                                 <button onClick={() => generateSinglePDF(selectedSubmission)} className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2">
                                     <Download className="w-5 h-5" /> Download PDF
                                 </button>

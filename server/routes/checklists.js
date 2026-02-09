@@ -327,4 +327,38 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Delete Checklist (Admin Only)
+router.delete('/:id', verifyUser, async (req, res) => {
+    if (req.user.role !== 'admin') return res.status(403).json({ error: 'Only admins can delete records' });
+
+    const checklistId = req.params.id;
+
+    try {
+        // Optional: Get image path to delete file if needed
+        const cRes = await db.query("SELECT image_path FROM checklists WHERE id = ?", [checklistId]);
+        const row = cRes.rows[0];
+
+        if (!row) return res.status(404).json({ error: 'Checklist not found' });
+
+        // Delete from DB
+        await db.query("DELETE FROM checklists WHERE id = ?", [checklistId]);
+
+        // Delete image file if exists
+        if (row.image_path) {
+            const fs = require('fs');
+            const filePath = path.join(__dirname, '../', row.image_path);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
+
+        const io = req.app.get('socketio');
+        if (io) io.emit('delete_checklist', checklistId);
+
+        res.json({ message: 'Checklist deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;

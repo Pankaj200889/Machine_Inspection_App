@@ -25,12 +25,12 @@ const Login = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
             <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 transform transition-all hover:scale-105">
-                <div className="text-center mb-8 relative">
-                    <Link to="/" className="absolute left-0 top-0 text-gray-400 hover:text-gray-600 transition">
+                <div className="text-center mb-8 relative px-6 md:px-0">
+                    <Link to="/" className="absolute left-0 top-1 text-gray-400 hover:text-gray-600 transition p-1 -ml-2 md:ml-0">
                         <ArrowLeft className="w-6 h-6" />
                     </Link>
-                    <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
-                    <p className="text-gray-500 mt-2">Sign in to your account</p>
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Welcome Back</h2>
+                    <p className="text-gray-500 mt-2 text-sm md:text-base">Sign in to your account</p>
                 </div>
 
                 {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm">{error}</div>}

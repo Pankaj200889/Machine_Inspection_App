@@ -64,12 +64,14 @@ const ResetPassword = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
             <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-                <div className="text-center mb-8 relative">
-                    <Link to="/" className="absolute left-0 top-1 text-gray-400 hover:text-gray-600 transition p-1 -ml-2">
-                        <ArrowLeft className="w-6 h-6" />
-                    </Link>
-                    <h2 className="text-2xl font-bold text-gray-800">Set New Password</h2>
-                    <p className="text-gray-500 mt-2 text-sm">Create a strong password for your account.</p>
+                <div className="mb-8">
+                    <div className="flex items-center mb-2">
+                        <Link to="/" className="p-2 -ml-2 text-gray-400 hover:text-gray-600 transition rounded-full hover:bg-gray-100 shrink-0">
+                            <ArrowLeft className="w-5 h-5" />
+                        </Link>
+                        <h2 className="text-2xl font-bold text-gray-800 text-center flex-1 pr-8">Set New Password</h2>
+                    </div>
+                    <p className="text-center text-gray-500 text-sm">Create a strong password for your account.</p>
                 </div>
 
                 {status === 'error' && <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-6 text-sm font-bold text-center border border-red-100">{msg}</div>}

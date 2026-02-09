@@ -11,7 +11,25 @@ const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
+    const [tokenStatus, setTokenStatus] = useState('checking'); // checking, valid, invalid
     const [msg, setMsg] = useState('');
+
+    useEffect(() => {
+        const checkToken = async () => {
+            if (!token) {
+                setTokenStatus('invalid');
+                return;
+            }
+            try {
+                await api.get(`/auth/verify-reset-token?token=${token}`);
+                setTokenStatus('valid');
+            } catch (err) {
+                setTokenStatus('invalid');
+                setMsg(err.response?.data?.error || "This link has expired or has already been used.");
+            }
+        };
+        checkToken();
+    }, [token]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,21 +44,30 @@ const ResetPassword = () => {
             await api.post('/auth/reset-password', { token, newPassword: password });
             setStatus('success');
         } catch (err) {
-            setStatus('error');
-            setMsg(err.response?.data?.error || "Failed to reset password. Link may be expired.");
+            // Re-verify if it failed (e.g. used in another tab)
+            setTokenStatus('invalid');
+            setMsg(err.response?.data?.error || "Failed to reset. Link may be expired.");
         }
     };
 
-    if (!token) {
+    if (tokenStatus === 'checking') {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-                <div className="bg-white p-8 rounded-2xl shadow-xl text-center max-w-sm w-full">
+                <div className="text-gray-500 font-bold animate-pulse">Verifying secure link...</div>
+            </div>
+        );
+    }
+
+    if (tokenStatus === 'invalid') {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+                <div className="bg-white p-8 rounded-2xl shadow-xl text-center max-w-sm w-full animate-in zoom-in-95">
                     <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
                         <Lock className="w-8 h-8" />
                     </div>
-                    <h2 className="text-xl font-bold text-gray-800 mb-2">Invalid Link</h2>
-                    <p className="text-gray-500 mb-6">This password reset link is invalid or missing.</p>
-                    <Link to="/" className="text-blue-600 font-bold hover:underline">Return to Login</Link>
+                    <h2 className="text-xl font-bold text-gray-800 mb-2">Link Expired</h2>
+                    <p className="text-gray-500 mb-6">{msg || "This password reset link is invalid or has already been used."}</p>
+                    <Link to="/" className="w-full block py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition">Return to Login</Link>
                 </div>
             </div>
         );

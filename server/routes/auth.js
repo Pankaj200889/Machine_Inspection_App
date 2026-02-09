@@ -102,6 +102,30 @@ router.post('/forgot-password', async (req, res) => {
     }
 });
 
+// Verify Reset Token (Check on Load)
+router.get('/verify-reset-token', async (req, res) => {
+    const { token } = req.query;
+    if (!token) return res.status(400).json({ error: 'Missing token' });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (decoded.purpose !== 'reset') return res.status(400).json({ error: 'Invalid token type' });
+
+        const result = await db.query("SELECT * FROM users WHERE id = ?", [decoded.id]);
+        const user = result.rows[0];
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const currentFingerprint = user.password_hash ? user.password_hash.slice(-10) : 'new_user';
+        if (decoded.fingerprint && decoded.fingerprint !== currentFingerprint) {
+            return res.status(400).json({ error: 'Link expired or already used' });
+        }
+
+        res.json({ valid: true });
+    } catch (err) {
+        res.status(400).json({ error: 'Invalid or expired token' });
+    }
+});
+
 // Reset Password
 router.post('/reset-password', async (req, res) => {
     const { token, newPassword } = req.body;

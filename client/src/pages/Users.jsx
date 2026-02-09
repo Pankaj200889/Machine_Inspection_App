@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { Link } from 'react-router-dom';
-import { Trash2, UserPlus, Users as UsersIcon, Shield, Mail, X, ArrowLeft } from 'lucide-react';
+import { Trash2, UserPlus, Users as UsersIcon, Shield, Mail, X, ArrowLeft, Key } from 'lucide-react';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -53,6 +53,19 @@ const Users = () => {
         } catch (err) {
             console.error("Failed to delete user", err);
             alert("Failed to delete user");
+        }
+    };
+
+    const [showResetModal, setShowResetModal] = useState(false);
+    const [resetLink, setResetLink] = useState('');
+
+    const handleGenerateLink = async (id) => {
+        try {
+            const res = await api.post(`/auth/users/${id}/reset-link`);
+            setResetLink(res.data.link);
+            setShowResetModal(true);
+        } catch (err) {
+            alert(err.response?.data?.error || "Failed to generate link");
         }
     };
 
@@ -129,6 +142,13 @@ const Users = () => {
                                                         <Trash2 className="w-5 h-5" />
                                                     </button>
                                                 )}
+                                                <button
+                                                    onClick={() => handleGenerateLink(user.id)}
+                                                    className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition ml-1"
+                                                    title="Reset Password"
+                                                >
+                                                    <Key className="w-5 h-5" />
+                                                </button>
                                             </td>
                                         </tr>
                                     ))
@@ -138,6 +158,36 @@ const Users = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Reset Link Modal */}
+            {showResetModal && (
+                <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+                    <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl p-6 text-center animate-in zoom-in-95">
+                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
+                            <Key className="w-6 h-6" />
+                        </div>
+                        <h3 className="text-lg font-bold text-gray-800 mb-2">Password Reset Link</h3>
+                        <p className="text-sm text-gray-500 mb-4">Share this secure link with the user. They can use it to set a new password.</p>
+
+                        <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 break-all text-xs font-mono text-gray-600 mb-4 select-all">
+                            {resetLink}
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button onClick={() => setShowResetModal(false)} className="flex-1 py-2.5 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition">Close</button>
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(resetLink);
+                                    alert("Link copied to clipboard!");
+                                }}
+                                className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition"
+                            >
+                                Copy Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Add User Modal */}
             {showAddModal && (

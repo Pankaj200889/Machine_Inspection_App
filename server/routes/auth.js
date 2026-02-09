@@ -58,6 +58,26 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Generate Reset Link (Admin Only - In real app, verify admin middleware here)
+router.post('/users/:id/reset-link', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await db.query("SELECT * FROM users WHERE id = ?", [id]);
+        const user = result.rows[0];
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const token = jwt.sign({ id: user.id, purpose: 'reset' }, JWT_SECRET, { expiresIn: '1h' });
+
+        // Construct Link (Use header origin to match current domain)
+        const origin = req.headers.origin || 'http://localhost:5173';
+        const link = `${origin}/reset-password?token=${token}`;
+
+        res.json({ link, message: 'Reset link generated successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Forgot Password (MVP: Log Token)
 router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
@@ -83,6 +103,10 @@ router.post('/reset-password', async (req, res) => {
     const { token, newPassword } = req.body;
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
+        if (decoded.purpose && decoded.purpose !== 'reset') {
+            return res.status(400).json({ error: 'Invalid token type' });
+        }
+
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(newPassword, salt);
 

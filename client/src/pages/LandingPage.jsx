@@ -15,7 +15,7 @@ const LandingPage = () => {
                         <div className="bg-blue-600 p-2 rounded-xl text-white">
                             <ShieldCheck className="w-6 h-6" />
                         </div>
-                        <span className="text-xl font-bold tracking-tight">MachineSafety</span>
+                        <span className="text-xl font-bold tracking-tight">EquipGuard</span>
                     </div>
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
                         <a href="#features" className="hover:text-blue-600 transition">Features</a>
@@ -78,7 +78,7 @@ const LandingPage = () => {
                             {
                                 icon: <Activity className="w-8 h-8 text-blue-600" />,
                                 title: "Real-time Monitoring",
-                                desc: "Track machine status and inspection compliance in real-time."
+                                desc: "Track machine status and inspection EquipGuard compliance in real-time."
                             },
                             {
                                 icon: <CheckCircle className="w-8 h-8 text-green-600" />,

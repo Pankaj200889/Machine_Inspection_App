@@ -483,7 +483,7 @@ const Home = () => {
                             )}
                             <div className="ml-0.5">
                                 <h1 className="text-lg md:text-xl font-extrabold text-gray-900 tracking-tight leading-none block">
-                                    {orgProfile?.company_name || 'Machine Inspection App'}
+                                    {orgProfile?.company_name || 'EquipGuard'}
                                 </h1>
                             </div>
                         </Link>

@@ -103,7 +103,9 @@ router.get('/:id/qr', verifyAdmin, async (req, res) => {
 
         if (!row) return res.status(404).json({ error: 'Machine not found' });
 
-        const qrData = JSON.stringify({ id: row.id, no: row.machine_no });
+        // Update to URL format for direct scanning
+        // const qrData = JSON.stringify({ id: row.id, no: row.machine_no });
+        const qrData = `https://siddhiss.com/machine/${row.id}`;
 
         qrcode.toDataURL(qrData, (err, url) => {
             if (err) return res.status(500).json({ error: 'Error generating QR' });

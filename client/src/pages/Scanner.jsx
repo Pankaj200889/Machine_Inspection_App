@@ -102,23 +102,47 @@ const Scanner = () => {
         }
 
         try {
-            const data = JSON.parse(decodedText);
-
-            // Use window.location.href instead of navigate to force a clean page load
-            // This ensures all camera resources are definitely released by the browser
-            if (data.id) {
-                if (user) {
-                    window.location.href = `/checklist/${data.id}`;
-                } else {
-                    window.location.href = `/machine/${data.id}`;
+            // 1. Try JSON Parse (Legacy support)
+            try {
+                const data = JSON.parse(decodedText);
+                if (data.id) {
+                    if (user) {
+                        window.location.href = `/checklist/${data.id}`;
+                    } else {
+                        window.location.href = `/machine/${data.id}`;
+                    }
+                    return;
+                } else if (data.no) {
+                    alert("Scanned: " + data.no);
+                    window.location.href = '/';
+                    return;
                 }
-            } else if (data.no) {
-                alert("Scanned: " + data.no);
-                window.location.href = '/';
+            } catch (e) {
+                // Not JSON, continue to URL check
             }
+
+            // 2. Try URL Parse (New Standard)
+            // Expected format: https://.../machine/:id
+            if (decodedText.includes('/machine/')) {
+                const parts = decodedText.split('/machine/');
+                const id = parts[1];
+                if (id) {
+                    if (user) {
+                        window.location.href = `/checklist/${id}`;
+                    } else {
+                        window.location.href = `/machine/${id}`;
+                    }
+                    return;
+                }
+            }
+
+            // 3. Fallback / Unknown
+            console.log("Unknown QR Format:", decodedText);
+            alert("This QR code is not recognized as a valid Machine ID.");
+
         } catch (e) {
-            console.log("Scan result not JSON:", decodedText);
-            alert("Invalid QR format: " + decodedText);
+            console.log("Scan Error:", e);
+            alert("Invalid QR format");
         }
     };
 

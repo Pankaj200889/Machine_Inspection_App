@@ -64,7 +64,7 @@ const MachineDetails = () => {
                                 <Box className="w-8 h-8 text-white" />
                             </div>
                             <h1 className="text-3xl font-black mb-1">{machine.machine_no}</h1>
-                            <p className="text-blue-100 font-medium text-lg">{machine.model}</p>
+                            <div className="text-center mt-12 text-slate-400 text-sm">EquipGuard System V2.3</div>
                             <div className="inline-block mt-4 px-4 py-1 bg-black/20 rounded-full text-xs font-bold uppercase tracking-widest backdrop-blur-sm border border-white/10">
                                 Line {machine.line_no}
                             </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api, { STATIC_BASE_URL } from '../api';
 import { Link } from 'react-router-dom';
-import { Download, Search, Filter, Calendar, FileText, CheckCircle, AlertCircle, X, ChevronDown, Activity, ArrowLeft } from 'lucide-react';
+import { Download, Search, Filter, Calendar, FileText, CheckCircle, AlertCircle, X, ChevronDown, Activity, ArrowLeft, Image as ImageIcon } from 'lucide-react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -10,6 +10,7 @@ const Reports = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedSubmission, setSelectedSubmission] = useState(null);
+    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
     // Filters
     const [search, setSearch] = useState('');
@@ -70,10 +71,10 @@ const Reports = () => {
         setDateRange({ start: '', end: '' });
     };
 
-    const exportToExcel = () => {
+    const exportToCSV = () => {
         if (!filteredData.length) return alert("No data to export");
 
-        const headers = ["Machine No", "Model", "Shift", "Inspector", "Date", "OK Qty", "NG Qty", "Total Qty", "Efficiency %", "Remarks"];
+        const headers = ["Machine No", "Model", "Shift", "Inspector", "Date", "Time", "OK Qty", "NG Qty", "Total Qty", "Efficiency %", "Remarks", "Image URL"];
 
         // Convert data to CSV format
         const csvContent = [
@@ -84,11 +85,13 @@ const Reports = () => {
                 item.shift,
                 item.username || 'Unknown',
                 new Date(item.submitted_at).toLocaleDateString(),
+                new Date(item.submitted_at).toLocaleTimeString(),
                 item.ok_quantity,
                 item.ng_quantity,
                 item.total_quantity,
                 item.bekido_percent || 0,
-                `"${(item.remarks || '').replace(/"/g, '""')}"` // Escape quotes
+                `"${(item.remarks || '').replace(/"/g, '""')}"`, // Escape quotes
+                item.image_path ? `${STATIC_BASE_URL}/${item.image_path}` : ''
             ].join(","))
         ].join("\n");
 
@@ -102,7 +105,23 @@ const Reports = () => {
         document.body.removeChild(link);
     };
 
-    const generatePDF = async (submission) => {
+    const fetchImageAsBase64 = async (url) => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        } catch (error) {
+            console.error('Error converting image to base64:', error);
+            return null;
+        }
+    };
+
+    const generateSinglePDF = async (submission) => {
         const doc = new jsPDF();
 
         // Header
@@ -113,9 +132,6 @@ const Reports = () => {
         doc.setFontSize(10);
         doc.setTextColor(100, 100, 100);
         doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
-
-        // Divider
-        doc.setDrawColor(200, 200, 200);
         doc.line(14, 32, 196, 32);
 
         // Details Table
@@ -149,9 +165,6 @@ const Reports = () => {
             yPos += 5;
 
             try {
-                // Fetch image as blobs to handle CORS or protected routes if necessary
-                // Assuming STATIC_BASE_URL serves images openly or we use a proxy. 
-                // For local filesystem images in a browser app, we need to fetch them.
                 const imgUrl = `${STATIC_BASE_URL}/${submission.image_path}`;
                 const imgData = await fetchImageAsBase64(imgUrl);
 
@@ -160,8 +173,13 @@ const Reports = () => {
                     const pdfWidth = 180;
                     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
+                    // Check if image fits on page, else add new page
+                    if (yPos + pdfHeight > 280) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+
                     doc.addImage(imgData, 'JPEG', 14, yPos, pdfWidth, pdfHeight);
-                    yPos += pdfHeight + 10;
                 }
             } catch (err) {
                 console.error("Error adding image to PDF", err);
@@ -174,19 +192,76 @@ const Reports = () => {
         doc.save(`Report_${submission.machine_no}_${submission.id}.pdf`);
     };
 
-    const fetchImageAsBase64 = async (url) => {
+    const generateBulkPDF = async () => {
+        if (!filteredData.length) return alert("No data to export");
+        setIsGeneratingPdf(true);
+
         try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
+            const doc = new jsPDF();
+
+            // Header
+            doc.setFontSize(18);
+            doc.text("Full Inspection Report", 14, 15);
+            doc.setFontSize(10);
+            doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 22);
+            doc.text(`Total Records: ${filteredData.length}`, 14, 27);
+
+            // Limit to 50 for performance if we are downloading images.
+            if (filteredData.length > 50 && !window.confirm(`You are about to export ${filteredData.length} records with images. This might take a while. Continue?`)) {
+                setIsGeneratingPdf(false);
+                return;
+            }
+
+            // Pre-fetch images
+            const dataWithImages = await Promise.all(filteredData.map(async (item) => {
+                let imgData = null;
+                if (item.image_path) {
+                    imgData = await fetchImageAsBase64(`${STATIC_BASE_URL}/${item.image_path}`);
+                }
+                return { ...item, imgData };
+            }));
+
+            doc.autoTable({
+                startY: 35,
+                head: [['Machine', 'Shift', 'Date', 'OK', 'NG', 'Total', 'Eff%', 'Remarks', 'Photo']],
+                body: dataWithImages.map(item => [
+                    item.machine_no,
+                    item.shift,
+                    new Date(item.submitted_at).toLocaleDateString(),
+                    item.ok_quantity,
+                    item.ng_quantity,
+                    item.total_quantity,
+                    item.bekido_percent + '%',
+                    item.remarks || '-',
+                    '' // Empty cell for image
+                ]),
+                theme: 'grid',
+                styles: { fontSize: 8, cellPadding: 1, valign: 'middle', minCellHeight: 15 },
+                headStyles: { fillColor: [41, 128, 185] },
+                columnStyles: {
+                    8: { cellWidth: 20 }
+                },
+                didDrawCell: function (data) {
+                    if (data.column.index === 8 && data.cell.section === 'body') {
+                        const item = dataWithImages[data.row.index];
+                        if (item.imgData) {
+                            try {
+                                doc.addImage(item.imgData, 'JPEG', data.cell.x + 1, data.cell.y + 1, 18, 13);
+                            } catch (e) {
+                                // ignore image error
+                            }
+                        }
+                    }
+                }
             });
-        } catch (error) {
-            console.error('Error converting image to base64:', error);
-            return null;
+
+            doc.save(`Full_Inspection_Report_${new Date().toISOString().slice(0, 10)}.pdf`);
+
+        } catch (err) {
+            console.error("PDF Gen Error", err);
+            alert("Failed to generate PDF");
+        } finally {
+            setIsGeneratingPdf(false);
         }
     };
 
@@ -212,10 +287,21 @@ const Reports = () => {
                             <Filter className="w-4 h-4" /> Reset Filters
                         </button>
                         <button
-                            onClick={exportToExcel}
+                            onClick={exportToCSV}
                             className="px-4 py-2 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition flex items-center gap-2 shadow-lg shadow-green-500/20"
                         >
-                            <FileText className="w-4 h-4" /> Export Excel
+                            <FileText className="w-4 h-4" /> Export CSV
+                        </button>
+                        <button
+                            onClick={generateBulkPDF}
+                            disabled={isGeneratingPdf}
+                            className={`px-4 py-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition flex items-center gap-2 shadow-lg shadow-red-500/20 ${isGeneratingPdf ? 'opacity-70 cursor-wait' : ''}`}
+                        >
+                            {isGeneratingPdf ? (
+                                <>Generating...</>
+                            ) : (
+                                <><Download className="w-4 h-4" /> Export PDF</>
+                            )}
                         </button>
                     </div>
                 </div>
@@ -332,10 +418,10 @@ const Reports = () => {
                                 {/* Action */}
                                 <div className="mt-auto pt-4 border-t border-slate-100">
                                     <button
-                                        onClick={() => generatePDF(item)}
+                                        onClick={() => generateSinglePDF(item)}
                                         className="w-full py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-lg shadow-slate-900/10 hover:bg-black transition flex items-center justify-center gap-2"
                                     >
-                                        <Download className="w-4 h-4" /> Export Report
+                                        <Download className="w-4 h-4" /> Download Report
                                     </button>
                                 </div>
                             </div>
@@ -377,7 +463,7 @@ const Reports = () => {
                             )}
 
                             <div className="mt-8 flex gap-3">
-                                <button onClick={() => generatePDF(selectedSubmission)} className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2">
+                                <button onClick={() => generateSinglePDF(selectedSubmission)} className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2">
                                     <Download className="w-5 h-5" /> Download PDF
                                 </button>
                                 <button onClick={() => setSelectedSubmission(null)} className="px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">

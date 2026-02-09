@@ -6,7 +6,6 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
     PieChart, Pie, Cell, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
-import { App as CapacitorApp } from '@capacitor/app';
 import {
     Activity, ClipboardList, Download, Settings, Building,
     LogOut, User, ChevronDown, X, Power, Camera, Info
@@ -529,11 +528,8 @@ const Home = () => {
 
                         {/* Mobile Profile (Visible on right) */}
                         <div className="flex md:hidden items-center gap-3">
-                            <button onClick={logout} className="w-9 h-9 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-500 mr-1" title="Logout">
+                            <button onClick={logout} className="w-9 h-9 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-500" title="Logout">
                                 <Power className="w-4 h-4" />
-                            </button>
-                            <button onClick={handleExit} className="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500" title="Exit App">
-                                <LogOut className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
@@ -558,9 +554,6 @@ const Home = () => {
                         </div>
                         <button onClick={logout} className="w-10 h-10 rounded-full bg-red-50 border border-red-100 shadow-sm flex items-center justify-center text-red-500 hover:text-red-600 hover:bg-red-100 hover:shadow-md hover:scale-105 transition-all" title="Logout">
                             <Power className="w-4 h-4" />
-                        </button>
-                        <button onClick={handleExit} className="w-10 h-10 rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-600 hover:shadow-md hover:scale-105 transition-all" title="Exit App">
-                            <LogOut className="w-4 h-4" />
                         </button>
                     </div>
                 </div>

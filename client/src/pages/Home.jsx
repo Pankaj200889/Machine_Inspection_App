@@ -229,6 +229,13 @@ const Home = () => {
 
     const handleExit = () => {
         CapacitorApp.exitApp();
+        // Fallback for Web/PWA
+        if (window.location.hostname !== 'localhost' && !window.Capacitor) {
+            // Try window.close (scripts can only close windows they opened)
+            window.close();
+            // Inform user
+            alert("To exit the application, please close this browser tab.");
+        }
     };
 
     return (
@@ -522,10 +529,10 @@ const Home = () => {
 
                         {/* Mobile Profile (Visible on right) */}
                         <div className="flex md:hidden items-center gap-3">
-                            <button onClick={handleExit} className="w-9 h-9 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-500 mr-1" title="Exit App">
+                            <button onClick={logout} className="w-9 h-9 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-500 mr-1" title="Logout">
                                 <Power className="w-4 h-4" />
                             </button>
-                            <button onClick={logout} className="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500">
+                            <button onClick={handleExit} className="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500" title="Exit App">
                                 <LogOut className="w-4 h-4" />
                             </button>
                         </div>
@@ -549,10 +556,10 @@ const Home = () => {
                             <div className="text-sm font-bold text-gray-800">{user?.username}</div>
                             <div className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">{user?.role || 'Operator'}</div>
                         </div>
-                        <button onClick={handleExit} className="w-10 h-10 rounded-full bg-red-50 border border-red-100 shadow-sm flex items-center justify-center text-red-500 hover:text-red-600 hover:bg-red-100 hover:shadow-md hover:scale-105 transition-all" title="Exit App">
+                        <button onClick={logout} className="w-10 h-10 rounded-full bg-red-50 border border-red-100 shadow-sm flex items-center justify-center text-red-500 hover:text-red-600 hover:bg-red-100 hover:shadow-md hover:scale-105 transition-all" title="Logout">
                             <Power className="w-4 h-4" />
                         </button>
-                        <button onClick={logout} className="w-10 h-10 rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400 hover:text-red-500 hover:shadow-md hover:scale-105 transition-all">
+                        <button onClick={handleExit} className="w-10 h-10 rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-600 hover:shadow-md hover:scale-105 transition-all" title="Exit App">
                             <LogOut className="w-4 h-4" />
                         </button>
                     </div>

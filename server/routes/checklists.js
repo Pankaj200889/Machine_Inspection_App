@@ -122,7 +122,7 @@ router.get('/stats/efficiency', async (req, res) => {
         FROM machines m
         LEFT JOIN checklists c ON m.id = c.machine_id AND c.submitted_at >= ?
         GROUP BY m.id, m.machine_no, m.model, m.prod_plan
-        ORDER BY total_ok DESC
+        ORDER BY avg_bekido DESC
     `;
     try {
         const result = await db.query(sql, [dateStr]);

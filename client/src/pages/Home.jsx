@@ -226,16 +226,7 @@ const Home = () => {
         }
     };
 
-    const handleExit = () => {
-        CapacitorApp.exitApp();
-        // Fallback for Web/PWA
-        if (window.location.hostname !== 'localhost' && !window.Capacitor) {
-            // Try window.close (scripts can only close windows they opened)
-            window.close();
-            // Inform user
-            alert("To exit the application, please close this browser tab.");
-        }
-    };
+
 
     return (
         <div className="min-h-screen bg-[#F0F2F5] font-sans selection:bg-blue-100 overflow-x-hidden relative pb-24 safe-area-inset-bottom">

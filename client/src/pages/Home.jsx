@@ -112,8 +112,10 @@ const Home = () => {
             const trendMap = {};
             rawTrend.forEach(row => {
                 // Ensure Date + Shift keys exist
-                if (!trendMap[row.date]) trendMap[row.date] = { date: row.date, Total: 0, 'Shift A': 0, 'Shift B': 0, 'Shift C': 0 };
+                if (!trendMap[row.date]) trendMap[row.date] = { date: row.date, Total: 0, OK: 0, NG: 0, 'Shift A': 0, 'Shift B': 0, 'Shift C': 0 };
                 trendMap[row.date].Total += Number(row.total || 0);
+                trendMap[row.date].OK += Number(row.ok || 0);
+                trendMap[row.date].NG += Number(row.ng || 0);
 
                 const shiftKey = `Shift ${row.shift}`;
                 if (trendMap[row.date][shiftKey] !== undefined) {
@@ -680,12 +682,22 @@ const Home = () => {
                                                         <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
                                                         <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
                                                     </linearGradient>
+                                                    <linearGradient id="colorOKGlass" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
+                                                        <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                                                    </linearGradient>
+                                                    <linearGradient id="colorNGGlass" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#EF4444" stopOpacity={0.3} />
+                                                        <stop offset="95%" stopColor="#EF4444" stopOpacity={0} />
+                                                    </linearGradient>
                                                 </defs>
                                                 <Tooltip
                                                     contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)', border: 'none', borderRadius: '16px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)', padding: '12px' }}
                                                     itemStyle={{ color: '#1F2937', fontWeight: 'bold' }}
                                                 />
-                                                <Area type="monotone" dataKey="Total" stroke="#3B82F6" strokeWidth={4} fill="url(#colorTotalGlass)" animationDuration={1000} />
+                                                <Area type="monotone" dataKey="Total" stroke="#3B82F6" strokeWidth={3} fill="url(#colorTotalGlass)" animationDuration={1000} />
+                                                <Area type="monotone" dataKey="OK" stroke="#10B981" strokeWidth={3} fill="url(#colorOKGlass)" animationDuration={1000} />
+                                                <Area type="monotone" dataKey="NG" stroke="#EF4444" strokeWidth={3} fill="url(#colorNGGlass)" animationDuration={1000} />
                                             </AreaChart>
                                         </ResponsiveContainer>
                                     </div>

@@ -66,7 +66,11 @@ router.post('/users/:id/reset-link', async (req, res) => {
         const user = result.rows[0];
         if (!user) return res.status(404).json({ error: 'User not found' });
 
-        const token = jwt.sign({ id: user.id, purpose: 'reset' }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({
+            id: user.id,
+            purpose: 'reset',
+            fingerprint: user.password_hash ? user.password_hash.slice(-10) : 'new_user'
+        }, JWT_SECRET, { expiresIn: '1h' });
 
         // Construct Link (Use header origin to match current domain)
         const origin = req.headers.origin || 'http://localhost:5173';
@@ -105,6 +109,16 @@ router.post('/reset-password', async (req, res) => {
         const decoded = jwt.verify(token, JWT_SECRET);
         if (decoded.purpose && decoded.purpose !== 'reset') {
             return res.status(400).json({ error: 'Invalid token type' });
+        }
+
+        // Fetch user to verify fingerprint (Invalidate if password changed)
+        const result = await db.query("SELECT * FROM users WHERE id = ?", [decoded.id]);
+        const user = result.rows[0];
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const currentFingerprint = user.password_hash ? user.password_hash.slice(-10) : 'new_user';
+        if (decoded.fingerprint && decoded.fingerprint !== currentFingerprint) {
+            return res.status(400).json({ error: 'Link expired or already used' });
         }
 
         const salt = bcrypt.genSaltSync(10);

@@ -126,7 +126,11 @@ router.get('/stats/efficiency', async (req, res) => {
     `;
     try {
         const result = await db.query(sql, [dateStr]);
-        res.json(result.rows);
+        const cappedRows = result.rows.map(row => ({
+            ...row,
+            avg_bekido: Math.min(Number(row.avg_bekido || 0), 100)
+        }));
+        res.json(cappedRows);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -194,7 +198,7 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
         let bekido_percent = 0;
         const totalSeconds = (machine.working_hours || 8) * 3600;
         if (totalSeconds > 0) {
-            bekido_percent = ((ok_quantity * (machine.mct || 0)) / totalSeconds) * 100;
+            bekido_percent = Math.min(((ok_quantity * (machine.mct || 0)) / totalSeconds) * 100, 100);
         }
 
         const sql = `INSERT INTO checklists (machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent, bekido_percent, image_path, device_info, location, shift) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`;
@@ -265,7 +269,7 @@ router.put('/:id', verifyUser, upload.fields([{ name: 'image', maxCount: 1 }, { 
         let newBekido = 0;
         if (hours > 0) {
             const theoretical_max = (hours * 3600) / (mct || 1);
-            newBekido = theoretical_max > 0 ? (newOk / theoretical_max) * 100 : 0;
+            newBekido = theoretical_max > 0 ? Math.min((newOk / theoretical_max) * 100, 100) : 0;
         }
 
         const finalImage = new_image_path || row.image_path;

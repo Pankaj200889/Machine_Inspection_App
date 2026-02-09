@@ -9,7 +9,7 @@ import {
 import { App as CapacitorApp } from '@capacitor/app';
 import {
     Activity, ClipboardList, Download, Settings, Building,
-    LogOut, User, ChevronDown, X, Power, Camera
+    LogOut, User, ChevronDown, X, Power, Camera, Info
 } from 'lucide-react';
 import api, { STATIC_BASE_URL } from '../api';
 
@@ -57,7 +57,9 @@ const Home = () => {
     });
     const [selectedImage, setSelectedImage] = useState(null);
     const [orgProfile, setOrgProfile] = useState(null);
+    const [orgProfile, setOrgProfile] = useState(null);
     const [isExportOpen, setIsExportOpen] = useState(false);
+    const [showFormulaInfo, setShowFormulaInfo] = useState(false);
 
     const refreshTimeoutRef = useRef(null);
 
@@ -258,6 +260,35 @@ const Home = () => {
                         </button>
 
                         <button onClick={() => setIsExportOpen(false)} className="mt-4 w-full py-3 bg-white border border-gray-200 text-gray-500 rounded-xl font-bold hover:bg-gray-50">Cancel</button>
+                    </div>
+                </div>
+            )}
+
+            {/* Formula Info Modal */}
+            {showFormulaInfo && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in" onClick={() => setShowFormulaInfo(false)}>
+                    <div className="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-md relative animate-in zoom-in-95" onClick={e => e.stopPropagation()}>
+                        <button onClick={() => setShowFormulaInfo(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><X className="w-6 h-6" /></button>
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                <Info className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-xl font-black text-gray-800">Efficiency Formula</h3>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 font-mono text-sm text-center text-gray-700">
+                                (OK Qty × MCT) ÷ (Working Hours × 3600) × 100
+                            </div>
+
+                            <div className="space-y-3 text-sm text-gray-600">
+                                <p><strong className="text-gray-800">MCT (Machine Cycle Time):</strong> The standard time (in seconds) it takes to produce one part.</p>
+                                <p><strong className="text-gray-800">Working Hours:</strong> The number of operational hours for the shift.</p>
+                                <p><strong className="text-gray-800">Efficiency Cap:</strong> The result is capped at 100% even if the machine runs faster than standard.</p>
+                            </div>
+                        </div>
+
+                        <button onClick={() => setShowFormulaInfo(false)} className="mt-6 w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition">Got it</button>
                     </div>
                 </div>
             )}
@@ -693,8 +724,11 @@ const Home = () => {
 
                                     {/* Machine List */}
                                     <GlassCard className="flex flex-col max-h-[340px] overflow-hidden shadow-lg shadow-gray-200/50">
-                                        <div className="sticky top-0 bg-white/80 backdrop-blur-sm z-10 pb-4 border-b border-gray-50">
+                                        <div className="sticky top-0 bg-white/80 backdrop-blur-sm z-10 pb-4 border-b border-gray-50 flex justify-between items-center">
                                             <h3 className="text-lg font-bold text-gray-800 tracking-tight">Top Performers</h3>
+                                            <button onClick={() => setShowFormulaInfo(true)} className="text-gray-400 hover:text-blue-500 transition">
+                                                <Info className="w-4 h-4" />
+                                            </button>
                                         </div>
                                         <div className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar pt-4">
                                             {efficiencyData.slice(0, 5).map((m, idx) => {

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import api, { STATIC_BASE_URL } from '../api';
 import { Link } from 'react-router-dom';
 import { Download, Search, Filter, Calendar, FileText, CheckCircle, AlertCircle, X, ChevronDown, Activity, ArrowLeft, Image as ImageIcon } from 'lucide-react';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const Reports = () => {
     const [submissions, setSubmissions] = useState([]);
@@ -122,74 +122,79 @@ const Reports = () => {
     };
 
     const generateSinglePDF = async (submission) => {
-        const doc = new jsPDF();
+        try {
+            const doc = new jsPDF();
 
-        // Header
-        doc.setFontSize(22);
-        doc.setTextColor(40, 40, 40);
-        doc.text("Machine Inspection Report", 14, 20);
-
-        doc.setFontSize(10);
-        doc.setTextColor(100, 100, 100);
-        doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
-        doc.line(14, 32, 196, 32);
-
-        // Details Table
-        doc.autoTable({
-            startY: 40,
-            head: [['Field', 'Value']],
-            body: [
-                ['Machine No', submission.machine_no],
-                ['Model', submission.model || 'N/A'],
-                ['Shift', submission.shift],
-                ['Inspector', submission.username || 'Unknown'],
-                ['Date', new Date(submission.submitted_at).toLocaleString()],
-                ['OK Quantity', submission.ok_quantity],
-                ['NG Quantity', submission.ng_quantity],
-                ['Total Quantity', submission.total_quantity],
-                ['Efficiency (Bekido)', `${submission.bekido_percent}%`],
-                ['Remarks', submission.remarks || '-']
-            ],
-            theme: 'striped',
-            headStyles: { fillColor: [59, 130, 246] },
-            styles: { fontSize: 10, cellPadding: 3 }
-        });
-
-        // Photo Section
-        let yPos = doc.lastAutoTable.finalY + 10;
-
-        if (submission.image_path) {
-            doc.setFontSize(14);
+            // Header
+            doc.setFontSize(22);
             doc.setTextColor(40, 40, 40);
-            doc.text("Visual Evidence", 14, yPos);
-            yPos += 5;
+            doc.text("Machine Inspection Report", 14, 20);
 
-            try {
-                const imgUrl = `${STATIC_BASE_URL}/${submission.image_path}`;
-                const imgData = await fetchImageAsBase64(imgUrl);
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
+            doc.line(14, 32, 196, 32);
 
-                if (imgData) {
-                    const imgProps = doc.getImageProperties(imgData);
-                    const pdfWidth = 180;
-                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            // Details Table
+            autoTable(doc, {
+                startY: 40,
+                head: [['Field', 'Value']],
+                body: [
+                    ['Machine No', submission.machine_no],
+                    ['Model', submission.model || 'N/A'],
+                    ['Shift', submission.shift],
+                    ['Inspector', submission.username || 'Unknown'],
+                    ['Date', new Date(submission.submitted_at).toLocaleString()],
+                    ['OK Quantity', submission.ok_quantity],
+                    ['NG Quantity', submission.ng_quantity],
+                    ['Total Quantity', submission.total_quantity],
+                    ['Efficiency (Bekido)', `${submission.bekido_percent}%`],
+                    ['Remarks', submission.remarks || '-']
+                ],
+                theme: 'striped',
+                headStyles: { fillColor: [59, 130, 246] },
+                styles: { fontSize: 10, cellPadding: 3 }
+            });
 
-                    // Check if image fits on page, else add new page
-                    if (yPos + pdfHeight > 280) {
-                        doc.addPage();
-                        yPos = 20;
+            // Photo Section
+            let yPos = (doc.lastAutoTable?.finalY || 40) + 10;
+
+            if (submission.image_path) {
+                doc.setFontSize(14);
+                doc.setTextColor(40, 40, 40);
+                doc.text("Visual Evidence", 14, yPos);
+                yPos += 5;
+
+                try {
+                    const imgUrl = `${STATIC_BASE_URL}/${submission.image_path}`;
+                    const imgData = await fetchImageAsBase64(imgUrl);
+
+                    if (imgData) {
+                        const imgProps = doc.getImageProperties(imgData);
+                        const pdfWidth = 180;
+                        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                        // Check if image fits on page, else add new page
+                        if (yPos + pdfHeight > 280) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+
+                        doc.addImage(imgData, 'JPEG', 14, yPos, pdfWidth, pdfHeight);
                     }
-
-                    doc.addImage(imgData, 'JPEG', 14, yPos, pdfWidth, pdfHeight);
+                } catch (err) {
+                    console.error("Error adding image to PDF", err);
+                    doc.setFontSize(10);
+                    doc.setTextColor(255, 0, 0);
+                    doc.text("Error loading image for report.", 14, yPos + 10);
                 }
-            } catch (err) {
-                console.error("Error adding image to PDF", err);
-                doc.setFontSize(10);
-                doc.setTextColor(255, 0, 0);
-                doc.text("Error loading image for report.", 14, yPos + 10);
             }
-        }
 
-        doc.save(`Report_${submission.machine_no}_${submission.id}.pdf`);
+            doc.save(`Report_${submission.machine_no}_${submission.id}.pdf`);
+        } catch (error) {
+            console.error("Single PDF Generation Error:", error);
+            alert("Failed to generate report. See console for details.");
+        }
     };
 
     const generateBulkPDF = async () => {
@@ -221,7 +226,7 @@ const Reports = () => {
                 return { ...item, imgData };
             }));
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: 35,
                 head: [['Machine', 'Shift', 'Date', 'OK', 'NG', 'Total', 'Eff%', 'Remarks', 'Photo']],
                 body: dataWithImages.map(item => [
@@ -259,7 +264,7 @@ const Reports = () => {
 
         } catch (err) {
             console.error("PDF Gen Error", err);
-            alert("Failed to generate PDF");
+            alert("Failed to generate PDF. See console for details.");
         } finally {
             setIsGeneratingPdf(false);
         }

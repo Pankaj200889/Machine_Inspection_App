@@ -136,6 +136,51 @@ router.get('/stats/efficiency', async (req, res) => {
     }
 });
 
+// Get templates for a machine
+router.get('/templates', verifyUser, async (req, res) => {
+    const { machine_id } = req.query;
+    let sql = `SELECT * FROM checklist_templates`;
+    let params = [];
+    if (machine_id) {
+        sql = `
+            SELECT t.* 
+            FROM checklist_templates t
+            JOIN machine_templates mt ON t.id = mt.template_id
+            WHERE mt.machine_id = ?
+        `;
+        params = [machine_id];
+    }
+    try {
+        const result = await db.query(sql, params);
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get template details
+router.get('/templates/:id', verifyUser, async (req, res) => {
+    const templateId = req.params.id;
+    try {
+        const tResult = await db.query("SELECT * FROM checklist_templates WHERE id = ?", [templateId]);
+        const template = tResult.rows[0];
+        if (!template) return res.status(404).json({ error: 'Template not found' });
+
+        const sResult = await db.query("SELECT * FROM template_sections WHERE template_id = ? ORDER BY order_index", [templateId]);
+        const sections = sResult.rows;
+
+        for (let section of sections) {
+            const iResult = await db.query("SELECT * FROM template_items WHERE section_id = ? ORDER BY order_index", [section.id]);
+            section.items = iResult.rows;
+        }
+
+        template.sections = sections;
+        res.json(template);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Get My Submissions
 router.get('/my-submissions', verifyUser, async (req, res) => {
     const sql = `
@@ -175,24 +220,134 @@ router.put('/:id/image', verifyUser, upload.single('image'), async (req, res) =>
     }
 });
 
-// Submit Checklist
+// Submit Checklist (supports dynamic template submissions)
 router.post('/', verifyUser, upload.single('image'), async (req, res) => {
-    let { machine_id, ok_quantity, ng_quantity, total_quantity, device_info, location } = req.body;
-
-    // No Trial Expiry Check (Paid Entry Model)
+    let { 
+        machine_id, 
+        template_id, 
+        shift, 
+        part_name, 
+        line_speed, 
+        values, 
+        device_info, 
+        location,
+        ok_quantity, 
+        ng_quantity, 
+        total_quantity 
+    } = req.body;
 
     const image_path = req.file ? 'uploads/' + req.file.filename : null;
     const user_id = req.user.id;
-    const shift = getShift();
-
-    ok_quantity = parseInt(ok_quantity) || 0;
-    ng_quantity = parseInt(ng_quantity) || 0;
-    total_quantity = parseInt(total_quantity) || (ok_quantity + ng_quantity);
+    shift = shift || getShift();
 
     try {
         const mRes = await db.query("SELECT mct, working_hours FROM machines WHERE id = ?", [machine_id]);
         const machine = mRes.rows[0];
         if (!machine) return res.status(404).json({ error: 'Machine not found' });
+
+        // Handle dynamic template checklist
+        if (template_id) {
+            template_id = parseInt(template_id);
+            if (typeof values === 'string') {
+                values = JSON.parse(values);
+            }
+
+            const subSql = `
+                INSERT INTO checklist_submissions (
+                    template_id, machine_id, user_id, shift, part_name, line_speed, submitted_at
+                ) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            `;
+            const subResult = await db.query(subSql, [template_id, machine_id, user_id, shift, part_name, line_speed]);
+            const submission_id = subResult.lastID;
+
+            let has_ng = false;
+            let total_checked = 0;
+            let ok_checked = 0;
+
+            for (let val of values) {
+                const { item_id, actual_value, remarks } = val;
+                
+                const itemRes = await db.query("SELECT * FROM template_items WHERE id = ?", [item_id]);
+                const item = itemRes.rows[0];
+                
+                let is_ok = 1;
+                if (item && item.input_type === 'numeric' && actual_value !== '') {
+                    const numVal = parseFloat(actual_value);
+                    if (item.expected_min !== null && numVal < item.expected_min) is_ok = 0;
+                    if (item.expected_max !== null && numVal > item.expected_max) is_ok = 0;
+                } else if (item && item.input_type === 'boolean') {
+                    if (actual_value === 'NG' || actual_value === '0' || actual_value === 'false' || actual_value === false) is_ok = 0;
+                }
+
+                if (is_ok === 0) has_ng = true;
+                total_checked++;
+                if (is_ok === 1) ok_checked++;
+
+                await db.query(`
+                    INSERT INTO checklist_submission_values (submission_id, item_id, actual_value, is_ok, remarks)
+                    VALUES (?, ?, ?, ?, ?)
+                `, [submission_id, item_id, actual_value, is_ok, remarks || '']);
+            }
+
+            let legacy_ok = has_ng ? 0 : 1;
+            let legacy_ng = has_ng ? 1 : 0;
+            let legacy_total = 1;
+            
+            if (ok_quantity !== undefined && ng_quantity !== undefined) {
+                legacy_ok = parseInt(ok_quantity) || 0;
+                legacy_ng = parseInt(ng_quantity) || 0;
+                legacy_total = legacy_ok + legacy_ng;
+            }
+
+            const avg_ng_percent = legacy_total > 0 ? (legacy_ng / legacy_total) * 100 : 0;
+            let bekido_percent = has_ng ? 0 : 100;
+            
+            const totalSeconds = (machine.working_hours || 8) * 3600;
+            if (totalSeconds > 0 && legacy_ok > 1) {
+                bekido_percent = Math.min(((legacy_ok * (machine.mct || 0)) / totalSeconds) * 100, 100);
+            }
+
+            const legSql = `
+                INSERT INTO checklists (
+                    machine_id, user_id, ok_quantity, ng_quantity, total_quantity, 
+                    avg_ng_percent, bekido_percent, image_path, device_info, location, shift
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+            const legResult = await db.query(legSql, [
+                machine_id, user_id, legacy_ok, legacy_ng, legacy_total, 
+                avg_ng_percent.toFixed(2), bekido_percent.toFixed(2), image_path, 
+                device_info || 'Mobile App', location || 'N/A', shift
+            ]);
+
+            const newChecklist = {
+                id: legResult.lastID,
+                submission_id,
+                machine_id,
+                user_id,
+                ok_quantity: legacy_ok,
+                ng_quantity: legacy_ng,
+                total_quantity: legacy_total,
+                avg_ng_percent,
+                bekido_percent,
+                image_path,
+                shift,
+                submitted_at: new Date()
+            };
+
+            const io = req.app.get('socketio');
+            if (io) io.emit('new_checklist', newChecklist);
+
+            return res.json({ 
+                message: 'Dynamic Checklist submitted successfully', 
+                submission_id,
+                checklist: newChecklist 
+            });
+        }
+
+        // Legacy fallback
+        ok_quantity = parseInt(ok_quantity) || 0;
+        ng_quantity = parseInt(ng_quantity) || 0;
+        total_quantity = parseInt(total_quantity) || (ok_quantity + ng_quantity);
 
         const avg_ng_percent = total_quantity > 0 ? (ng_quantity / total_quantity) * 100 : 0;
         let bekido_percent = 0;
@@ -201,14 +356,11 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
             bekido_percent = Math.min(((ok_quantity * (machine.mct || 0)) / totalSeconds) * 100, 100);
         }
 
-        const sql = `INSERT INTO checklists (machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent, bekido_percent, image_path, device_info, location, shift) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`;
+        const sql = `INSERT INTO checklists (machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent, bekido_percent, image_path, device_info, location, shift) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const result = await db.query(sql, [machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent.toFixed(2), bekido_percent.toFixed(2), image_path, device_info, location, shift]);
 
         const newChecklist = {
-            id: result.lastID, // Wrapper guarantees this mapping for SQLite. For PG, we need to handle it.
-            // Note: In Dual Mode, creating a generic way to return ID is tricky without RETURNING.
-            // But since this is a new insert, we can fetch max id? No unsafe.
-            // For now, assume result.lastID works or simple response is ok.
+            id: result.lastID,
             machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent, bekido_percent, image_path, shift, submitted_at: new Date()
         };
 
@@ -217,6 +369,7 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
 
         res.json({ message: 'Checklist submitted successfully', checklist: newChecklist });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: err.message });
     }
 });

@@ -221,9 +221,11 @@ function initSqlite() {
         });
 
         // Migration for Admin Features (Remarks & Proof)
-        const checklistCols = ['remarks', 'approval_proof_path'];
+        const checklistCols = ['remarks', 'approval_proof_path', 'submission_id'];
         checklistCols.forEach(col => {
-            db.run(`ALTER TABLE checklists ADD COLUMN ${col} TEXT`, (err) => { });
+            let type = 'TEXT';
+            if (col === 'submission_id') type = 'INTEGER';
+            db.run(`ALTER TABLE checklists ADD COLUMN ${col} ${type}`, (err) => { });
         });
 
         seedData();
@@ -280,6 +282,7 @@ async function initPg() {
         try {
             await query(`ALTER TABLE checklists ADD COLUMN IF NOT EXISTS remarks TEXT`);
             await query(`ALTER TABLE checklists ADD COLUMN IF NOT EXISTS approval_proof_path TEXT`);
+            await query(`ALTER TABLE checklists ADD COLUMN IF NOT EXISTS submission_id INTEGER`);
         } catch (e) { console.log("Cols exist or error", e.message); }
 
         await query(`CREATE TABLE IF NOT EXISTS audit_logs (

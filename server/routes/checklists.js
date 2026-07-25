@@ -310,13 +310,13 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
             const legSql = `
                 INSERT INTO checklists (
                     machine_id, user_id, ok_quantity, ng_quantity, total_quantity, 
-                    avg_ng_percent, bekido_percent, image_path, device_info, location, shift
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    avg_ng_percent, bekido_percent, image_path, device_info, location, shift, submission_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
             const legResult = await db.query(legSql, [
                 machine_id, user_id, legacy_ok, legacy_ng, legacy_total, 
                 avg_ng_percent.toFixed(2), bekido_percent.toFixed(2), image_path, 
-                device_info || 'Mobile App', location || 'N/A', shift
+                device_info || 'Mobile App', location || 'N/A', shift, submission_id
             ]);
 
             const newChecklist = {
@@ -370,6 +370,71 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
         res.json({ message: 'Checklist submitted successfully', checklist: newChecklist });
     } catch (err) {
         console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get detailed dynamic submission details
+router.get('/submissions/:id', verifyUser, async (req, res) => {
+    const submissionId = req.params.id;
+    try {
+        const subRes = await db.query(`
+            SELECT s.*, t.template_name, t.doc_no, t.rev_no, t.rev_date, m.machine_no, m.model, u.username as inspector
+            FROM checklist_submissions s
+            JOIN checklist_templates t ON s.template_id = t.id
+            JOIN machines m ON s.machine_id = m.id
+            JOIN users u ON s.user_id = u.id
+            WHERE s.id = ?
+        `, [submissionId]);
+        
+        const submission = subRes.rows[0];
+        if (!submission) return res.status(404).json({ error: 'Submission not found' });
+
+        const sResult = await db.query("SELECT * FROM template_sections WHERE template_id = ? ORDER BY order_index", [submission.template_id]);
+        const sections = sResult.rows;
+
+        for (let section of sections) {
+            const iResult = await db.query(`
+                SELECT i.*, v.actual_value, v.is_ok, v.remarks as value_remarks
+                FROM template_items i
+                LEFT JOIN checklist_submission_values v ON i.id = v.item_id AND v.submission_id = ?
+                WHERE i.section_id = ?
+                ORDER BY i.order_index
+            `, [submissionId, section.id]);
+            section.items = iResult.rows;
+        }
+
+        submission.sections = sections;
+        res.json(submission);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Supervisor Sign-off (Checked By / Approved By)
+router.post('/submissions/:id/sign', verifyUser, async (req, res) => {
+    const submissionId = req.params.id;
+    const { type } = req.body;
+    const user_id = req.user.id;
+
+    try {
+        if (type === 'check') {
+            await db.query(`
+                UPDATE checklist_submissions 
+                SET checked_by = ?, checked_at = CURRENT_TIMESTAMP 
+                WHERE id = ?
+            `, [user_id, submissionId]);
+        } else if (type === 'approve') {
+            await db.query(`
+                UPDATE checklist_submissions 
+                SET approved_by = ?, approved_at = CURRENT_TIMESTAMP 
+                WHERE id = ?
+            `, [user_id, submissionId]);
+        } else {
+            return res.status(400).json({ error: 'Invalid sign-off type' });
+        }
+        res.json({ message: 'Signature logged successfully.' });
+    } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });

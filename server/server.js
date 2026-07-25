@@ -30,6 +30,10 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`, req.body);
+    next();
+});
 const fs = require('fs');
 
 // Ensure Uploads Directory Exists
@@ -80,7 +84,18 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Catch-all handler for React Router (Express 5 fix)
 app.get(/(.*)/, (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    try {
+        const htmlPath = path.join(__dirname, '../client/dist/index.html');
+        if (fs.existsSync(htmlPath)) {
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            res.send(html);
+        } else {
+            res.status(404).send("Frontend build not found. Please run 'npm run build'.");
+        }
+    } catch (err) {
+        console.error("Catch-all error:", err);
+        res.status(500).send("Internal Server Error loading frontend");
+    }
 });
 
 io.on('connection', (socket) => {

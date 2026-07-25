@@ -139,6 +139,79 @@ function initSqlite() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`);
 
+        // Dynamic Checklist Tables
+        db.run(`CREATE TABLE IF NOT EXISTS checklist_templates (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            template_name TEXT NOT NULL,
+            doc_no TEXT,
+            rev_no TEXT DEFAULT '00',
+            rev_date TEXT,
+            frequency TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`);
+
+        db.run(`CREATE TABLE IF NOT EXISTS template_sections (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            template_id INTEGER,
+            section_name TEXT NOT NULL,
+            order_index INTEGER DEFAULT 0,
+            FOREIGN KEY(template_id) REFERENCES checklist_templates(id) ON DELETE CASCADE
+        )`);
+
+        db.run(`CREATE TABLE IF NOT EXISTS template_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            section_id INTEGER,
+            check_point TEXT NOT NULL,
+            specification TEXT,
+            checking_method TEXT,
+            responsibility TEXT DEFAULT 'Operator',
+            input_type TEXT DEFAULT 'numeric',
+            expected_min REAL,
+            expected_max REAL,
+            is_mandatory INTEGER DEFAULT 1,
+            order_index INTEGER DEFAULT 0,
+            FOREIGN KEY(section_id) REFERENCES template_sections(id) ON DELETE CASCADE
+        )`);
+
+        db.run(`CREATE TABLE IF NOT EXISTS checklist_submissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            template_id INTEGER,
+            machine_id INTEGER,
+            user_id INTEGER,
+            shift TEXT NOT NULL,
+            part_name TEXT,
+            line_speed TEXT,
+            checked_by INTEGER,
+            checked_at DATETIME,
+            approved_by INTEGER,
+            approved_at DATETIME,
+            submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(template_id) REFERENCES checklist_templates(id),
+            FOREIGN KEY(machine_id) REFERENCES machines(id),
+            FOREIGN KEY(user_id) REFERENCES users(id),
+            FOREIGN KEY(checked_by) REFERENCES users(id),
+            FOREIGN KEY(approved_by) REFERENCES users(id)
+        )`);
+
+        db.run(`CREATE TABLE IF NOT EXISTS checklist_submission_values (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            submission_id INTEGER,
+            item_id INTEGER,
+            actual_value TEXT,
+            is_ok INTEGER DEFAULT 1,
+            remarks TEXT,
+            FOREIGN KEY(submission_id) REFERENCES checklist_submissions(id) ON DELETE CASCADE,
+            FOREIGN KEY(item_id) REFERENCES template_items(id)
+        )`);
+
+        db.run(`CREATE TABLE IF NOT EXISTS machine_templates (
+            machine_id INTEGER,
+            template_id INTEGER,
+            PRIMARY KEY (machine_id, template_id),
+            FOREIGN KEY(machine_id) REFERENCES machines(id) ON DELETE CASCADE,
+            FOREIGN KEY(template_id) REFERENCES checklist_templates(id) ON DELETE CASCADE
+        )`);
+
         // Migration for Trial Columns
         const orgCols = ['subscription_plan', 'trial_ends_at'];
         orgCols.forEach(col => {
@@ -231,6 +304,68 @@ async function initPg() {
             subscription_plan TEXT DEFAULT 'trial',
             trial_ends_at TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`);
+
+        // Dynamic Checklist Tables (Postgres)
+        await query(`CREATE TABLE IF NOT EXISTS checklist_templates (
+            id SERIAL PRIMARY KEY,
+            template_name TEXT NOT NULL,
+            doc_no TEXT,
+            rev_no TEXT DEFAULT '00',
+            rev_date TEXT,
+            frequency TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`);
+
+        await query(`CREATE TABLE IF NOT EXISTS template_sections (
+            id SERIAL PRIMARY KEY,
+            template_id INTEGER REFERENCES checklist_templates(id) ON DELETE CASCADE,
+            section_name TEXT NOT NULL,
+            order_index INTEGER DEFAULT 0
+        )`);
+
+        await query(`CREATE TABLE IF NOT EXISTS template_items (
+            id SERIAL PRIMARY KEY,
+            section_id INTEGER REFERENCES template_sections(id) ON DELETE CASCADE,
+            check_point TEXT NOT NULL,
+            specification TEXT,
+            checking_method TEXT,
+            responsibility TEXT DEFAULT 'Operator',
+            input_type TEXT DEFAULT 'numeric',
+            expected_min REAL,
+            expected_max REAL,
+            is_mandatory INTEGER DEFAULT 1,
+            order_index INTEGER DEFAULT 0
+        )`);
+
+        await query(`CREATE TABLE IF NOT EXISTS checklist_submissions (
+            id SERIAL PRIMARY KEY,
+            template_id INTEGER REFERENCES checklist_templates(id),
+            machine_id INTEGER REFERENCES machines(id),
+            user_id INTEGER REFERENCES users(id),
+            shift TEXT NOT NULL,
+            part_name TEXT,
+            line_speed TEXT,
+            checked_by INTEGER REFERENCES users(id),
+            checked_at TIMESTAMP,
+            approved_by INTEGER REFERENCES users(id),
+            approved_at TIMESTAMP,
+            submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`);
+
+        await query(`CREATE TABLE IF NOT EXISTS checklist_submission_values (
+            id SERIAL PRIMARY KEY,
+            submission_id INTEGER REFERENCES checklist_submissions(id) ON DELETE CASCADE,
+            item_id INTEGER REFERENCES template_items(id),
+            actual_value TEXT,
+            is_ok INTEGER DEFAULT 1,
+            remarks TEXT
+        )`);
+
+        await query(`CREATE TABLE IF NOT EXISTS machine_templates (
+            machine_id INTEGER REFERENCES machines(id) ON DELETE CASCADE,
+            template_id INTEGER REFERENCES checklist_templates(id) ON DELETE CASCADE,
+            PRIMARY KEY (machine_id, template_id)
         )`);
 
         seedData();

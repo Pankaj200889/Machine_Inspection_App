@@ -123,7 +123,7 @@ const ChecklistForm = () => {
             } catch (error) {
                 console.error("Error loading template details:", error);
                 setError(`Template Load Error: ${error.message || error.toString()}`);
-                setTemplateLoading(false);
+                setLoading(false);
             }
         };
         fetchTemplateDetails();

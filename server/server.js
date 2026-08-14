@@ -12,6 +12,7 @@ const io = new Server(server, {
         origin: [
             "http://localhost:5173",
             "https://machine.siddhiss.com",
+            "https://machine-api.siddhiss.com",
             "https://machineinspectionapp-production.up.railway.app",
             "https://machine-inspection-app-cyan.vercel.app"
         ],
@@ -24,6 +25,7 @@ app.use(cors({
     origin: [
         "http://localhost:5173",
         "https://machine.siddhiss.com",
+        "https://machine-api.siddhiss.com",
         "https://machineinspectionapp-production.up.railway.app",
         "https://machine-inspection-app-cyan.vercel.app"
     ],

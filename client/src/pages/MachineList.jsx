@@ -90,7 +90,7 @@ const MachineList = () => {
             const res = await api.get(`/machines/${id}/qr`);
             setQrData({ machine: res.data.machine, img: res.data.qrCode });
         } catch (error) {
-            alert('Error generating QR');
+            alert('Error generating QR: ' + (error.response?.data?.error || error.message));
         }
     };
 

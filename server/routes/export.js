@@ -9,7 +9,8 @@ const verifyAdmin = (req, res, next) => {
     const token = req.headers['authorization'];
     if (!token) return res.status(403).json({ error: 'No token provided' });
     jwt.verify(token.split(' ')[1], JWT_SECRET, (err, decoded) => {
-        if (err || decoded.role !== 'admin') return res.status(403).json({ error: 'Requires Admin' });
+        if (err) return res.status(401).json({ error: 'Unauthorized: ' + err.message });
+        if (decoded.role !== 'admin') return res.status(403).json({ error: 'Requires Admin role' });
         next();
     });
 };

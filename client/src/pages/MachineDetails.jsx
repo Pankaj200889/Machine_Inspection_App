@@ -11,6 +11,7 @@ const MachineDetails = () => {
     
     const [machine, setMachine] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [isEditingProduction, setIsEditingProduction] = useState(false);
     
     // Production Edit fields
@@ -33,10 +34,13 @@ const MachineDetails = () => {
                     setRevised(found.prod_plan_revised || 0);
                     setMct(found.mct || 0);
                     setWorkingHours(found.working_hours || 8);
+                } else {
+                    setError(`Machine with ID "${id}" (numeric: ${numericId}) not found in the machines database.`);
                 }
                 setLoading(false);
             } catch (err) {
                 console.error(err);
+                setError(`API Fetch Error: ${err.message || err.toString()}`);
                 setLoading(false);
             }
         };
@@ -76,6 +80,21 @@ const MachineDetails = () => {
     if (loading) return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+    );
+    
+    if (error) return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 p-6 text-center">
+            <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md border border-red-100 space-y-4">
+                <AlertTriangle className="w-16 h-16 text-red-500 mx-auto animate-bounce" />
+                <h2 className="text-xl font-bold text-slate-800">Scan Lookup Failed</h2>
+                <p className="text-slate-500 text-sm">{error}</p>
+                <div className="pt-4">
+                    <Link to={user ? "/dashboard" : "/"} className="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-bold transition">
+                        Back to Home
+                    </Link>
+                </div>
+            </div>
         </div>
     );
     

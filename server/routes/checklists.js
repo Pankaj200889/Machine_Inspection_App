@@ -154,7 +154,13 @@ router.get('/templates', verifyUser, async (req, res) => {
         params = [machine_id];
     }
     try {
-        const result = await db.query(sql, params);
+        let result = await db.query(sql, params);
+        
+        // Fallback: If a new machine has no templates mapped, return all templates by default
+        if (result.rows.length === 0 && machine_id) {
+            result = await db.query(`SELECT * FROM checklist_templates`);
+        }
+        
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });

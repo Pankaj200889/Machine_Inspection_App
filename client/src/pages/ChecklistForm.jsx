@@ -388,10 +388,15 @@ const ChecklistForm = () => {
                                     <option key={t.id} value={t.id}>{t.template_name}</option>
                                 ))}
                             </select>
-                        ) : (
+                        ) : templates.length === 1 ? (
                             <div className="font-bold text-white text-sm bg-white/5 px-3 py-2 rounded-lg border border-white/5 flex items-center justify-between">
-                                <span>{templates[0]?.template_name || 'Loading template...'}</span>
+                                <span>{templates[0].template_name}</span>
                                 <CheckCircle className="w-4 h-4 text-emerald-400" />
+                            </div>
+                        ) : (
+                            <div className="font-bold text-white text-sm bg-white/5 px-3 py-2 rounded-lg border border-white/5 flex items-center justify-between text-yellow-300">
+                                <span>No Check Sheets Assigned</span>
+                                <AlertCircle className="w-4 h-4 text-yellow-300" />
                             </div>
                         )}
                     </div>

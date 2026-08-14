@@ -12,6 +12,7 @@ const ChecklistForm = () => {
     const [templateDetails, setTemplateDetails] = useState(null);
     
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [openSections, setOpenSections] = useState({});
     
@@ -76,6 +77,7 @@ const ChecklistForm = () => {
                 setLoading(false);
             } catch (error) {
                 console.error("Initialization error:", error);
+                setError(`Initialization Error: ${error.message || error.toString()}`);
                 setLoading(false);
             }
         };
@@ -120,6 +122,7 @@ const ChecklistForm = () => {
                 setLoading(false);
             } catch (error) {
                 console.error("Error loading template details:", error);
+                setError(`Template Load Error: ${error.message || error.toString()}`);
                 setLoading(false);
             }
         };
@@ -323,6 +326,21 @@ const ChecklistForm = () => {
             setSubmitting(false);
         }
     };
+
+    if (error) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6 text-center">
+                <div className="bg-white p-6 rounded-2xl shadow-xl max-w-sm border border-red-100 space-y-4">
+                    <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
+                    <h2 className="text-xl font-bold text-gray-800">Checklist Load Failed</h2>
+                    <p className="text-sm text-gray-500">{error}</p>
+                    <button onClick={() => navigate(`/machine/${machineId}`)} className="mt-4 px-6 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-bold">
+                        Back to Machine Hub
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     if (loading) {
         return (

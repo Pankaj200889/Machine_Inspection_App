@@ -29,7 +29,8 @@ app.use(cors({
         "https://machineinspectionapp-production.up.railway.app",
         "https://machine-inspection-app-cyan.vercel.app"
     ],
-    credentials: true
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 app.use((req, res, next) => {

@@ -25,7 +25,10 @@ const verifyUser = (req, res, next) => {
     if (!token) return res.status(403).json({ error: 'No token provided' });
 
     jwt.verify(token.split(' ')[1], JWT_SECRET, (err, decoded) => {
-        if (err) return res.status(401).json({ error: 'Unauthorized' });
+        if (err) {
+            console.error('JWT Verify Error:', err.message, 'Token:', token);
+            return res.status(401).json({ error: 'Unauthorized: ' + err.message });
+        }
         req.user = decoded;
         next();
     });

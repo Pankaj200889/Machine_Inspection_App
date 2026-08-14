@@ -256,6 +256,7 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
                 INSERT INTO checklist_submissions (
                     template_id, machine_id, user_id, shift, part_name, line_speed, submitted_at
                 ) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                ${process.env.DATABASE_URL ? 'RETURNING id' : ''}
             `;
             const subResult = await db.query(subSql, [template_id, machine_id, user_id, shift, part_name, line_speed]);
             const submission_id = subResult.lastID;
@@ -312,6 +313,7 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
                     machine_id, user_id, ok_quantity, ng_quantity, total_quantity, 
                     avg_ng_percent, bekido_percent, image_path, device_info, location, shift, submission_id
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ${process.env.DATABASE_URL ? 'RETURNING id' : ''}
             `;
             const legResult = await db.query(legSql, [
                 machine_id, user_id, legacy_ok, legacy_ng, legacy_total, 
@@ -356,7 +358,7 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
             bekido_percent = Math.min(((ok_quantity * (machine.mct || 0)) / totalSeconds) * 100, 100);
         }
 
-        const sql = `INSERT INTO checklists (machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent, bekido_percent, image_path, device_info, location, shift) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const sql = `INSERT INTO checklists (machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent, bekido_percent, image_path, device_info, location, shift) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ${process.env.DATABASE_URL ? 'RETURNING id' : ''}`;
         const result = await db.query(sql, [machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent.toFixed(2), bekido_percent.toFixed(2), image_path, device_info, location, shift]);
 
         const newChecklist = {

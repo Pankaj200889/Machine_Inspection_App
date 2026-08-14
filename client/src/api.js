@@ -8,16 +8,14 @@ import axios from 'axios';
 // 3. Fallback to Relative/Origin if served from same domain
 let STATIC_BASE_URL = '';
 
-if (window.location.origin.includes('localhost:3000') || window.location.origin.includes('127.0.0.1:3000')) {
-    STATIC_BASE_URL = window.location.origin;
-} else if (window.location.hostname.includes('siddhiss.com')) {
-    STATIC_BASE_URL = 'https://machine-api.siddhiss.com';
-} else if (import.meta.env.VITE_API_BASE_URL) {
-    STATIC_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-} else if (window.location.port === '5173') {
-    STATIC_BASE_URL = `http://${window.location.hostname}:3000`;
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    if (window.location.port === '5173') {
+        STATIC_BASE_URL = `http://${window.location.hostname}:3000`;
+    } else {
+        STATIC_BASE_URL = window.location.origin;
+    }
 } else {
-    STATIC_BASE_URL = window.location.origin;
+    STATIC_BASE_URL = 'https://machine-api.siddhiss.com';
 }
 
 const API_BASE_URL = `${STATIC_BASE_URL}/api`;

@@ -10,6 +10,8 @@ let STATIC_BASE_URL = '';
 
 if (window.location.origin.includes('localhost:3000') || window.location.origin.includes('127.0.0.1:3000')) {
     STATIC_BASE_URL = window.location.origin;
+} else if (window.location.hostname.includes('siddhiss.com')) {
+    STATIC_BASE_URL = 'https://machine-api.siddhiss.com';
 } else if (import.meta.env.VITE_API_BASE_URL) {
     STATIC_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 } else if (window.location.port === '5173') {

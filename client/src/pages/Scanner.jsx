@@ -106,11 +106,7 @@ const Scanner = () => {
             try {
                 const data = JSON.parse(decodedText);
                 if (data.id) {
-                    if (user) {
-                        window.location.href = `/checklist/${data.id}`;
-                    } else {
-                        window.location.href = `/machine/${data.id}`;
-                    }
+                    window.location.href = `/machine/${data.id}`;
                     return;
                 } else if (data.no) {
                     alert("Scanned: " + data.no);
@@ -127,11 +123,7 @@ const Scanner = () => {
                 const parts = decodedText.split('/machine/');
                 const id = parts[1];
                 if (id) {
-                    if (user) {
-                        window.location.href = `/checklist/${id}`;
-                    } else {
-                        window.location.href = `/machine/${id}`;
-                    }
+                    window.location.href = `/machine/${id}`;
                     return;
                 }
             }

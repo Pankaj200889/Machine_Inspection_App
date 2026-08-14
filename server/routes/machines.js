@@ -19,6 +19,18 @@ const verifyAdmin = (req, res, next) => {
     });
 };
 
+// Middleware to verify Logged-in User (Admin or Operator)
+const verifyUser = (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(403).json({ error: 'No token provided' });
+
+    jwt.verify(token.split(' ')[1], JWT_SECRET, (err, decoded) => {
+        if (err) return res.status(401).json({ error: 'Unauthorized' });
+        req.user = decoded;
+        next();
+    });
+};
+
 // Get all machines
 router.get('/', async (req, res) => {
     try {
@@ -113,6 +125,45 @@ router.get('/:id/qr', verifyAdmin, async (req, res) => {
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+// Update Machine Production Quantities (Admin & Operator)
+router.put('/:id/production', verifyUser, async (req, res) => {
+    const { prod_plan_actual, prod_plan_revised, mct, working_hours } = req.body;
+    
+    const fields = [];
+    const params = [];
+    
+    if (prod_plan_actual !== undefined) {
+        fields.push("prod_plan_actual = ?");
+        params.push(prod_plan_actual);
+    }
+    if (prod_plan_revised !== undefined) {
+        fields.push("prod_plan_revised = ?");
+        params.push(prod_plan_revised);
+    }
+    if (mct !== undefined) {
+        fields.push("mct = ?");
+        params.push(mct);
+    }
+    if (working_hours !== undefined) {
+        fields.push("working_hours = ?");
+        params.push(working_hours);
+    }
+    
+    if (fields.length === 0) {
+        return res.status(400).json({ error: 'No production fields to update' });
+    }
+    
+    params.push(req.params.id);
+    const sql = `UPDATE machines SET ${fields.join(', ')} WHERE id = ?`;
+
+    try {
+        const result = await db.query(sql, params);
+        res.json({ message: 'Production details updated successfully', changes: result.rowCount });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
 });
 

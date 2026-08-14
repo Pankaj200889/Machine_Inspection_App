@@ -24,7 +24,8 @@ const MachineDetails = () => {
         const fetchDetails = async () => {
             try {
                 const mRes = await api.get('/machines');
-                const found = mRes.data.find(m => m.id == id);
+                const numericId = parseInt(id, 10);
+                const found = mRes.data.find(m => m.id === numericId);
 
                 if (found) {
                     setMachine(found);

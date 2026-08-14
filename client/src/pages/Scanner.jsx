@@ -121,10 +121,13 @@ const Scanner = () => {
             // Expected format: https://.../machine/:id
             if (decodedText.includes('/machine/')) {
                 const parts = decodedText.split('/machine/');
-                const id = parts[1];
-                if (id) {
-                    window.location.href = `/machine/${id}`;
-                    return;
+                const rawId = parts[1];
+                if (rawId) {
+                    const match = rawId.match(/^(\d+)/);
+                    if (match) {
+                        window.location.href = `/machine/${match[1]}`;
+                        return;
+                    }
                 }
             }
 

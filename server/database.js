@@ -11,11 +11,10 @@ let pgPool;
 
 if (isPostgres) {
     console.log('Using PostgreSQL Database');
+    const isInternal = process.env.DATABASE_URL.includes('.internal');
     pgPool = new Pool({
         connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false // Required for some hosted providers like Heroku/Railway
-        }
+        ssl: isInternal ? false : { rejectUnauthorized: false }
     });
     initPg();
 } else {

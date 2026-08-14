@@ -71,7 +71,8 @@ const MachineDetails = () => {
             setIsEditingProduction(false);
         } catch (err) {
             console.error(err);
-            alert("Failed to update production logs.");
+            const errMsg = err.response?.data?.error || err.response?.data || err.message || err.toString();
+            alert(`Failed to update production logs: ${errMsg}`);
         } finally {
             setSaving(false);
         }

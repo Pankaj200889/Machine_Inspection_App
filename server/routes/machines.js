@@ -4,7 +4,7 @@ const db = require('../database');
 const jwt = require('jsonwebtoken');
 const qrcode = require('qrcode');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+const JWT_SECRET = 'HARDCODED_MACHINE_SECRET_2026';
 
 // Middleware to verify Admin
 const verifyAdmin = (req, res, next) => {

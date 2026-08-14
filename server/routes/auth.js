@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../database');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+const JWT_SECRET = 'HARDCODED_MACHINE_SECRET_2026';
 
 // Register User
 router.post('/register', async (req, res) => {

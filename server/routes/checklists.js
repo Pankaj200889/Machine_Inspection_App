@@ -5,7 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+const JWT_SECRET = 'HARDCODED_MACHINE_SECRET_2026';
 
 // Multer Setup for Images
 const fs = require('fs');

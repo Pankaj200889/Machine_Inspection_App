@@ -283,12 +283,15 @@ async function initPg() {
             submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
 
-        // Migration for existing Postgres tables (Safe Add)
+        const legacyCols = ['remarks', 'approval_proof_path'];
+        for (const col of legacyCols) {
+            try {
+                await query(`ALTER TABLE checklists ADD COLUMN ${col} TEXT`);
+            } catch(e) {}
+        }
         try {
-            await query(`ALTER TABLE checklists ADD COLUMN IF NOT EXISTS remarks TEXT`);
-            await query(`ALTER TABLE checklists ADD COLUMN IF NOT EXISTS approval_proof_path TEXT`);
-            await query(`ALTER TABLE checklists ADD COLUMN IF NOT EXISTS submission_id INTEGER`);
-        } catch (e) { console.log("Cols exist or error", e.message); }
+            await query(`ALTER TABLE checklists ADD COLUMN submission_id INTEGER`);
+        } catch(e) {}
 
         await query(`CREATE TABLE IF NOT EXISTS audit_logs (
             id SERIAL PRIMARY KEY,
@@ -365,12 +368,14 @@ async function initPg() {
             submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
 
-        try {
-            await query(`ALTER TABLE checklist_submissions ADD COLUMN IF NOT EXISTS image_url TEXT`);
-            await query(`ALTER TABLE checklist_submissions ADD COLUMN IF NOT EXISTS image2_url TEXT`);
-            await query(`ALTER TABLE checklist_submissions ADD COLUMN IF NOT EXISTS signature_url TEXT`);
-            await query(`ALTER TABLE checklist_submissions ADD COLUMN IF NOT EXISTS comments TEXT`);
-        } catch (e) { console.log("Cols exist or error", e.message); }
+        const subCols = ['image_url', 'image2_url', 'signature_url', 'comments'];
+        for (const col of subCols) {
+            try {
+                await query(`ALTER TABLE checklist_submissions ADD COLUMN ${col} TEXT`);
+            } catch (e) {
+                // Ignore column already exists error (42701)
+            }
+        }
 
         await query(`CREATE TABLE IF NOT EXISTS checklist_submission_values (
             id SERIAL PRIMARY KEY,

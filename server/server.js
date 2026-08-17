@@ -101,6 +101,49 @@ app.get(/(.*)/, (req, res) => {
     }
 });
 
+app.get('/api/debug-db', async (req, res) => {
+    try {
+        if (!process.env.DATABASE_URL) {
+            return res.json({ error: "Not using Postgres" });
+        }
+        const { Pool } = require('pg');
+        const isInternal = process.env.DATABASE_URL.includes('.internal');
+        const pgPool = new Pool({
+            connectionString: process.env.DATABASE_URL,
+            ssl: isInternal ? false : { rejectUnauthorized: false }
+        });
+        
+        let colsResult;
+        try {
+            colsResult = await pgPool.query(`
+                SELECT column_name, data_type 
+                FROM information_schema.columns 
+                WHERE table_name = 'checklist_submissions'
+            `);
+        } catch (e) {
+            return res.json({ error: 'Failed to query schema', details: e.message });
+        }
+
+        const subCols = ['image_url', 'image2_url', 'signature_url', 'comments'];
+        const results = {};
+        for (const col of subCols) {
+            try {
+                await pgPool.query(`ALTER TABLE checklist_submissions ADD COLUMN ${col} TEXT`);
+                results[col] = "Added successfully";
+            } catch (e) {
+                results[col] = e.message;
+            }
+        }
+
+        res.json({
+            columns: colsResult.rows,
+            migrationResults: results
+        });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 

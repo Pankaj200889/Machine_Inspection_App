@@ -373,7 +373,9 @@ async function initPg() {
             try {
                 await query(`ALTER TABLE checklist_submissions ADD COLUMN ${col} TEXT`);
             } catch (e) {
-                // Ignore column already exists error (42701)
+                if (e.code !== '42701') {
+                    console.error(`Error adding column ${col} to checklist_submissions:`, e);
+                }
             }
         }
 

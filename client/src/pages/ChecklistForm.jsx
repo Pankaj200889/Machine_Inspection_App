@@ -348,9 +348,7 @@ const ChecklistForm = () => {
         }
 
         try {
-            await api.post('/checklists', data, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            await api.post('/checklists', data);
             alert("Dynamic Checklist Submitted Successfully!");
             navigate('/');
         } catch (error) {

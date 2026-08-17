@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
-import { Camera, Check, X, RefreshCw, Aperture, ChevronDown, ChevronUp, AlertCircle, Info, Sparkles, CheckCircle } from 'lucide-react';
+import { Camera, Check, X, RefreshCw, Aperture, ChevronDown, ChevronUp, AlertCircle, Info, Sparkles, CheckCircle, Trash2 } from 'lucide-react';
+import SignatureCanvas from 'react-signature-canvas';
 
 const ChecklistForm = () => {
     const { machineId } = useParams();
@@ -20,15 +21,19 @@ const ChecklistForm = () => {
     const [answers, setAnswers] = useState({});
     
     const [formData, setFormData] = useState({
-        image: null,
-        remarks: '',
+        image1: null,
+        image2: null,
+        comments: '',
         shift: 'A',
         part_name: '',
         line_speed: ''
     });
     
-    const [preview, setPreview] = useState(null);
+    const [preview1, setPreview1] = useState(null);
+    const [preview2, setPreview2] = useState(null);
     const [location, setLocation] = useState(null);
+    const sigCanvas = useRef(null);
+    const [activeCameraIndex, setActiveCameraIndex] = useState(null);
 
     // Camera state
     const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -136,7 +141,8 @@ const ChecklistForm = () => {
         };
     }, []);
 
-    const startCamera = async () => {
+    const startCamera = async (index) => {
+        setActiveCameraIndex(index);
         setIsCameraOpen(true);
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
@@ -152,6 +158,7 @@ const ChecklistForm = () => {
             console.error("Camera access error:", err);
             alert("Could not access camera.");
             setIsCameraOpen(false);
+            setActiveCameraIndex(null);
         }
     };
 
@@ -161,10 +168,11 @@ const ChecklistForm = () => {
             streamRef.current = null;
         }
         setIsCameraOpen(false);
+        setActiveCameraIndex(null);
     };
 
     const capturePhoto = () => {
-        if (videoRef.current && canvasRef.current) {
+        if (videoRef.current && canvasRef.current && activeCameraIndex) {
             const video = videoRef.current;
             const canvas = canvasRef.current;
             canvas.width = video.videoWidth;
@@ -173,19 +181,30 @@ const ChecklistForm = () => {
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             canvas.toBlob(blob => {
                 if (blob) {
-                    const file = new File([blob], `capture_${Date.now()}.jpg`, { type: "image/jpeg" });
-                    setFormData(prev => ({ ...prev, image: file }));
-                    setPreview(URL.createObjectURL(file));
+                    const file = new File([blob], `capture_${activeCameraIndex}_${Date.now()}.jpg`, { type: "image/jpeg" });
+                    
+                    if (activeCameraIndex === 1) {
+                        setFormData(prev => ({ ...prev, image1: file }));
+                        setPreview1(URL.createObjectURL(file));
+                    } else if (activeCameraIndex === 2) {
+                        setFormData(prev => ({ ...prev, image2: file }));
+                        setPreview2(URL.createObjectURL(file));
+                    }
                     stopCamera();
                 }
             }, 'image/jpeg', 0.8);
         }
     };
 
-    const retakePhoto = () => {
-        setPreview(null);
-        setFormData(prev => ({ ...prev, image: null }));
-        startCamera();
+    const retakePhoto = (index) => {
+        if (index === 1) {
+            setPreview1(null);
+            setFormData(prev => ({ ...prev, image1: null }));
+        } else if (index === 2) {
+            setPreview2(null);
+            setFormData(prev => ({ ...prev, image2: null }));
+        }
+        startCamera(index);
     };
 
     // Toggle Section Accordion
@@ -308,9 +327,24 @@ const ChecklistForm = () => {
         const deviceInfo = `${navigator.platform} - ${navigator.userAgent}`;
         data.append('device_info', deviceInfo);
         data.append('location', location || 'N/A');
+        data.append('comments', formData.comments);
         
-        if (formData.image) {
-            data.append('image', formData.image);
+        if (formData.image1) data.append('image1', formData.image1);
+        if (formData.image2) data.append('image2', formData.image2);
+
+        // Process Signature
+        if (sigCanvas.current && !sigCanvas.current.isEmpty()) {
+            const signatureDataUrl = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+            // Convert base64 to Blob
+            const byteString = atob(signatureDataUrl.split(',')[1]);
+            const mimeString = signatureDataUrl.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            const blob = new Blob([ab], {type: mimeString});
+            data.append('signature', new File([blob], `signature_${Date.now()}.png`, { type: 'image/png' }));
         }
 
         try {
@@ -563,35 +597,24 @@ const ChecklistForm = () => {
                             ))}
                         </div>
 
-                        {/* General Remarks */}
+                        {/* General Comments */}
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">General Notes / Remarks</label>
+                            <label className="block text-sm font-bold text-gray-700">Comments</label>
                             <textarea
                                 className="w-full border border-gray-200 p-3 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500"
                                 rows="3"
-                                placeholder="Write any shift setup notes here..."
-                                value={formData.remarks}
-                                onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
+                                placeholder="Any final comments..."
+                                value={formData.comments}
+                                onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
                             ></textarea>
                         </div>
 
-                        {/* Image Verification Proof */}
-                        <div className="space-y-2">
-                            <label className="block text-sm font-bold text-gray-700">Audit Image Verification</label>
+                        {/* Image Verification Proof (Max 2) */}
+                        <div className="space-y-4">
+                            <label className="block text-sm font-bold text-gray-700">Audit Images (Max 2)</label>
                             <canvas ref={canvasRef} className="hidden"></canvas>
 
-                            {!isCameraOpen && !preview && (
-                                <div
-                                    onClick={startCamera}
-                                    className="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:bg-blue-50/30 hover:border-blue-300 transition cursor-pointer"
-                                >
-                                    <Camera className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                                    <span className="block font-bold text-sm text-gray-600">Capture Proof Photo</span>
-                                    <span className="text-[10px] text-gray-400">(Required for machine setup validation)</span>
-                                </div>
-                            )}
-
-                            {isCameraOpen && (
+                            {isCameraOpen && activeCameraIndex && (
                                 <div className="relative bg-black rounded-2xl overflow-hidden">
                                     <video ref={videoRef} autoPlay playsInline className="w-full h-48 object-cover" />
                                     <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-4">
@@ -601,18 +624,69 @@ const ChecklistForm = () => {
                                 </div>
                             )}
 
-                            {preview && (
-                                <div className="relative">
-                                    <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded-2xl shadow-sm" />
-                                    <button
-                                        type="button"
-                                        onClick={retakePhoto}
-                                        className="absolute bottom-2 right-2 bg-black/60 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-black/80 transition"
-                                    >
-                                        <RefreshCw className="w-3.5 h-3.5" /> Retake
-                                    </button>
+                            <div className="grid grid-cols-2 gap-4">
+                                {/* Image 1 */}
+                                <div>
+                                    {!preview1 ? (
+                                        <div
+                                            onClick={() => startCamera(1)}
+                                            className="border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center hover:bg-blue-50/30 hover:border-blue-300 transition cursor-pointer"
+                                        >
+                                            <Camera className="w-6 h-6 text-gray-400 mx-auto mb-1" />
+                                            <span className="block font-bold text-xs text-gray-600">Add Photo 1</span>
+                                        </div>
+                                    ) : (
+                                        <div className="relative group">
+                                            <img src={preview1} alt="Preview 1" className="w-full h-24 object-cover rounded-2xl shadow-sm" />
+                                            <button
+                                                type="button"
+                                                onClick={() => retakePhoto(1)}
+                                                className="absolute top-1 right-1 p-1 bg-white/90 rounded-full text-red-500 hover:bg-red-50"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                                {/* Image 2 */}
+                                <div>
+                                    {!preview2 ? (
+                                        <div
+                                            onClick={() => startCamera(2)}
+                                            className="border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center hover:bg-blue-50/30 hover:border-blue-300 transition cursor-pointer"
+                                        >
+                                            <Camera className="w-6 h-6 text-gray-400 mx-auto mb-1" />
+                                            <span className="block font-bold text-xs text-gray-600">Add Photo 2</span>
+                                        </div>
+                                    ) : (
+                                        <div className="relative group">
+                                            <img src={preview2} alt="Preview 2" className="w-full h-24 object-cover rounded-2xl shadow-sm" />
+                                            <button
+                                                type="button"
+                                                onClick={() => retakePhoto(2)}
+                                                className="absolute top-1 right-1 p-1 bg-white/90 rounded-full text-red-500 hover:bg-red-50"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Signature Pad */}
+                        <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                                <label className="block text-sm font-bold text-gray-700">Operator Signature</label>
+                                <button type="button" onClick={() => sigCanvas.current?.clear()} className="text-xs text-red-500 hover:text-red-700 font-bold">Clear</button>
+                            </div>
+                            <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white">
+                                <SignatureCanvas 
+                                    ref={sigCanvas} 
+                                    penColor="blue"
+                                    canvasProps={{className: 'signatureCanvas w-full h-32'}} 
+                                />
+                            </div>
                         </div>
 
                         {/* Submit Action */}

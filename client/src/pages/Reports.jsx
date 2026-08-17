@@ -594,11 +594,19 @@ const Reports = () => {
                     <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl" onClick={e => e.stopPropagation()}>
                         
                         {/* Header Image banner */}
-                        <div className="relative h-48 sm:h-56 bg-slate-900 shrink-0">
-                            {selectedSubmission.image_path ? (
+                        <div className="relative h-48 sm:h-56 bg-slate-900 shrink-0 flex">
+                            {dynamicDetails?.image_url ? (
+                                <img src={dynamicDetails.image_url.startsWith('http') ? dynamicDetails.image_url : `${STATIC_BASE_URL}/${dynamicDetails.image_url}`} className="w-1/2 h-full object-cover opacity-80 border-r border-slate-700" />
+                            ) : selectedSubmission.image_path ? (
                                 <img src={`${STATIC_BASE_URL}/${selectedSubmission.image_path}`} className="w-full h-full object-cover opacity-80" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-slate-500 font-bold uppercase tracking-widest text-sm">Visual Evidence Missing</div>
+                                <div className="w-1/2 h-full flex items-center justify-center text-slate-500 font-bold uppercase tracking-widest text-sm border-r border-slate-700">No Image 1</div>
+                            )}
+
+                            {dynamicDetails?.image2_url ? (
+                                <img src={dynamicDetails.image2_url.startsWith('http') ? dynamicDetails.image2_url : `${STATIC_BASE_URL}/${dynamicDetails.image2_url}`} className="w-1/2 h-full object-cover opacity-80" />
+                            ) : (
+                                <div className="w-1/2 h-full flex items-center justify-center text-slate-500 font-bold uppercase tracking-widest text-sm">No Image 2</div>
                             )}
                             <button className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition" onClick={() => setSelectedSubmission(null)}>
                                 <X className="w-5 h-5" />
@@ -732,10 +740,19 @@ const Reports = () => {
                                 </div>
                             ) : null}
 
-                            {selectedSubmission.remarks && (
+                            {/* Operator Signature */}
+                            {dynamicDetails?.signature_url && (
+                                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center">
+                                    <span className="block text-xs font-bold text-slate-400 uppercase mb-2">Operator Signature</span>
+                                    <img src={dynamicDetails.signature_url.startsWith('http') ? dynamicDetails.signature_url : `${STATIC_BASE_URL}/${dynamicDetails.signature_url}`} alt="Operator Signature" className="h-20 object-contain" />
+                                </div>
+                            )}
+
+                            {/* Comments */}
+                            {(dynamicDetails?.comments || selectedSubmission.remarks) && (
                                 <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
-                                    <span className="block text-xs font-bold text-yellow-600 uppercase mb-1">Remarks</span>
-                                    <p className="text-slate-700 font-medium text-sm">{selectedSubmission.remarks}</p>
+                                    <span className="block text-xs font-bold text-yellow-600 uppercase mb-1">Remarks / Comments</span>
+                                    <p className="text-slate-700 font-medium text-sm">{dynamicDetails?.comments || selectedSubmission.remarks}</p>
                                 </div>
                             )}
 

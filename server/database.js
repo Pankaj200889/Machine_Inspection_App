@@ -227,6 +227,12 @@ function initSqlite() {
             db.run(`ALTER TABLE checklists ADD COLUMN ${col} ${type}`, (err) => { });
         });
 
+        // Migration for new Submission fields
+        const submissionCols = ['image_url', 'image2_url', 'signature_url', 'comments'];
+        submissionCols.forEach(col => {
+            db.run(`ALTER TABLE checklist_submissions ADD COLUMN ${col} TEXT`, (err) => { });
+        });
+
         seedData();
     });
 }
@@ -352,8 +358,19 @@ async function initPg() {
             checked_at TIMESTAMP,
             approved_by INTEGER REFERENCES users(id),
             approved_at TIMESTAMP,
+            image_url TEXT,
+            image2_url TEXT,
+            signature_url TEXT,
+            comments TEXT,
             submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
+
+        try {
+            await query(`ALTER TABLE checklist_submissions ADD COLUMN IF NOT EXISTS image_url TEXT`);
+            await query(`ALTER TABLE checklist_submissions ADD COLUMN IF NOT EXISTS image2_url TEXT`);
+            await query(`ALTER TABLE checklist_submissions ADD COLUMN IF NOT EXISTS signature_url TEXT`);
+            await query(`ALTER TABLE checklist_submissions ADD COLUMN IF NOT EXISTS comments TEXT`);
+        } catch (e) { console.log("Cols exist or error", e.message); }
 
         await query(`CREATE TABLE IF NOT EXISTS checklist_submission_values (
             id SERIAL PRIMARY KEY,

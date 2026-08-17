@@ -10,7 +10,7 @@ const JWT_SECRET = 'HARDCODED_MACHINE_SECRET_2026';
 // Multer Setup for Images
 const fs = require('fs');
 
-// Multer Setup
+// Multer Setup (Local - Legacy)
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = path.join(__dirname, '../uploads/');
@@ -24,6 +24,9 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
+
+// Cloudinary Setup
+const { uploadCloudinary } = require('../config/cloudinary');
 
 // Middleware (Operator or Admin)
 const verifyUser = (req, res, next) => {
@@ -230,7 +233,11 @@ router.put('/:id/image', verifyUser, upload.single('image'), async (req, res) =>
 });
 
 // Submit Checklist (supports dynamic template submissions)
-router.post('/', verifyUser, upload.single('image'), async (req, res) => {
+router.post('/', verifyUser, uploadCloudinary.fields([
+    { name: 'image1', maxCount: 1 },
+    { name: 'image2', maxCount: 1 },
+    { name: 'signature', maxCount: 1 }
+]), async (req, res) => {
     let { 
         machine_id, 
         template_id, 
@@ -240,12 +247,17 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
         values, 
         device_info, 
         location,
-        ok_quantity, 
-        ng_quantity, 
-        total_quantity 
+        comments,
+        ok_quantity,
+        ng_quantity,
+        total_quantity
     } = req.body;
 
-    const image_path = req.file ? 'uploads/' + req.file.filename : null;
+    const image1_url = req.files && req.files['image1'] ? req.files['image1'][0].path : null;
+    const image2_url = req.files && req.files['image2'] ? req.files['image2'][0].path : null;
+    const signature_url = req.files && req.files['signature'] ? req.files['signature'][0].path : null;
+    const image_path = image1_url; // fallback for legacy table
+
     const user_id = req.user.id;
     shift = shift || getShift();
 
@@ -263,11 +275,11 @@ router.post('/', verifyUser, upload.single('image'), async (req, res) => {
 
             const subSql = `
                 INSERT INTO checklist_submissions (
-                    template_id, machine_id, user_id, shift, part_name, line_speed, submitted_at
-                ) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                    template_id, machine_id, user_id, shift, part_name, line_speed, image_url, image2_url, signature_url, comments, submitted_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
                 ${process.env.DATABASE_URL ? 'RETURNING id' : ''}
             `;
-            const subResult = await db.query(subSql, [template_id, machine_id, user_id, shift, part_name, line_speed]);
+            const subResult = await db.query(subSql, [template_id, machine_id, user_id, shift, part_name, line_speed, image1_url, image2_url, signature_url, comments]);
             const submission_id = subResult.lastID;
 
             let has_ng = false;

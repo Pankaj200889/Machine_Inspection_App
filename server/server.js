@@ -61,46 +61,6 @@ app.use('/api/checklists', checklistRoutes);
 app.use('/api/organization', organizationRoutes);
 app.use('/api/export', exportRoutes);
 
-// Debug Route: Force Seed (Protected by simplistic check or rely on admin login later)
-// Debug Route: Force Seed
-app.post('/api/debug/seed', async (req, res) => {
-    try {
-        if (process.env.DATABASE_URL) {
-            console.log("Triggering Postgres Seeding...");
-            const seedPg = require('./seed_pg');
-            await seedPg();
-            res.json({ message: 'PostgreSQL Seeding triggered. Check logs.' });
-        } else {
-            console.log("Triggering SQLite Seeding...");
-            delete require.cache[require.resolve('./seed_prod')];
-            require('./seed_prod');
-            res.json({ message: 'SQLite Seeding triggered. Check logs.' });
-        }
-    } catch (err) {
-        console.error("Seeding Error:", err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Serve Static Frontend (Production)
-app.use(express.static(path.join(__dirname, '../client/dist')));
-
-// Catch-all handler for React Router (Express 5 fix)
-app.get(/(.*)/, (req, res) => {
-    try {
-        const htmlPath = path.join(__dirname, '../client/dist/index.html');
-        if (fs.existsSync(htmlPath)) {
-            const html = fs.readFileSync(htmlPath, 'utf8');
-            res.send(html);
-        } else {
-            res.status(404).send("Frontend build not found. Please run 'npm run build'.");
-        }
-    } catch (err) {
-        console.error("Catch-all error:", err);
-        res.status(500).send("Internal Server Error loading frontend");
-    }
-});
-
 app.get('/api/debug-db', async (req, res) => {
     try {
         if (!process.env.DATABASE_URL) {
@@ -141,6 +101,46 @@ app.get('/api/debug-db', async (req, res) => {
         });
     } catch (e) {
         res.status(500).json({ error: e.message });
+    }
+});
+
+// Debug Route: Force Seed (Protected by simplistic check or rely on admin login later)
+// Debug Route: Force Seed
+app.post('/api/debug/seed', async (req, res) => {
+    try {
+        if (process.env.DATABASE_URL) {
+            console.log("Triggering Postgres Seeding...");
+            const seedPg = require('./seed_pg');
+            await seedPg();
+            res.json({ message: 'PostgreSQL Seeding triggered. Check logs.' });
+        } else {
+            console.log("Triggering SQLite Seeding...");
+            delete require.cache[require.resolve('./seed_prod')];
+            require('./seed_prod');
+            res.json({ message: 'SQLite Seeding triggered. Check logs.' });
+        }
+    } catch (err) {
+        console.error("Seeding Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Serve Static Frontend (Production)
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// Catch-all handler for React Router (Express 5 fix)
+app.get(/(.*)/, (req, res) => {
+    try {
+        const htmlPath = path.join(__dirname, '../client/dist/index.html');
+        if (fs.existsSync(htmlPath)) {
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            res.send(html);
+        } else {
+            res.status(404).send("Frontend build not found. Please run 'npm run build'.");
+        }
+    } catch (err) {
+        console.error("Catch-all error:", err);
+        res.status(500).send("Internal Server Error loading frontend");
     }
 });
 

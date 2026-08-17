@@ -279,7 +279,18 @@ router.post('/', verifyUser, uploadCloudinary.fields([
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
                 ${process.env.DATABASE_URL ? 'RETURNING id' : ''}
             `;
-            const subResult = await db.query(subSql, [template_id, machine_id, user_id, shift, part_name, line_speed, image1_url, image2_url, signature_url, comments]);
+            const subResult = await db.query(subSql, [
+                template_id, 
+                machine_id, 
+                user_id, 
+                shift, 
+                part_name ?? '', 
+                line_speed ?? '', 
+                image1_url, 
+                image2_url, 
+                signature_url, 
+                comments ?? ''
+            ]);
             const submission_id = subResult.lastID;
 
             let has_ng = false;
@@ -308,7 +319,7 @@ router.post('/', verifyUser, uploadCloudinary.fields([
                 await db.query(`
                     INSERT INTO checklist_submission_values (submission_id, item_id, actual_value, is_ok, remarks)
                     VALUES (?, ?, ?, ?, ?)
-                `, [submission_id, item_id, actual_value, is_ok, remarks || '']);
+                `, [submission_id, item_id, actual_value ?? '', is_ok, remarks || '']);
             }
 
             let legacy_ok = has_ng ? 0 : 1;

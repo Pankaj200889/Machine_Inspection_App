@@ -353,7 +353,8 @@ const ChecklistForm = () => {
             navigate('/');
         } catch (error) {
             console.error(error);
-            alert("Error submitting checklist.");
+            const errMsg = error.response?.data?.error || error.message || "Unknown error";
+            alert(`Error submitting checklist: ${errMsg}`);
         } finally {
             setSubmitting(false);
         }

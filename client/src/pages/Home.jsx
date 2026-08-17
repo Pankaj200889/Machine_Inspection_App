@@ -306,7 +306,7 @@ const Home = () => {
                                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Machine Photo</label>
                                     <div className="h-32 bg-gray-100 rounded-xl overflow-hidden border border-gray-200 relative group">
                                         {editingChecklist.image_path ? (
-                                            <img src={`${STATIC_BASE_URL}/${editingChecklist.image_path}`} className="w-full h-full object-cover" />
+                                            <img src={editingChecklist.image_path.startsWith('http') ? editingChecklist.image_path : `${STATIC_BASE_URL}/${editingChecklist.image_path}`} className="w-full h-full object-cover" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs flex-col gap-1">
                                                 <Activity className="w-8 h-8 opacity-50" />
@@ -391,7 +391,7 @@ const Home = () => {
                         {/* Header Image */}
                         <div className="relative h-64 bg-gray-100 group">
                             {selectedImage.image_path ? (
-                                <img src={`${STATIC_BASE_URL}/${selectedImage.image_path}`} className="w-full h-full object-cover" />
+                                <img src={selectedImage.image_path.startsWith('http') ? selectedImage.image_path : `${STATIC_BASE_URL}/${selectedImage.image_path}`} className="w-full h-full object-cover" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center text-gray-300 flex-col gap-2">
                                     <Activity className="w-12 h-12 opacity-50" />
@@ -623,7 +623,7 @@ const Home = () => {
                                             <div key={check.id} onClick={() => setSelectedImage(check)} className="p-3 mx-2 rounded-xl hover:bg-blue-50/50 transition flex items-center gap-3 group cursor-pointer">
                                                 <div className="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden shadow-sm shrink-0 border border-gray-200 group-hover:border-blue-200 transition-colors">
                                                     {check.image_path ? (
-                                                        <img src={`${STATIC_BASE_URL}/${check.image_path}`} className="w-full h-full object-cover" />
+                                                        <img src={check.image_path.startsWith('http') ? check.image_path : `${STATIC_BASE_URL}/${check.image_path}`} className="w-full h-full object-cover" />
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center text-gray-300"><Activity className="w-5 h-5" /></div>
                                                     )}

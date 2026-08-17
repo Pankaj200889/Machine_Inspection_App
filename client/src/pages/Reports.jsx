@@ -150,7 +150,7 @@ const Reports = () => {
                 item.total_quantity,
                 item.bekido_percent || 0,
                 `"${(item.remarks || '').replace(/"/g, '""')}"`,
-                item.image_path ? `${STATIC_BASE_URL}/${item.image_path}` : ''
+                item.image_path ? (item.image_path.startsWith('http') ? item.image_path : `${STATIC_BASE_URL}/${item.image_path}`) : ''
             ].join(","))
         ].join("\n");
 
@@ -178,6 +178,12 @@ const Reports = () => {
             console.error('Error converting image to base64:', error);
             return null;
         }
+    };
+
+    const getFullImageUrl = (url) => {
+        if (!url) return null;
+        if (url.startsWith('http')) return url;
+        return `${STATIC_BASE_URL}/${url}`;
     };
 
     const generateSinglePDF = async (submission) => {
@@ -316,7 +322,8 @@ const Reports = () => {
             }
 
             // Photo visual evidence
-            if (submission.image_path) {
+            const imgPath = details?.image_url || submission.image_path;
+            if (imgPath) {
                 if (yPos + 80 > 280) {
                     doc.addPage();
                     yPos = 20;
@@ -329,7 +336,7 @@ const Reports = () => {
                 yPos += 5;
 
                 try {
-                    const imgUrl = `${STATIC_BASE_URL}/${submission.image_path}`;
+                    const imgUrl = getFullImageUrl(imgPath);
                     const imgData = await fetchImageAsBase64(imgUrl);
 
                     if (imgData) {
@@ -375,7 +382,7 @@ const Reports = () => {
             const dataWithImages = await Promise.all(filteredData.map(async (item) => {
                 let imgData = null;
                 if (item.image_path) {
-                    imgData = await fetchImageAsBase64(`${STATIC_BASE_URL}/${item.image_path}`);
+                    imgData = await fetchImageAsBase64(getFullImageUrl(item.image_path));
                 }
                 return { ...item, imgData };
             }));
@@ -596,15 +603,15 @@ const Reports = () => {
                         {/* Header Image banner */}
                         <div className="relative h-48 sm:h-56 bg-slate-900 shrink-0 flex">
                             {dynamicDetails?.image_url ? (
-                                <img src={dynamicDetails.image_url.startsWith('http') ? dynamicDetails.image_url : `${STATIC_BASE_URL}/${dynamicDetails.image_url}`} className="w-1/2 h-full object-cover opacity-80 border-r border-slate-700" />
+                                <img src={getFullImageUrl(dynamicDetails.image_url)} className="w-1/2 h-full object-cover opacity-80 border-r border-slate-700" />
                             ) : selectedSubmission.image_path ? (
-                                <img src={`${STATIC_BASE_URL}/${selectedSubmission.image_path}`} className="w-full h-full object-cover opacity-80" />
+                                <img src={getFullImageUrl(selectedSubmission.image_path)} className="w-full h-full object-cover opacity-80" />
                             ) : (
                                 <div className="w-1/2 h-full flex items-center justify-center text-slate-500 font-bold uppercase tracking-widest text-sm border-r border-slate-700">No Image 1</div>
                             )}
 
                             {dynamicDetails?.image2_url ? (
-                                <img src={dynamicDetails.image2_url.startsWith('http') ? dynamicDetails.image2_url : `${STATIC_BASE_URL}/${dynamicDetails.image2_url}`} className="w-1/2 h-full object-cover opacity-80" />
+                                <img src={getFullImageUrl(dynamicDetails.image2_url)} className="w-1/2 h-full object-cover opacity-80" />
                             ) : (
                                 <div className="w-1/2 h-full flex items-center justify-center text-slate-500 font-bold uppercase tracking-widest text-sm">No Image 2</div>
                             )}

@@ -129,7 +129,7 @@ const SubmissionHistory = () => {
                                     <div className="shrink-0 relative group w-full sm:w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                         {item.image_path ? (
                                             <img
-                                                src={`${STATIC_BASE_URL}/${item.image_path}`}
+                                                src={item.image_path.startsWith('http') ? item.image_path : `${STATIC_BASE_URL}/${item.image_path}`}
                                                 alt="Proof"
                                                 className="w-full h-full object-cover"
                                             />

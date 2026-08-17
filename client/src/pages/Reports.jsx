@@ -134,11 +134,12 @@ const Reports = () => {
     const exportToCSV = () => {
         if (!filteredData.length) return alert("No data to export");
 
-        const headers = ["Machine No", "Model", "Shift", "Inspector", "Date", "Time", "OK Qty", "NG Qty", "Total Qty", "Efficiency %", "Remarks", "Image URL"];
+        const headers = ["Checklist Name", "Machine No", "Model", "Shift", "Inspector", "Date", "Time", "OK Qty", "NG Qty", "Total Qty", "Efficiency %", "Remarks", "Image URL"];
 
         const csvContent = [
             headers.join(","),
             ...filteredData.map(item => [
+                `"${item.template_name || 'Standard Checklist'}"`,
                 item.machine_no,
                 item.model || '-',
                 item.shift,
@@ -201,10 +202,10 @@ const Reports = () => {
             doc.setFillColor(28, 63, 170); // Deep Blue Primary
             doc.rect(0, 0, 210, 40, 'F');
 
-            doc.setFontSize(22);
+            doc.setFontSize(20);
             doc.setTextColor(255, 255, 255);
             doc.setFont("helvetica", "bold");
-            doc.text("EQUIPGUARD COMPLIANCE REPORT", 14, 25);
+            doc.text((submission.template_name || "EQUIPGUARD COMPLIANCE REPORT").toUpperCase(), 14, 25);
 
             doc.setFontSize(9);
             doc.setFont("helvetica", "normal");
@@ -216,6 +217,7 @@ const Reports = () => {
                 startY: 45,
                 head: [['Metadata Field', 'Value', 'Metadata Field', 'Value']],
                 body: [
+                    ['Checklist Name', submission.template_name || 'Standard Checklist', 'Audit Date/Time', new Date(submission.submitted_at).toLocaleString()],
                     ['Machine No', submission.machine_no, 'Inspector Name', submission.username || 'Unknown'],
                     ['Machine Model', submission.model || 'N/A', 'Audit Date/Time', new Date(submission.submitted_at).toLocaleString()],
                     ['Shift / Run', `Shift ${submission.shift}`, 'Line Speed', details?.line_speed || '-'],
@@ -389,8 +391,9 @@ const Reports = () => {
 
             autoTable(doc, {
                 startY: 35,
-                head: [['Machine', 'Shift', 'Date', 'OK', 'NG', 'Total', 'Eff%', 'Remarks', 'Photo']],
+                head: [['Checklist', 'Machine', 'Shift', 'Date', 'OK', 'NG', 'Total', 'Eff%', 'Remarks', 'Photo']],
                 body: dataWithImages.map(item => [
+                    (item.template_name || 'Standard').substring(0, 15),
                     item.machine_no,
                     item.shift,
                     new Date(item.submitted_at).toLocaleDateString(),
@@ -405,10 +408,11 @@ const Reports = () => {
                 styles: { fontSize: 8, cellPadding: 1, valign: 'middle', minCellHeight: 15 },
                 headStyles: { fillColor: [41, 128, 185] },
                 columnStyles: {
-                    8: { cellWidth: 20 }
+                    0: { cellWidth: 20 },
+                    9: { cellWidth: 20 }
                 },
                 didDrawCell: function (data) {
-                    if (data.column.index === 8 && data.cell.section === 'body') {
+                    if (data.column.index === 9 && data.cell.section === 'body') {
                         const item = dataWithImages[data.row.index];
                         if (item.imgData) {
                             try {

@@ -196,9 +196,11 @@ router.get('/templates/:id', verifyUser, async (req, res) => {
 // Get My Submissions
 router.get('/my-submissions', verifyUser, async (req, res) => {
     const sql = `
-        SELECT c.*, m.machine_no 
+        SELECT c.*, m.machine_no, t.template_name 
         FROM checklists c
         JOIN machines m ON c.machine_id = m.id
+        LEFT JOIN checklist_submissions cs ON c.submission_id = cs.id
+        LEFT JOIN checklist_templates t ON cs.template_id = t.id
         WHERE c.user_id = ?
         ORDER BY c.submitted_at DESC
         LIMIT 50
@@ -558,18 +560,22 @@ router.put('/:id', verifyUser, upload.fields([{ name: 'image', maxCount: 1 }, { 
 // Get History
 router.get('/', async (req, res) => {
     const machine_id = req.query.machine_id;
-    let sql = `SELECT checklists.*, machines.machine_no, machines.model, users.username 
+    let sql = `SELECT checklists.*, machines.machine_no, machines.model, users.username, t.template_name 
                FROM checklists 
                JOIN machines ON checklists.machine_id = machines.id 
                LEFT JOIN users ON checklists.user_id = users.id
+               LEFT JOIN checklist_submissions cs ON checklists.submission_id = cs.id
+               LEFT JOIN checklist_templates t ON cs.template_id = t.id
                ORDER BY submitted_at DESC LIMIT 50`;
     let params = [];
 
     if (machine_id) {
-        sql = `SELECT checklists.*, machines.machine_no, machines.model, users.username 
+        sql = `SELECT checklists.*, machines.machine_no, machines.model, users.username, t.template_name 
                FROM checklists 
                JOIN machines ON checklists.machine_id = machines.id 
                LEFT JOIN users ON checklists.user_id = users.id
+               LEFT JOIN checklist_submissions cs ON checklists.submission_id = cs.id
+               LEFT JOIN checklist_templates t ON cs.template_id = t.id
                WHERE machine_id = ? 
                ORDER BY submitted_at DESC`;
         params = [machine_id];

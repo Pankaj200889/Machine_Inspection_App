@@ -6,38 +6,17 @@ const qrcode = require('qrcode');
 
 const JWT_SECRET = 'HARDCODED_MACHINE_SECRET_2026';
 
-// Middleware to verify Admin
-const verifyAdmin = (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (!token) return res.status(403).json({ error: 'No token provided' });
-
-    jwt.verify(token.split(' ')[1], JWT_SECRET, (err, decoded) => {
-        if (err) return res.status(401).json({ error: 'Unauthorized: ' + err.message });
-        if (decoded.role !== 'admin') return res.status(403).json({ error: 'Requires Admin role' });
-        req.user = decoded;
-        next();
-    });
-};
-
-// Middleware to verify Logged-in User (Admin or Operator)
-const verifyUser = (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (!token) return res.status(403).json({ error: 'No token provided' });
-
-    jwt.verify(token.split(' ')[1], JWT_SECRET, (err, decoded) => {
-        if (err) {
-            console.error('JWT Verify Error:', err.message, 'Token:', token);
-            return res.status(401).json({ error: 'Unauthorized: ' + err.message });
-        }
-        req.user = decoded;
-        next();
-    });
-};
+const { verifyUser, verifyAdmin } = require('../middleware/authMiddleware');
 
 // Get all machines
-router.get('/', async (req, res) => {
+router.get('/', verifyUser, async (req, res) => {
     try {
-        const result = await db.query("SELECT * FROM machines");
+        let result;
+        if (req.user.role === 'super_admin') {
+            result = await db.query("SELECT * FROM machines");
+        } else {
+            result = await db.query("SELECT * FROM machines WHERE organization_id = ?", [req.user.organization_id]);
+        }
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -67,9 +46,9 @@ router.post('/', verifyAdmin, async (req, res) => {
     }
     // END: Trial Limit Check
 
-    const sql = "INSERT INTO machines (machine_no, line_no, model, prod_plan, prod_plan_actual, mct, working_hours) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
+    const sql = "INSERT INTO machines (machine_no, line_no, model, prod_plan, prod_plan_actual, mct, working_hours, organization_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
     try {
-        const result = await db.query(sql, [machine_no, line_no, model, prod_plan, prod_plan_actual || 0, mct || 0, working_hours || 8]);
+        const result = await db.query(sql, [machine_no, line_no, model, prod_plan, prod_plan_actual || 0, mct || 0, working_hours || 8, req.user.organization_id]);
         // result.lastID is handled by our database.js wrapper for both PG (via RETURNING) and SQLite
         res.json({ id: result.lastID, machine_no, line_no, model, prod_plan, prod_plan_actual, mct, working_hours });
     } catch (err) {
@@ -91,7 +70,7 @@ router.put('/:id', verifyAdmin, async (req, res) => {
                  WHERE id = ?`;
 
     try {
-        const result = await db.query(sql, [machine_no, line_no, model, prod_plan, prod_plan_actual, mct, working_hours, req.params.id]);
+        const result = await db.query(sql, [machine_no, line_no, model, prod_plan, prod_plan_actual, mct, working_hours, req.params.id, req.user.organization_id]);
         res.json({ message: 'Updated', changes: result.rowCount });
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -100,9 +79,9 @@ router.put('/:id', verifyAdmin, async (req, res) => {
 
 // Delete Machine (Admin Only)
 router.delete('/:id', verifyAdmin, async (req, res) => {
-    const sql = "DELETE FROM machines WHERE id = ?";
+    const sql = "DELETE FROM machines WHERE id = ? AND organization_id = ?";
     try {
-        const result = await db.query(sql, [req.params.id]);
+        const result = await db.query(sql, [req.params.id, req.user.organization_id]);
         res.json({ message: 'Deleted', changes: result.rowCount });
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -111,9 +90,9 @@ router.delete('/:id', verifyAdmin, async (req, res) => {
 
 // Generate QR Code (Admin Only, Returns Data URL)
 router.get('/:id/qr', verifyAdmin, async (req, res) => {
-    const sql = "SELECT * FROM machines WHERE id = ?";
+    const sql = "SELECT * FROM machines WHERE id = ? AND organization_id = ?";
     try {
-        const result = await db.query(sql, [req.params.id]);
+        const result = await db.query(sql, [req.params.id, req.user.organization_id]);
         const row = result.rows[0];
 
         if (!row) return res.status(404).json({ error: 'Machine not found' });

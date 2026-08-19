@@ -394,6 +394,34 @@ async function initPg() {
             PRIMARY KEY (machine_id, template_id)
         )`);
 
+        // Multi-Tenant Migrations
+        try { await query(`ALTER TABLE organization_settings ADD COLUMN status TEXT DEFAULT 'active'`); } catch(e) {}
+
+        const tablesToAddOrg = ['users', 'machines', 'checklist_templates', 'checklists', 'checklist_submissions', 'audit_logs'];
+        for (const table of tablesToAddOrg) {
+            try {
+                await query(`ALTER TABLE ${table} ADD COLUMN organization_id INTEGER REFERENCES organization_settings(id)`);
+                if (table === 'users') {
+                    await query(`UPDATE users SET organization_id = 1 WHERE organization_id IS NULL AND role != 'super_admin'`);
+                } else {
+                    await query(`UPDATE ${table} SET organization_id = 1 WHERE organization_id IS NULL`);
+                }
+            } catch(e) {
+                try {
+                    if (table === 'users') {
+                        await query(`UPDATE users SET organization_id = 1 WHERE organization_id IS NULL AND role != 'super_admin'`);
+                    } else {
+                        await query(`UPDATE ${table} SET organization_id = 1 WHERE organization_id IS NULL`);
+                    }
+                } catch(err) {}
+            }
+        }
+
+        // Set Pankaj to super_admin
+        try {
+            await query(`UPDATE users SET role = 'super_admin', organization_id = NULL WHERE username ILIKE 'pankaj'`);
+        } catch(e) {}
+
         seedData();
         console.log("PostgreSQL Tables Initialized");
     } catch (err) {

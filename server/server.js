@@ -47,18 +47,20 @@ if (!fs.existsSync(uploadDir)) {
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes (Imports)
+// Routes// Import Routes
 const authRoutes = require('./routes/auth');
 const machineRoutes = require('./routes/machines');
 const checklistRoutes = require('./routes/checklists');
 const organizationRoutes = require('./routes/organization');
+const superadminRoutes = require('./routes/superadmin');
 const exportRoutes = require('./routes/export');
 
-// Routes (Usage)
+// Use Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/machines', machineRoutes);
 app.use('/api/checklists', checklistRoutes);
 app.use('/api/organization', organizationRoutes);
+app.use('/api/superadmin', superadminRoutes);
 app.use('/api/export', exportRoutes);
 
 app.get('/api/debug-db', async (req, res) => {

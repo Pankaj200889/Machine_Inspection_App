@@ -67,7 +67,7 @@ const logAudit = async (userId, action, tableName, targetId, oldValues, newValue
 // --- Analytics Endpoints ---
 
 // Get Production Trend (Last 7 Days by Shift)
-router.get('/stats/trend', async (req, res) => {
+router.get('/stats/trend', verifyUser, async (req, res) => {
     // Note: SQLite uses datetime('now'), Postgres uses NOW() or CURRENT_TIMESTAMP. 
     // To be compatible: Use simple variable interval syntax or handle in JS.
     // Normalized approach: Postgres uses `CURRENT_DATE - INTERVAL '7 days'`
@@ -102,7 +102,7 @@ router.get('/stats/trend', async (req, res) => {
     `;
 
     try {
-        const result = await db.query(sql, [dateStr]);
+        const result = await db.query(sql, [dateStr, req.user.organization_id]);
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -110,7 +110,7 @@ router.get('/stats/trend', async (req, res) => {
 });
 
 // Get Efficiency Stats (By Machine)
-router.get('/stats/efficiency', async (req, res) => {
+router.get('/stats/efficiency', verifyUser, async (req, res) => {
     // Handle `datetime('now', '-30 days')` vs JS Date
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -131,7 +131,7 @@ router.get('/stats/efficiency', async (req, res) => {
         ORDER BY avg_bekido DESC
     `;
     try {
-        const result = await db.query(sql, [dateStr]);
+        const result = await db.query(sql, [dateStr, req.user.organization_id, req.user.organization_id]);
         const cappedRows = result.rows.map(row => ({
             ...row,
             avg_bekido: Math.min(Number(row.avg_bekido || 0), 100)
@@ -161,7 +161,7 @@ router.get('/templates', verifyUser, async (req, res) => {
         
         // Fallback: If a new machine has no templates mapped, return all templates by default
         if (result.rows.length === 0 && machine_id) {
-            result = await db.query(`SELECT * FROM checklist_templates`);
+            result = await db.query(`SELECT * FROM checklist_templates WHERE organization_id = ?`, [req.user.organization_id]);
         }
         
         res.json(result.rows);
@@ -174,7 +174,7 @@ router.get('/templates', verifyUser, async (req, res) => {
 router.get('/templates/:id', verifyUser, async (req, res) => {
     const templateId = req.params.id;
     try {
-        const tResult = await db.query("SELECT * FROM checklist_templates WHERE id = ?", [templateId]);
+        const tResult = await db.query("SELECT * FROM checklist_templates WHERE id = ? AND organization_id = ?", [templateId, req.user.organization_id]);
         const template = tResult.rows[0];
         if (!template) return res.status(404).json({ error: 'Template not found' });
 
@@ -201,12 +201,12 @@ router.get('/my-submissions', verifyUser, async (req, res) => {
         JOIN machines m ON c.machine_id = m.id
         LEFT JOIN checklist_submissions cs ON c.submission_id = cs.id
         LEFT JOIN checklist_templates t ON cs.template_id = t.id
-        WHERE c.user_id = ?
+        WHERE c.user_id = ? AND c.organization_id = ?
         ORDER BY c.submitted_at DESC
         LIMIT 50
     `;
     try {
-        const result = await db.query(sql, [req.user.id]);
+        const result = await db.query(sql, [req.user.id, req.user.organization_id]);
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -218,7 +218,7 @@ router.put('/:id/image', verifyUser, upload.single('image'), async (req, res) =>
     if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
     try {
-        const checkResult = await db.query("SELECT user_id FROM checklists WHERE id = ?", [req.params.id]);
+        const checkResult = await db.query("SELECT user_id FROM checklists WHERE id = ? AND organization_id = ?", [req.params.id, req.user.organization_id]);
         const row = checkResult.rows[0];
 
         if (!row) return res.status(404).json({ error: 'Checklist not found' });
@@ -227,7 +227,7 @@ router.put('/:id/image', verifyUser, upload.single('image'), async (req, res) =>
         }
 
         const relativePath = 'uploads/' + req.file.filename;
-        await db.query(`UPDATE checklists SET image_path = ? WHERE id = ?`, [relativePath, req.params.id]);
+        await db.query(`UPDATE checklists SET image_path = ? WHERE id = ? AND organization_id = ?`, [relativePath, req.params.id, req.user.organization_id]);
         res.json({ message: 'Image updated successfully', image_path: relativePath });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -392,8 +392,8 @@ router.post('/', verifyUser, uploadCloudinary.fields([
             bekido_percent = Math.min(((ok_quantity * (machine.mct || 0)) / totalSeconds) * 100, 100);
         }
 
-        const sql = `INSERT INTO checklists (machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent, bekido_percent, image_path, device_info, location, shift) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ${process.env.DATABASE_URL ? 'RETURNING id' : ''}`;
-        const result = await db.query(sql, [machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent.toFixed(2), bekido_percent.toFixed(2), image_path, device_info, location, shift]);
+        const sql = `INSERT INTO checklists (machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent, bekido_percent, image_path, device_info, location, shift, organization_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ${process.env.DATABASE_URL ? 'RETURNING id' : ''}`;
+        const result = await db.query(sql, [machine_id, user_id, ok_quantity, ng_quantity, total_quantity, avg_ng_percent.toFixed(2), bekido_percent.toFixed(2), image_path, device_info, location, shift, req.user.organization_id]);
 
         const newChecklist = {
             id: result.lastID,
@@ -420,8 +420,8 @@ router.get('/submissions/:id', verifyUser, async (req, res) => {
             JOIN checklist_templates t ON s.template_id = t.id
             JOIN machines m ON s.machine_id = m.id
             JOIN users u ON s.user_id = u.id
-            WHERE s.id = ?
-        `, [submissionId]);
+            WHERE s.id = ? AND s.organization_id = ?
+        `, [submissionId, req.user.organization_id]);
         
         const submission = subRes.rows[0];
         if (!submission) return res.status(404).json({ error: 'Submission not found' });
@@ -487,7 +487,7 @@ router.put('/:id', verifyUser, upload.fields([{ name: 'image', maxCount: 1 }, { 
     const new_proof_path = req.files && req.files['proof'] ? 'uploads/' + req.files['proof'][0].filename : null;
 
     try {
-        const cRes = await db.query("SELECT * FROM checklists WHERE id = ?", [checklistId]);
+        const cRes = await db.query("SELECT * FROM checklists WHERE id = ? AND organization_id = ?", [checklistId, req.user.organization_id]);
         const row = cRes.rows[0];
         if (!row) return res.status(404).json({ error: 'Checklist not found' });
 
@@ -558,7 +558,7 @@ router.put('/:id', verifyUser, upload.fields([{ name: 'image', maxCount: 1 }, { 
 });
 
 // Get History
-router.get('/', async (req, res) => {
+router.get('/', verifyUser, async (req, res) => {
     const machine_id = req.query.machine_id;
     let sql = `SELECT checklists.*, machines.machine_no, machines.model, users.username, t.template_name 
                FROM checklists 
@@ -597,13 +597,13 @@ router.delete('/:id', verifyUser, async (req, res) => {
 
     try {
         // Optional: Get image path to delete file if needed
-        const cRes = await db.query("SELECT image_path FROM checklists WHERE id = ?", [checklistId]);
+        const cRes = await db.query("SELECT image_path FROM checklists WHERE id = ? AND organization_id = ?", [checklistId, req.user.organization_id]);
         const row = cRes.rows[0];
 
         if (!row) return res.status(404).json({ error: 'Checklist not found' });
 
         // Delete from DB
-        await db.query("DELETE FROM checklists WHERE id = ?", [checklistId]);
+        await db.query("DELETE FROM checklists WHERE id = ? AND organization_id = ?", [checklistId, req.user.organization_id]);
 
         // Delete image file if exists
         if (row.image_path) {

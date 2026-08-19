@@ -3,11 +3,12 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../database');
+const { verifyUser, verifyAdmin, verifySuperAdmin } = require('../middleware/authMiddleware');
 
 const JWT_SECRET = 'HARDCODED_MACHINE_SECRET_2026';
 
 // Register User
-router.post('/register', async (req, res) => {
+router.post('/register', verifyAdmin, async (req, res) => {
     const { username, email, password, role } = req.body;
 
     if (!username || !email || !password) {
@@ -27,9 +28,9 @@ router.post('/register', async (req, res) => {
     const hash = bcrypt.hashSync(password, salt);
     const userRole = role === 'admin' ? 'admin' : 'operator';
 
-    const sql = `INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)`;
+    const sql = `INSERT INTO users (username, email, password_hash, role, organization_id) VALUES (?, ?, ?, ?, ?)`;
     try {
-        const result = await db.query(sql, [username, email, hash, userRole]);
+        const result = await db.query(sql, [username, email, hash, userRole, req.user.organization_id]);
         res.status(201).json({ message: 'User registered', username, role: userRole });
     } catch (err) {
         return res.status(400).json({ error: err.message });
@@ -41,7 +42,12 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     // Allow login by Email OR Username
-    const sql = `SELECT * FROM users WHERE email = ? OR username = ?`;
+    const sql = `
+        SELECT u.*, o.status as org_status 
+        FROM users u 
+        LEFT JOIN organization_settings o ON u.organization_id = o.id 
+        WHERE u.email = ? OR u.username = ?
+    `;
     try {
         const result = await db.query(sql, [email, email]);
         const user = result.rows[0];
@@ -51,18 +57,27 @@ router.post('/login', async (req, res) => {
         const isMatch = bcrypt.compareSync(password, user.password_hash);
         if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
 
-        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
-        res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
+        if (user.role !== 'super_admin' && user.org_status === 'suspended') {
+            return res.status(403).json({ error: 'Account Suspended. Please contact support.' });
+        }
+
+        const token = jwt.sign({ 
+            id: user.id, 
+            role: user.role, 
+            organization_id: user.organization_id 
+        }, JWT_SECRET, { expiresIn: '1d' });
+
+        res.json({ token, user: { id: user.id, username: user.username, role: user.role, organization_id: user.organization_id } });
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
 });
 
 // Generate Reset Link (Admin Only - In real app, verify admin middleware here)
-router.post('/users/:id/reset-link', async (req, res) => {
+router.post('/users/:id/reset-link', verifyAdmin, async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await db.query("SELECT * FROM users WHERE id = ?", [id]);
+        const result = await db.query("SELECT * FROM users WHERE id = ? AND organization_id = ?", [id, req.user.organization_id]);
         const user = result.rows[0];
         if (!user) return res.status(404).json({ error: 'User not found' });
 
@@ -156,9 +171,9 @@ router.post('/reset-password', async (req, res) => {
 });
 
 // List Users (Admin Only - simplified check)
-router.get('/users', async (req, res) => {
+router.get('/users', verifyAdmin, async (req, res) => {
     try {
-        const result = await db.query("SELECT id, username, email, role, created_at FROM users ORDER BY created_at DESC");
+        const result = await db.query("SELECT id, username, email, role, created_at FROM users WHERE organization_id = ? ORDER BY created_at DESC", [req.user.organization_id]);
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -166,10 +181,10 @@ router.get('/users', async (req, res) => {
 });
 
 // Delete User (Admin Only)
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users/:id', verifyAdmin, async (req, res) => {
     const { id } = req.params;
     try {
-        await db.query("DELETE FROM users WHERE id = ?", [id]);
+        await db.query("DELETE FROM users WHERE id = ? AND organization_id = ?", [id, req.user.organization_id]);
         res.json({ message: 'User deleted successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });

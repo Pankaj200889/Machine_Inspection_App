@@ -16,6 +16,7 @@ import SubmissionHistory from './pages/SubmissionHistory';
 import LandingPage from './pages/LandingPage';
 import Reports from './pages/Reports';
 import Users from './pages/Users';
+import SuperAdmin from './pages/SuperAdmin';
 
 import ChecklistEdit from './pages/ChecklistEdit';
 import PrivateRoute from './components/PrivateRoute';
@@ -48,6 +49,11 @@ function App() {
                     <Route path="/users" element={<Users />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/checklist/:id/edit" element={<ChecklistEdit />} />
+                </Route>
+
+                {/* Super Admin Routes */}
+                <Route element={<PrivateRoute roles={['superadmin']} />}>
+                    <Route path="/superadmin" element={<SuperAdmin />} />
                 </Route>
             </Routes >
         </AuthProvider >

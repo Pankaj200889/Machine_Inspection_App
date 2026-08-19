@@ -37,9 +37,9 @@ const verifyAdmin = (req, res, next) => {
 };
 
 // Get Organization Profile
-router.get('/', async (req, res) => {
+router.get('/', verifyUser, async (req, res) => {
     try {
-        const result = await db.query("SELECT * FROM organization_settings LIMIT 1");
+        const result = await db.query("SELECT * FROM organization_settings WHERE id = ?", [req.user.organization_id]);
         res.json(result.rows[0] || {});
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -58,7 +58,7 @@ router.put('/', verifyAdmin, upload.single('logo'), async (req, res) => {
 
     try {
         // Check if exists
-        const checkResult = await db.query("SELECT id FROM organization_settings LIMIT 1");
+        const checkResult = await db.query("SELECT id FROM organization_settings WHERE id = ?", [req.user.organization_id]);
         const row = checkResult.rows[0];
 
         if (row) {
@@ -70,7 +70,7 @@ router.put('/', verifyAdmin, upload.single('logo'), async (req, res) => {
                          address = COALESCE(?, address),
                          updated_at = CURRENT_TIMESTAMP
                          WHERE id = ?`;
-            await db.query(sql, [company_name, finalLogoUrl, plant_no, address, row.id]);
+            await db.query(sql, [company_name, finalLogoUrl, plant_no, address, req.user.organization_id]);
             res.json({ message: 'Organization Updated', logo_url: finalLogoUrl });
         } else {
             // Insert

@@ -98,4 +98,19 @@ router.put('/organizations/:id/reset-password', verifySuperAdmin, async (req, re
     }
 });
 
+// Delete Organization (Wipes all their data)
+router.delete('/organizations/:id', verifySuperAdmin, async (req, res) => {
+    try {
+        // Postgres ON DELETE CASCADE should handle children if configured, 
+        // but we'll manually delete users just in case.
+        await db.query("DELETE FROM users WHERE organization_id = ?", [req.params.id]);
+        await db.query("DELETE FROM machines WHERE organization_id = ?", [req.params.id]);
+        await db.query("DELETE FROM organization_settings WHERE id = ?", [req.params.id]);
+        
+        res.json({ message: 'Organization permanently deleted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;

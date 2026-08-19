@@ -156,9 +156,24 @@ const SuperAdmin = () => {
                                         </button>
                                         <button 
                                             onClick={() => toggleStatus(org.id, org.status)}
-                                            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${org.status === 'active' ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}`}
+                                            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${org.status === 'active' ? 'bg-orange-50 text-orange-600 hover:bg-orange-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}`}
                                         >
                                             {org.status === 'active' ? 'Suspend' : 'Activate'}
+                                        </button>
+                                        <button 
+                                            onClick={async () => {
+                                                if (window.confirm(`Are you absolutely sure you want to permanently delete ${org.company_name} and ALL their data?`)) {
+                                                    try {
+                                                        await api.delete(`/superadmin/organizations/${org.id}`);
+                                                        setOrganizations(organizations.filter(o => o.id !== org.id));
+                                                    } catch(e) {
+                                                        alert("Failed to delete organization");
+                                                    }
+                                                }
+                                            }}
+                                            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 transition-all"
+                                        >
+                                            Delete
                                         </button>
                                     </td>
                                 </tr>

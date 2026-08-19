@@ -9,26 +9,6 @@ const isPostgres = !!process.env.DATABASE_URL;
 let db;
 let pgPool;
 
-if (isPostgres) {
-    console.log('Using PostgreSQL Database');
-    const isInternal = process.env.DATABASE_URL.includes('.internal');
-    pgPool = new Pool({
-        connectionString: process.env.DATABASE_URL,
-        ssl: isInternal ? false : { rejectUnauthorized: false }
-    });
-    initPg();
-} else {
-    console.log('Using SQLite Database (Local)');
-    const dbPath = path.resolve(__dirname, 'machines.db');
-    db = new sqlite3.Database(dbPath, (err) => {
-        if (err) console.error("Error opening SQLite:", err.message);
-        else {
-            db.run('PRAGMA journal_mode = WAL;');
-            initSqlite();
-        }
-    });
-}
-
 // --- Query Wrapper (Promise-based) ---
 // Returns { rows: [], rowCount: 0, lastID: ... }
 const query = (text, params = []) => {
@@ -65,6 +45,28 @@ const query = (text, params = []) => {
         }
     });
 };
+
+if (isPostgres) {
+    console.log('Using PostgreSQL Database');
+    const isInternal = process.env.DATABASE_URL.includes('.internal');
+    pgPool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: isInternal ? false : { rejectUnauthorized: false }
+    });
+    initPg();
+} else {
+    console.log('Using SQLite Database (Local)');
+    const dbPath = path.resolve(__dirname, 'machines.db');
+    db = new sqlite3.Database(dbPath, (err) => {
+        if (err) console.error("Error opening SQLite:", err.message);
+        else {
+            db.run('PRAGMA journal_mode = WAL;');
+            initSqlite();
+        }
+    });
+}
+
+
 
 // --- Initialization Scripts ---
 

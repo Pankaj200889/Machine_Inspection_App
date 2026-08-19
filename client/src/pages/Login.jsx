@@ -16,7 +16,11 @@ const Login = () => {
         if (res.success) {
             const params = new URLSearchParams(window.location.search);
             const redirect = params.get('redirect');
-            navigate(redirect || '/dashboard');
+            if (res.user.role === 'super_admin') {
+                navigate(redirect || '/superadmin');
+            } else {
+                navigate(redirect || '/dashboard');
+            }
         } else {
             setError(res.error);
         }

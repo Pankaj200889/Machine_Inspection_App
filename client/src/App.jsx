@@ -52,7 +52,7 @@ function App() {
                 </Route>
 
                 {/* Super Admin Routes */}
-                <Route element={<PrivateRoute roles={['superadmin']} />}>
+                <Route element={<PrivateRoute roles={['super_admin']} />}>
                     <Route path="/superadmin" element={<SuperAdmin />} />
                 </Route>
             </Routes >

@@ -70,12 +70,24 @@ const SuperAdmin = () => {
                         </h1>
                         <p className="text-gray-500">Manage all tenant organizations and billing access.</p>
                     </div>
-                    <button 
-                        onClick={() => setShowNewModal(true)}
-                        className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700 flex items-center gap-2 shadow-lg shadow-blue-500/30"
-                    >
-                        <Plus className="w-5 h-5" /> New Client
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={() => {
+                                localStorage.removeItem('token');
+                                localStorage.removeItem('user');
+                                window.location.href = '/login';
+                            }}
+                            className="bg-gray-100 text-gray-600 px-4 py-2.5 rounded-xl font-bold hover:bg-gray-200 flex items-center gap-2"
+                        >
+                            <Power className="w-5 h-5" /> Logout
+                        </button>
+                        <button 
+                            onClick={() => setShowNewModal(true)}
+                            className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700 flex items-center gap-2 shadow-lg shadow-blue-500/30"
+                        >
+                            <Plus className="w-5 h-5" /> New Client
+                        </button>
+                    </div>
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

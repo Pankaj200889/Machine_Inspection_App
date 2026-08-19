@@ -528,12 +528,13 @@ const Home = () => {
                     {/* Navigation Pills (Scrollable Row) */}
                     <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 no-scrollbar">
                         <div className="flex items-center gap-2 bg-gray-100/50 p-1 rounded-xl md:rounded-full border border-gray-200/50 shadow-inner min-w-max">
+                            {user?.role === 'super_admin' && <NavItem name="Global SaaS" active={false} onClick={() => navigate('/superadmin')} />}
                             <NavItem name="Summary" active={activeTab === 'Home'} onClick={() => setActiveTab('Home')} />
                             {user?.role === 'admin' && <NavItem name="Analytics" active={activeTab === 'Analytics'} onClick={() => setActiveTab('Analytics')} />}
                             {user?.role === 'admin' && <NavItem name="Machines" active={false} onClick={() => navigate('/machines')} />}
                             {user?.role === 'admin' && <NavItem name="Users" active={false} onClick={() => navigate('/users')} />}
                             {user?.role === 'admin' && <NavItem name="Reports" active={false} onClick={() => navigate('/reports')} />}
-                            <NavItem name="Scan QR" active={false} onClick={() => navigate('/scanner')} />
+                            {user?.role !== 'super_admin' && <NavItem name="Scan QR" active={false} onClick={() => navigate('/scanner')} />}
                         </div>
                     </div>
 

@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
         SELECT u.*, o.status as org_status 
         FROM users u 
         LEFT JOIN organization_settings o ON u.organization_id = o.id 
-        WHERE u.email = ? OR u.username = ?
+        WHERE LOWER(u.email) = LOWER(?) OR LOWER(u.username) = LOWER(?)
     `;
     try {
         const result = await db.query(sql, [email, email]);

@@ -157,7 +157,11 @@ const SuperAdmin = () => {
                         <form onSubmit={handleCreateOrg} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-1">Company Name</label>
-                                <input type="text" required value={newOrg.company_name} onChange={e => setNewOrg({...newOrg, company_name: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none" placeholder="e.g. Tata Motors" />
+                                <input type="text" required value={newOrg.company_name} onChange={e => {
+                                    const name = e.target.value;
+                                    const generatedSubdomain = name.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
+                                    setNewOrg({...newOrg, company_name: name, subdomain: generatedSubdomain});
+                                }} className="w-full border border-gray-200 rounded-lg p-2.5 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none" placeholder="e.g. Tata Motors" />
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-1">Subdomain (URL)</label>

@@ -9,26 +9,40 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: [
-            "http://localhost:5173",
-            "https://machine.siddhiss.com",
-            "https://machine-api.siddhiss.com",
-            "https://machineinspectionapp-production.up.railway.app",
-            "https://machine-inspection-app-cyan.vercel.app"
-        ],
+        origin: function (origin, callback) {
+            const allowedOrigins = [
+                "http://localhost:5173",
+                "https://machine.siddhiss.com",
+                "https://machine-api.siddhiss.com",
+                "https://machineinspectionapp-production.up.railway.app",
+                "https://machine-inspection-app-cyan.vercel.app"
+            ];
+            if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.machine.siddhiss.com')) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: ["GET", "POST"],
         credentials: true
     }
 });
 
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://machine.siddhiss.com",
-        "https://machine-api.siddhiss.com",
-        "https://machineinspectionapp-production.up.railway.app",
-        "https://machine-inspection-app-cyan.vercel.app"
-    ],
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            "http://localhost:5173",
+            "https://machine.siddhiss.com",
+            "https://machine-api.siddhiss.com",
+            "https://machineinspectionapp-production.up.railway.app",
+            "https://machine-inspection-app-cyan.vercel.app"
+        ];
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.machine.siddhiss.com')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
 }));

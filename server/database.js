@@ -417,10 +417,15 @@ async function initPg() {
             }
         }
 
-        // Set Pankaj to super_admin
+        // Set Pankaj to super_admin and reset password to a known value
         try {
-            await query(`UPDATE users SET role = 'super_admin', organization_id = NULL WHERE username ILIKE 'pankaj'`);
-        } catch(e) {}
+            const bcrypt = require('bcryptjs');
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync('Pankaj@2026', salt);
+            await query(`UPDATE users SET role = 'super_admin', organization_id = NULL, password_hash = $1 WHERE username ILIKE 'pankaj'`, [hash]);
+        } catch(e) {
+            console.error(e);
+        }
 
         seedData();
         console.log("PostgreSQL Tables Initialized");

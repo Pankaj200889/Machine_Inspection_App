@@ -311,6 +311,7 @@ async function initPg() {
         await query(`CREATE TABLE IF NOT EXISTS organization_settings (
             id SERIAL PRIMARY KEY,
             company_name TEXT,
+            subdomain TEXT UNIQUE,
             logo_url TEXT,
             plant_no TEXT,
             address TEXT,
@@ -398,6 +399,7 @@ async function initPg() {
 
         // Multi-Tenant Migrations
         try { await query(`ALTER TABLE organization_settings ADD COLUMN status TEXT DEFAULT 'active'`); } catch(e) {}
+        try { await query(`ALTER TABLE organization_settings ADD COLUMN subdomain TEXT UNIQUE`); } catch(e) {}
 
         const tablesToAddOrg = ['users', 'machines', 'checklist_templates', 'checklists', 'checklist_submissions', 'audit_logs'];
         for (const table of tablesToAddOrg) {

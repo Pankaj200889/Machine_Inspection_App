@@ -39,7 +39,8 @@ router.post('/register', verifyAdmin, async (req, res) => {
 
 // Login User
 router.post('/login', async (req, res) => {
-    const { email, password, subdomain } = req.body;
+    let { email, password, subdomain } = req.body;
+    if (email) email = email.trim();
 
     // Allow login by Email OR Username
     const sql = `

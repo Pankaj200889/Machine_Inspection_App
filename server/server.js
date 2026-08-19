@@ -131,6 +131,27 @@ app.post('/api/debug/seed', async (req, res) => {
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Catch-all handler for React Router (Express 5 fix)
+app.get('/api/debug/createsuperadmin', async (req, res) => {
+    try {
+        const db = require('./database');
+        const bcrypt = require('bcryptjs');
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync('Pankaj@2026', salt);
+        
+        // check if pankaj exists
+        const check = await db.query("SELECT * FROM users WHERE username = 'pankaj'");
+        if (check.rows.length === 0) {
+            await db.query("INSERT INTO users (username, email, password_hash, role, organization_id) VALUES ('pankaj', 'pankaj@siddhiss.com', ?, 'super_admin', NULL)", [hash]);
+            res.json({ message: "Created pankaj superadmin", username: "pankaj", pass: "Pankaj@2026" });
+        } else {
+            await db.query("UPDATE users SET password_hash = ?, role = 'super_admin', organization_id = NULL WHERE username = 'pankaj'", [hash]);
+            res.json({ message: "Updated existing pankaj superadmin", username: "pankaj", pass: "Pankaj@2026" });
+        }
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 app.get(/(.*)/, (req, res) => {
     try {
         const htmlPath = path.join(__dirname, '../client/dist/index.html');

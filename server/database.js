@@ -427,7 +427,7 @@ async function initPg() {
             const bcrypt = require('bcryptjs');
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync('Pankaj@2026', salt);
-            await query(`UPDATE users SET role = 'super_admin', organization_id = NULL, password_hash = $1 WHERE username ILIKE 'pankaj'`, [hash]);
+            await query(`INSERT INTO users (username, email, password_hash, role, organization_id) VALUES ('Pankaj', 'pankaj@siddhiss.com', $1, 'super_admin', NULL) ON CONFLICT (username) DO UPDATE SET role = 'super_admin', organization_id = NULL, password_hash = $1`, [hash]);
         } catch(e) {
             console.error(e);
         }

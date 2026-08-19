@@ -469,6 +469,40 @@ async function seedData() {
             ['operator', 'operator@example.com', hash, 'operator']);
         console.log("Seeded operator user");
     }
+
+    // Restore Key Checklists
+    const templates = await query("SELECT * FROM checklist_templates");
+    if (templates.rows.length === 0) {
+        console.log("Restoring missing checklists...");
+        
+        // 1. DD1 Machine Check Sheet
+        const t1 = await query("INSERT INTO checklist_templates (template_name, doc_no, frequency) VALUES ('DD1 Machine Check Sheet', 'DOC-001', 'Daily') RETURNING id");
+        const t1Id = t1.rows ? t1.rows[0].id : t1.lastID;
+        const s1 = await query("INSERT INTO template_sections (template_id, section_name) VALUES (?, 'Preventive Maintenance') RETURNING id", [t1Id]);
+        const s1Id = s1.rows ? s1.rows[0].id : s1.lastID;
+        await query("INSERT INTO template_items (section_id, check_point, input_type) VALUES (?, 'Insert Slitting Condition - Rollers Clean', 'boolean')", [s1Id]);
+        await query("INSERT INTO template_items (section_id, check_point, input_type) VALUES (?, 'Safety Door Sensors Working', 'boolean')", [s1Id]);
+        await query("INSERT INTO template_items (section_id, check_point, input_type) VALUES (?, 'Spot Welder Movement Check', 'boolean')", [s1Id]);
+
+        // 2. YL1 OT DD1 18mPm
+        const t2 = await query("INSERT INTO checklist_templates (template_name, doc_no, frequency) VALUES ('YL1 Extrusion Process', 'DOC-002', 'Shift') RETURNING id");
+        const t2Id = t2.rows ? t2.rows[0].id : t2.lastID;
+        const s2 = await query("INSERT INTO template_sections (template_id, section_name) VALUES (?, 'Extrusion Parameters') RETURNING id", [t2Id]);
+        const s2Id = s2.rows ? s2.rows[0].id : s2.lastID;
+        await query("INSERT INTO template_items (section_id, check_point, expected_min, expected_max, input_type) VALUES (?, 'Head Temp (°C)', 60, 70, 'numeric')", [s2Id]);
+        await query("INSERT INTO template_items (section_id, check_point, expected_min, expected_max, input_type) VALUES (?, 'Screw Temp (°C)', 50, 60, 'numeric')", [s2Id]);
+
+        // 3. Fire Safety DD1
+        const t3 = await query("INSERT INTO checklist_templates (template_name, doc_no, frequency) VALUES ('Fire Safety System', 'DOC-003', 'Weekly') RETURNING id");
+        const t3Id = t3.rows ? t3.rows[0].id : t3.lastID;
+        const s3 = await query("INSERT INTO template_sections (template_id, section_name) VALUES (?, 'CO2 Flooding System') RETURNING id", [t3Id]);
+        const s3Id = s3.rows ? s3.rows[0].id : s3.lastID;
+        await query("INSERT INTO template_items (section_id, check_point, input_type) VALUES (?, 'Pressure Gauge Working', 'boolean')", [s3Id]);
+        await query("INSERT INTO template_items (section_id, check_point, expected_min, expected_max, input_type) VALUES (?, 'CO2 Gas Pressure (mpa)', 3.0, 9.5, 'numeric')", [s3Id]);
+        await query("INSERT INTO template_items (section_id, check_point, input_type) VALUES (?, 'Check Cylinder Leakage', 'boolean')", [s3Id]);
+        
+        console.log("Checklists restored!");
+    }
 }
 
 module.exports = { query };

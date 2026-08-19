@@ -53,6 +53,7 @@ const machineRoutes = require('./routes/machines');
 const checklistRoutes = require('./routes/checklists');
 const organizationRoutes = require('./routes/organization');
 const superadminRoutes = require('./routes/superadmin');
+const publicRoutes = require('./routes/public');
 const exportRoutes = require('./routes/export');
 
 // Use Routes
@@ -61,6 +62,7 @@ app.use('/api/machines', machineRoutes);
 app.use('/api/checklists', checklistRoutes);
 app.use('/api/organization', organizationRoutes);
 app.use('/api/superadmin', superadminRoutes);
+app.use('/api/public', publicRoutes);
 app.use('/api/export', exportRoutes);
 
 app.get('/api/debug-db', async (req, res) => {

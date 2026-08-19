@@ -39,7 +39,7 @@ router.post('/register', verifyAdmin, async (req, res) => {
 
 // Login User
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, subdomain } = req.body;
 
     // Allow login by Email OR Username
     const sql = `
@@ -56,6 +56,14 @@ router.post('/login', async (req, res) => {
 
         const isMatch = bcrypt.compareSync(password, user.password_hash);
         if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+
+        // Verify subdomain match if not super_admin
+        if (user.role !== 'super_admin' && subdomain) {
+            const orgCheck = await db.query('SELECT subdomain FROM organization_settings WHERE id = ?', [user.organization_id]);
+            if (orgCheck.rows.length > 0 && orgCheck.rows[0].subdomain !== subdomain) {
+                return res.status(403).json({ error: 'This user account does not belong to this portal.' });
+            }
+        }
 
         if (user.role !== 'super_admin' && user.org_status === 'suspended') {
             return res.status(403).json({ error: 'Account Suspended. Please contact support.' });

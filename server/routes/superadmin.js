@@ -23,9 +23,9 @@ router.get('/organizations', verifySuperAdmin, async (req, res) => {
 
 // Create new organization and its default admin
 router.post('/organizations', verifySuperAdmin, async (req, res) => {
-    const { company_name, admin_email, admin_password } = req.body;
+    const { company_name, admin_email, admin_password, subdomain } = req.body;
 
-    if (!company_name || !admin_email || !admin_password) {
+    if (!company_name || !admin_email || !admin_password || !subdomain) {
         return res.status(400).json({ error: 'Company name, admin email, and password are required' });
     }
 

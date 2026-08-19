@@ -11,7 +11,7 @@ const SuperAdmin = () => {
     const [loading, setLoading] = useState(true);
 
     const [showNewModal, setShowNewModal] = useState(false);
-    const [newOrg, setNewOrg] = useState({ company_name: '', admin_email: '', admin_password: '' });
+    const [newOrg, setNewOrg] = useState({ company_name: '', subdomain: '', admin_email: '', admin_password: '' });
 
     useEffect(() => {
         if (user && user.role !== 'super_admin') {
@@ -37,7 +37,7 @@ const SuperAdmin = () => {
         try {
             await api.post('/superadmin/organizations', newOrg);
             setShowNewModal(false);
-            setNewOrg({ company_name: '', admin_email: '', admin_password: '' });
+            setNewOrg({ company_name: '', subdomain: '', admin_email: '', admin_password: '' });
             fetchOrganizations();
             alert("Organization created successfully");
         } catch (err) {
@@ -108,11 +108,18 @@ const SuperAdmin = () => {
                                 <tr key={org.id} className="hover:bg-gray-50/50 transition-colors">
                                     <td className="p-4 text-sm font-bold text-gray-400">#{org.id}</td>
                                     <td className="p-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-                                                {org.company_name?.charAt(0)}
+                                        <div className="flex flex-col gap-1">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                                                    {org.company_name?.charAt(0)}
+                                                </div>
+                                                <span className="font-bold text-gray-800">{org.company_name}</span>
                                             </div>
-                                            <span className="font-bold text-gray-800">{org.company_name}</span>
+                                            {org.subdomain && (
+                                                <a href={`https://${org.subdomain}.siddhiss.com`} target="_blank" rel="noreferrer" className="text-xs text-blue-500 hover:underline pl-11">
+                                                    {org.subdomain}.siddhiss.com
+                                                </a>
+                                            )}
                                         </div>
                                     </td>
                                     <td className="p-4 text-sm">
@@ -151,6 +158,13 @@ const SuperAdmin = () => {
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-1">Company Name</label>
                                 <input type="text" required value={newOrg.company_name} onChange={e => setNewOrg({...newOrg, company_name: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none" placeholder="e.g. Tata Motors" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-1">Subdomain (URL)</label>
+                                <div className="flex items-center">
+                                    <input type="text" required value={newOrg.subdomain} onChange={e => setNewOrg({...newOrg, subdomain: e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '')})} className="w-full border border-gray-200 rounded-l-lg p-2.5 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none" placeholder="tata" />
+                                    <span className="bg-gray-100 border border-l-0 border-gray-200 px-3 py-2.5 rounded-r-lg text-gray-500 font-medium">.siddhiss.com</span>
+                                </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-1">Admin Email</label>

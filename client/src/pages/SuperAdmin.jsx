@@ -125,7 +125,10 @@ const SuperAdmin = () => {
                                     <td className="p-4 text-sm">
                                         <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-bold uppercase">{org.subscription_plan}</span>
                                     </td>
-                                    <td className="p-4 text-sm font-medium text-gray-600">{org.user_count}</td>
+                                    <td className="p-4 text-sm font-medium text-gray-600">
+                                        <div>{org.user_count} Total</div>
+                                        {org.admin_email && <div className="text-[10px] text-gray-400 font-normal">{org.admin_email}</div>}
+                                    </td>
                                     <td className="p-4 text-sm font-medium text-gray-600">{org.machine_count}</td>
                                     <td className="p-4">
                                         {org.status === 'active' ? (
@@ -134,7 +137,23 @@ const SuperAdmin = () => {
                                             <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold flex items-center gap-1 w-max"><div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div> Suspended</span>
                                         )}
                                     </td>
-                                    <td className="p-4 text-right">
+                                    <td className="p-4 text-right flex justify-end gap-2">
+                                        <button 
+                                            onClick={async () => {
+                                                const newPassword = prompt(`Enter new password for ${org.company_name} Admin:`);
+                                                if (!newPassword) return;
+                                                if (newPassword.length < 6) return alert("Password too short");
+                                                try {
+                                                    await api.put(`/superadmin/organizations/${org.id}/reset-password`, { new_password: newPassword });
+                                                    alert("Password reset successfully!");
+                                                } catch(e) {
+                                                    alert("Failed to reset password");
+                                                }
+                                            }}
+                                            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-50 text-blue-600 hover:bg-blue-100 transition-all"
+                                        >
+                                            Reset Pwd
+                                        </button>
                                         <button 
                                             onClick={() => toggleStatus(org.id, org.status)}
                                             className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${org.status === 'active' ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}`}

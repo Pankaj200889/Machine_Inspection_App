@@ -10,7 +10,8 @@ router.get('/organizations', verifySuperAdmin, async (req, res) => {
         const sql = `
             SELECT o.*, 
                    (SELECT COUNT(*) FROM users u WHERE u.organization_id = o.id) as user_count,
-                   (SELECT COUNT(*) FROM machines m WHERE m.organization_id = o.id) as machine_count
+                   (SELECT COUNT(*) FROM machines m WHERE m.organization_id = o.id) as machine_count,
+                   (SELECT u.email FROM users u WHERE u.organization_id = o.id AND u.role = 'admin' LIMIT 1) as admin_email
             FROM organization_settings o
             ORDER BY o.id DESC
         `;
@@ -31,8 +32,8 @@ router.post('/organizations', verifySuperAdmin, async (req, res) => {
 
     try {
         // 1. Create Organization
-        const orgSql = "INSERT INTO organization_settings (company_name, subscription_plan, status) VALUES (?, 'active', 'active') RETURNING id";
-        const orgRes = await db.query(orgSql, [company_name]);
+        const orgSql = "INSERT INTO organization_settings (company_name, subdomain, subscription_plan, status) VALUES (?, ?, 'active', 'active') RETURNING id";
+        const orgRes = await db.query(orgSql, [company_name, subdomain.toLowerCase()]);
         const orgId = orgRes.lastID || orgRes.rows[0].id;
 
         // 2. Create Admin User
@@ -66,6 +67,32 @@ router.put('/organizations/:id/status', verifySuperAdmin, async (req, res) => {
         }
 
         res.json({ message: `Organization status updated to ${status}` });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Reset Admin Password for a Client
+router.put('/organizations/:id/reset-password', verifySuperAdmin, async (req, res) => {
+    const { new_password } = req.body;
+    
+    if (!new_password || new_password.length < 6) {
+        return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    }
+
+    try {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(new_password, salt);
+        
+        // Update all admins for this organization (usually just one)
+        const sql = "UPDATE users SET password_hash = ? WHERE organization_id = ? AND role = 'admin'";
+        const result = await db.query(sql, [hash, req.params.id]);
+        
+        if (result.rowCount === 0 && result.changes === 0) {
+            return res.status(404).json({ error: 'Admin user not found for this organization' });
+        }
+
+        res.json({ message: 'Admin password reset successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

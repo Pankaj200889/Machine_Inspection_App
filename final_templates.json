@@ -1,0 +1,1155 @@
+[
+  {
+    "name": "AQ 06 chemical Check Sheet",
+    "doc_no": "FRM/PR-EXT/96",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "Special characteristics",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Make By -Operator Name",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Spong pipe need to change after 2 Hrs ,Gun wipe by wire brush in 30 min ,Gun clean in every 2 Hrs",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Engineer /Supervidor Sign………..",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "e -Scan  Note :\r\n 1. Use thin tip DVD marker only to fill this check-sheet\r\n2. Fill in with neat & legible",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document). & Add Special characteristics.",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "This is an online approved document.Consider as a Controlled Copy Document.",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "COMPOUND CONSUMPTION DETAIL DD1,2,3,GR1,2",
+    "doc_no": "FRM/PR-EXT/111",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "Compound Consumption Detail  LINE -DD1,2,3,GR1 & 2",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Compound Grade …………….",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Comp. used at extrusion time",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Compound Grade …………….",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Comp. used at extrusion time",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "RE- USE COMPOUND DETAIL",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "RE-USE COMPOUND GRADE",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECKED BY :- Sup./ Eng/ sign. …………………..",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document).",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "This is an online approved document.Consider as a Controlled Copy Document.",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DAILY PRODUCTION LOG SHEET",
+    "doc_no": "FRM/PR-EXT/76",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "DAILY PRODUCTION LOG SHEET",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "PART QTY PER BIN / TROLLEY",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Factor（Specifically explain the reason for\r\nrejection）",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Actual Run time ( Min)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECKED BY :- SUP./ ENGINEER SIGN …..",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document).",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "This is an online approved document.Consider as a Controlled Copy Document.",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DD1 Machine check sheet",
+    "doc_no": "FRM/PR-EXT/81",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "JOB SETUP / MACHINE CHECK SHEET DD1 LINE",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Machine Name",
+        "items": [
+          {
+            "check_point": "SL No.",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DPR ALL LINE",
+    "doc_no": "FRM/PR-EXT/79",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "Daily Production Report For All line (Extrusion)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Process defects  (IN KGS.) {A}",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Contamination(Sponge)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Lip Cut(Die/Compound/Material)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Slitting Insert Scrap",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Insert break/ Metal Insert Out",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Cut ,Scratch , waviness , Wrinkle/ belt mark",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Profile shape variation",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Laser Marking sample QA",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Cutting M/C (Short length)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Line Trip(Extruder/UHF/OVEN)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Set-up Rejection                 (IN KGS.) {B}",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Feeding Scrap due to Spill(TPV)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Compound/Material Warming-up",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Line Stop  cut and waste profile",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Line Stop head clean waste",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DWM Extrusion Engineer",
+    "doc_no": "FRM/PR-EXT/106",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "Verification of all lines running as per plan",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Last DayYield and issues review with Supervisor nad prepare action plan for improvement",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Cross Verify All Safety Pokayoke",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "4M Board Updation,Line Wise 4M Verification including signed reports",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Skill Upgradation and review of multiskilling status",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2S& 1Y of Shop Floor",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Set-up Approval With QC and First Part Approval with QC and checking of insert/drill /forming/paint condition",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Daily Report Feeding In SAP System",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Check Red Bin Availability at Inspection Stations",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Performance Board Updation&Inventory Status Update",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Material Movement As Per FIFO and inventory level as per secondary/ customer pull",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Facility Maintenance verification (Cutting MC  ,tube light)Lip opener- No damage ,No losse ,No wear & tear Tube light:-Working properly, No damage",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Kaizen Activity( 2\r\nKaizen/month)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "KY : Unsafe condition & Unsafe Act ( 2 KY/Month/Person)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Skill matrix update and training to operators training",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Monthly report preperation",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Performance analysis and countermeasure and effectiveness checking",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Evaluation of Kaizens and improvements done",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Departmental  formats, displays and check sheet updation",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "23.03.2026",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Fire safety DD1  Revised 01.Aug.2025",
+    "doc_no": "FRM/PR-EXT/100",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "<C02 FLOODING SYSTEM CHECK SHEET>",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "UHF 1",
+        "items": [
+          {
+            "check_point": "Check fire cylinder  Pressure Gauge work",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder C02 gas Pressure 3 to 9.5mpa",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder  gas  Value open & close properly",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Check Cylinder leakage problem",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "HAV-1",
+        "items": [
+          {
+            "check_point": "Check fire cylinder  Pressure Gauge work",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder C02 gas Pressure 3 to 9.5mpa",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder  gas  Value open & close properly",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Check Cylinder leakage problem",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "HAV-2",
+        "items": [
+          {
+            "check_point": "Check fire cylinder  Pressure Gauge work",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder C02 gas Pressure 3 to 9.5mpa",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder  gas  Value open & close properly",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Check Cylinder leakage problem",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "HAV-3",
+        "items": [
+          {
+            "check_point": "Check fire cylinder  Pressure Gauge work",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder C02 gas Pressure 3 to 9.5mpa",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder  gas  Value open & close properly",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Check Cylinder leakage problem",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "SILICON OVEN",
+        "items": [
+          {
+            "check_point": "Check fire cylinder  Pressure Gauge work",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder C02 gas Pressure  3 to 9.5mpa",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Check cylinder  gas  Value open & close properly",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Check Cylinder leakage problem",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Rev. Date",
+        "items": [
+          {
+            "check_point": "Change Of Detail",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "06.08.2025",
+        "items": [
+          {
+            "check_point": "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document).",
+            "input_type": "numeric"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "INSERT MANAGEMANT",
+    "doc_no": "FRM/PR-EXT/113",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "स्लिटिंग करने के  पहले साइज",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Light weight & Inner 34.3+ 0.2 - 0.2",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "स्लिटिंग करने के  बाद साइज",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Light weight & Inner 35.7+ 0.2 - 0.4 mm",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "स्लिटिंग करने के  पहले साइज",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "YP8 O/T 35.4 + 0.2 - 0.2",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "स्लिटिंग करने के  बाद साइज",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "YP8 O/T 35.9 + 02 - 0.3",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "इंसर्ट केम्बर 03 एमएम से ज्यादा नहीं होना चाहिए\r\nACTUAL",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "बहार से स्लिट की हुई इन्सर्ट का इंस्पेक्शन करना",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "*Width measurement：Use Vernier Calipper",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "※Measure at the start and End（Record End Measure）",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "WIDTH INSPECTION                                                                                                                                                                        CAMBER INSPECTION",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "PERPARED BY    ______________                                                                                                       CHECKED BY___________",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Insert size after sliting has been revised from 36±1mm to 35.7+ 0.2 - 0.4 mm",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ONLINE INSPECTION DD1,2,3 GR1,2",
+    "doc_no": "DOC. NO :- FRM/PR-EXT/122/01",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "Daily Bekido check sheet LINE (………….)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Operator Name ………………….",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "PART QTY ON TROLLEY/ PALLET",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Factor（Specifically explain the reason for rejection）",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECKED BY :- SUP./ ENGINEER SIGN …..",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Poke Yoke Verification Revised 01.Aug.2025",
+    "doc_no": "FRM/PR-EXT/99",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "Insert Accumulator",
+        "items": [
+          {
+            "check_point": "1. During door open in runing condition line stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2. During door open in runing condition line stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "3. During door open in runing condition line stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "4. During door open in runing condition line stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "5. Emergency switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Pre- Former",
+        "items": [
+          {
+            "check_point": "1. During Door open roller stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2. Emergency switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Auto feeder",
+        "items": [
+          {
+            "check_point": "1.Emergency Switch",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2. Alarm during feeding stop",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "UHF",
+        "items": [
+          {
+            "check_point": "1. During Door open of UHF oven UHF ( Megnatrons) stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2.Emergency switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Main Puller",
+        "items": [
+          {
+            "check_point": "1. During puller door open In runing condition line stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2 . Emergency switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Laser marking",
+        "items": [
+          {
+            "check_point": "1. During door open Laser marking m/c stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2. Emergency switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "link breaking M/C",
+        "items": [
+          {
+            "check_point": "1. If Any Body Cross The Sensor then Machine   stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2. Emergency Switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Post forming M/c",
+        "items": [
+          {
+            "check_point": "1.If Any Body Cross The Sensor then Machine   stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2. Emergency Switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Drilling / Puller",
+        "items": [
+          {
+            "check_point": "1. During door open in m/c runing condition m/c stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2. Emergency switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Cutting m/c",
+        "items": [
+          {
+            "check_point": "1.If Any Body Cross The Sensor then Machine   stop",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "2. Emergency switch",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Revision Date",
+        "items": [
+          {
+            "check_point": "Change Of Detail",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "01.08.2025",
+        "items": [
+          {
+            "check_point": "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)",
+            "input_type": "numeric"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Shadowgraph check sheet all line",
+    "doc_no": "FRM/PR-EXT/80",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "Quality Inspector Name :-",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Extrusion check Status",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Supervisior /Engineer SIGN. -…………………..",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document).",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "This is an online approved document.Consider as a Controlled Copy Document.",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Shift engineer check point",
+    "doc_no": "FRM/PR-EXT/122",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "EXTRUSION ENGINEER CHECK SHEET",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "MUST READ AND WRITE THE LOG BOOK DAILY",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK 2S 1 Y STATUS IN ALL EXTRUSION AREA",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ALL LINE PROCESS STANDARD V/S ACTUAL AND SIGNED IT",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK NEXT PLAN OF EXTRUSION LINE",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK NEXT PLAN DIE & INSERT AVAILABLITY",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK THAT ALL OPERATORS ARE USING PPE DURING THE PROCESS",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK HOLD PROFILE STATUS HOLD PROFILE SHOULD NOT BE LAYING ON FLOOR",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK READY PU PAINT STATUS THIS SHOULD NOT BE MORE THEN TWO HOUR",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ALL WIP PROFILE KAN BAN MUST BE AVLABLE",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ALL WIP PROFILE STORAGE SHOULD BE IN PROPER WAY ( PALLET STATUS )",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK THE FIFO SYSTEM IN WIP STORAGE",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ON LINE CUTTING LENGTH AT ALL LINE IT SHOULD BE WITH IN SPEC.",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "EXTRUSION ENGINEER CHECK SHEET",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "MUST READ AND WRITE THE LOG BOOK DAILY",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK 2S 1 Y STATUS IN ALL EXTRUSION AREA",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ALL LINE PROCESS STANDARD V/S ACTUAL AND SIGNED IT",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK NEXT PLAN OF EXTRUSION LINE",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK NEXT PLAN DIE & INSERT AVAILABLITY",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK THAT ALL OPERATORS ARE USING PPE DURING THE PROCESS",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK HOLD PROFILE STATUS HOLD PROFILE SHOULD NOT BE LAYING ON FLOOR",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK READY PU PAINT STATUS THIS SHOULD NOT BE MORE THEN TWO HOUR",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ALL WIP PROFILE KAN BAN MUST BE AVLABLE",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ALL WIP PROFILE STORAGE SHOULD BE IN PROPER WAY ( PALLET STATUS )",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK THE FIFO SYSTEM IN WIP STORAGE",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ON LINE CUTTING LENGTH AT ALL LINE IT SHOULD BE WITH IN SPEC.",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "EXTRUSION ENGINEER CHECK SHEET",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "MUST READ AND WRITE THE LOG BOOK DAILY",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK 2S 1 Y STATUS IN ALL EXTRUSION AREA",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ALL LINE PROCESS STANDARD V/S ACTUAL AND SIGNED IT",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK NEXT PLAN OF EXTRUSION LINE",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK NEXT PLAN DIE & INSERT AVAILABLITY",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK THAT ALL OPERATORS ARE USING PPE DURING THE PROCESS",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK HOLD PROFILE STATUS HOLD PROFILE SHOULD NOT BE LAYING ON FLOOR",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK READY PU PAINT STATUS THIS SHOULD NOT BE MORE THEN TWO HOUR",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "CHECK ALL WIP PROFILE KAN BAN MUST BE AVAILABLE",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Updated_excel_4M change Tracking sheet",
+    "doc_no": "FRM/PR/06",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "General",
+        "items": [
+          {
+            "check_point": "4 M CHANGE TRACKING SHEET",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Production Supervior / Engineer Sign.",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "QC Supervior / Engineer Sign.",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Summary of Changes / Abnormal Situations and Handling Actions",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Line / \r\nStation No. / Machine No.",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Planned/Unplanned/Abnormality",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "NO CHANGE (GREEN COLOR)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Initial doc. From 01.09.2017 ( 1st edition after Company name changed from TGMIN to TGUMI consider as a initial doc.)",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "TOTAL NO. OF CHANGE IN MONTH :-",
+            "input_type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "YL1 OT  DD1 18mPm",
+    "doc_no": "FRM/PR-EXT/01",
+    "freq": "Daily",
+    "sections": [
+      {
+        "name": "INSERT",
+        "items": [
+          {
+            "check_point": "Accumulator air pressure",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Insert size",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Slitted insert weight",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Preformer unit should be YL1 O/T",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "90 MM Extruder",
+        "items": [
+          {
+            "check_point": "Compound Grade",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Head Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Cylinder-1 Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Cylinder-2 Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Cylinder-3 Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Screw Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Extruder RPM",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Back Pressure (Mpa) \"Ref. Value",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Feed Roll RPM *Ref. Value",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "70 MM Extruder",
+        "items": [
+          {
+            "check_point": "Compound Grade",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Cylinder-1 Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Cylinder-2 Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Screw Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Extruder RPM",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Back Pressure (Mpa) \"Ref. Value",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Feed Roll RPM *Ref. Value",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "45 MM Extruder",
+        "items": [
+          {
+            "check_point": "Compound Grade",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Cylinder-1 Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Screw Temp.",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Extruder RPM",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Back Pressure (Mpa) \"Ref. Value",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Feed Roll RPM *Ref. Value",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "UHF Oven",
+        "items": [
+          {
+            "check_point": "UHF Temp",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "UHF Power",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "HAV Oven",
+        "items": [
+          {
+            "check_point": "HAV-1",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "HAV-2",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "HAV-3",
+            "input_type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "Silicon   coating",
+        "items": [
+          {
+            "check_point": "Silicon type",
+            "input_type": "boolean"
+          },
+          {
+            "check_point": "Air Pressure Of spray Gun-1\r\n(Mpa)",
+            "input_type": "numeric"
+          },
+          {
+            "check_point": "Air Pressure Of spray Gun-2\r\n(Mpa)",
+            "input_type": "numeric"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,3919 @@
+{
+  "AQ 06 chemical Check Sheet.xlsx": [
+    [
+      null,
+      null,
+      null,
+      "AQ - 06  Guard  Chemical   Mixing  Check  Sheet",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Doc. No.",
+      "FRM/PR-EXT/96"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev No.",
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. Date",
+      "07.08.2025"
+    ],
+    [
+      "Special characteristics",
+      null,
+      null,
+      "Line No.:-…..",
+      null,
+      null,
+      "Date :-…..",
+      null,
+      null,
+      "Shift :-…..",
+      null,
+      null,
+      "Part Name:-"
+    ],
+    [
+      "S.No",
+      "XR 5580",
+      null,
+      null,
+      "RC1500",
+      null,
+      null,
+      "RC3007S",
+      null,
+      null,
+      "Water",
+      "Total Qty.\r\nGM",
+      "Mix Time",
+      "Finish Time",
+      "Make By -Operator Name"
+    ],
+    [
+      null,
+      "Qty GM",
+      "Lot No",
+      "Exp date",
+      "Qty GM",
+      "Lot No",
+      "Exp date",
+      "Qty GM",
+      "Lot No",
+      "Exp date"
+    ],
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6
+    ],
+    [
+      7
+    ],
+    [
+      8
+    ],
+    [
+      "Spong pipe need to change after 2 Hrs ,Gun wipe by wire brush in 30 min ,Gun clean in every 2 Hrs"
+    ],
+    [
+      "Gun Wipes",
+      null,
+      "Pipe Change Time",
+      null,
+      "Gun Clean ",
+      "Sign.",
+      "Gun Wipes",
+      "Pipe Change Time",
+      null,
+      "Gun Clean ",
+      "Sign.",
+      "Gun Wipes",
+      "Pipe Change Time",
+      null,
+      "Gun Clean ",
+      "Sign."
+    ],
+    [
+      "Engineer /Supervidor Sign……….."
+    ],
+    [
+      "Revision History",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "e -Scan  Note :\r\n 1. Use thin tip DVD marker only to fill this check-sheet\r\n2. Fill in with neat & legible"
+    ],
+    [
+      "Rev. No.",
+      null,
+      "Rev. Date",
+      "Details of Change"
+    ],
+    [
+      0,
+      null,
+      "07.08.2025",
+      "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document). & Add Special characteristics."
+    ],
+    [
+      "Upload By:Hemant Sharma  07-08-2025    Checked & Approved By:Inderjeet Singh  07-08-2025    Verified & Controlled By:Anita Singh  20-08-2025"
+    ],
+    [
+      "This is an online approved document.Consider as a Controlled Copy Document."
+    ]
+  ],
+  "COMPOUND CONSUMPTION DETAIL DD1,2,3,GR1,2.xlsx": [
+    [
+      null,
+      null,
+      "Compound Consumption Detail  LINE -DD1,2,3,GR1 & 2",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "DOC. NO ",
+      "FRM/PR-EXT/111"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. No.",
+      0
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. Date",
+      "13.08.2025"
+    ],
+    [
+      "Line No ……….",
+      null,
+      "Die/ Part Name……………",
+      null,
+      null,
+      "Head Opt. name ………….",
+      null,
+      null,
+      null,
+      "Date ………………",
+      null,
+      null,
+      "Shift ………………"
+    ],
+    [
+      "Die No/ Name",
+      "90 MM Extruder",
+      null,
+      null,
+      null,
+      "Compound Grade …………….",
+      null,
+      null,
+      "70 MM Extruder",
+      null,
+      null,
+      null,
+      "Compound Grade ……………."
+    ],
+    [
+      null,
+      "Batch No",
+      "Mixing Date",
+      "Expire Date",
+      "Comp. used at extrusion time",
+      "Batch Qty In Kg",
+      "Used Qty In kg",
+      "Remark",
+      "Batch No",
+      "Mixing Date",
+      "Expire Date",
+      "Comp. used at extrusion time",
+      "Batch Qty In Kg",
+      "Used Qty In kg",
+      "Remark"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "50 MM Extruder",
+      null,
+      null,
+      null,
+      "Compound Grade ……………."
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Batch No",
+      "Mixing Date",
+      "Expire Date",
+      "Comp. used at extrusion time",
+      "Batch Qty In Kg",
+      "Used Qty In kg",
+      "Remark"
+    ],
+    [
+      "RE- USE COMPOUND DETAIL"
+    ],
+    [
+      "RE-USE COMPOUND GRADE",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "RE-USE COMPOUND QUANTITY  IN KG",
+      null,
+      null,
+      null,
+      null,
+      "SUP. SIGN."
+    ],
+    [
+      "CHECKED BY :- Sup./ Eng/ sign. ………………….."
+    ],
+    [
+      "Revision History"
+    ],
+    [
+      "Rev. No.",
+      "Rev. Date",
+      null,
+      "Change of Details"
+    ],
+    [
+      0,
+      "13.08.2025",
+      null,
+      "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)."
+    ],
+    [
+      "Upload By:Hemant Sharma  14-08-2025    Checked & Approved By:Inderjeet Singh  14-08-2025    Verified & Controlled By:Anita Singh  20-08-2025"
+    ],
+    [
+      "This is an online approved document.Consider as a Controlled Copy Document."
+    ]
+  ],
+  "DAILY PRODUCTION LOG SHEET.xlsx": [
+    [
+      null,
+      null,
+      null,
+      "DAILY PRODUCTION LOG SHEET ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Doc. No.",
+      "FRM/PR-EXT/76"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. No.",
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. Date",
+      "13.08.2025"
+    ],
+    [
+      "OPERATOR NAME ",
+      null,
+      null,
+      null,
+      "LINE :- ……….",
+      null,
+      null,
+      null,
+      "DATE:- ……..",
+      null,
+      null,
+      "SHIFT …………."
+    ],
+    [
+      "Time Minutes",
+      null,
+      "PRODUCT NAME",
+      null,
+      "PART QTY PER BIN / TROLLEY",
+      "TROLLEY NO",
+      "KAN BAN CHECK STATUS",
+      "EXTRUSION TIME",
+      "SECONDRY MAY USE AT",
+      "CHECKED BY SUP/ENG.",
+      "Reason for the line stop"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Stop time\r\n(min)",
+      "Factor（Specifically explain the reason for\r\nrejection）"
+    ],
+    [
+      0
+    ],
+    [
+      60
+    ],
+    [
+      120
+    ],
+    [
+      180
+    ],
+    [
+      240
+    ],
+    [
+      300
+    ],
+    [
+      360
+    ],
+    [
+      420
+    ],
+    [
+      480
+    ],
+    [
+      null,
+      "Summary"
+    ],
+    [
+      "S.No.",
+      "Part Name",
+      null,
+      "Actual Run time ( Min)",
+      "Change over Time ",
+      "Down Time (Min)",
+      "Break down time ( Min)",
+      "Trial ( Min)",
+      " No Plan (Min)",
+      "Total Available time ",
+      "Remarks"
+    ],
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6
+    ],
+    [
+      null,
+      "Total"
+    ],
+    [
+      "CHECKED BY :- SUP./ ENGINEER SIGN ….."
+    ],
+    [
+      "Revision History"
+    ],
+    [
+      "Rev. No.",
+      "Rev. Date",
+      null,
+      "Change of Details"
+    ],
+    [
+      0,
+      "13.08.2025",
+      null,
+      "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)."
+    ],
+    [
+      "Upload By:Hemant Sharma  13-08-2025    Checked & Approved By:Inderjeet Singh  14-08-2025    Verified & Controlled By:Anita Singh  20-08-2025"
+    ],
+    [
+      "This is an online approved document.Consider as a Controlled Copy Document."
+    ]
+  ],
+  "DD1 Machine check sheet.xlsx": [
+    [
+      null,
+      null,
+      "JOB SETUP / MACHINE CHECK SHEET DD1 LINE",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Doc.No.",
+      "FRM/PR-EXT/81"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.No.",
+      "01"
+    ],
+    [
+      null,
+      null,
+      "Daily Check Point  (Start time /End Time)",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.date",
+      "19.06.2026"
+    ],
+    [
+      "Date : …………………",
+      null,
+      null,
+      "Operator Name : …………………",
+      null,
+      null,
+      null,
+      null,
+      "Shift : ……………"
+    ],
+    [
+      "S. No",
+      "Machine Name",
+      "SL No.",
+      "Check Point",
+      null,
+      null,
+      null,
+      null,
+      "Status OK ( ü ) /Not OK (x )",
+      null,
+      "Remarks If Any"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Before start of production",
+      "Shift End time"
+    ],
+    [
+      1,
+      "Insert Slitting M/C",
+      1,
+      "इंसर्ट मशीन  की स्लिटिंग कंडीशन चेक करनी है ,की रोलर सभी क्लीन हो "
+    ],
+    [
+      null,
+      null,
+      2,
+      "इंसर्ट मशीन के सेफ्टी डोर सेंसर ,चैक करने है की सही से काम कर रहे ह या नहीं "
+    ],
+    [
+      null,
+      null,
+      3,
+      "चेक करें की इन्सर्ट के ऊपर से पानी सही तरीके से साफ होना चाहिए नहीं तो पार्ट एयर बबल की प्रॉब्लम आ सकती है "
+    ],
+    [
+      null,
+      null,
+      4,
+      "इन्सर्ट मशीन का पानी हर शिफ्ट में  साफ होना चाहिये "
+    ],
+    [
+      2,
+      "Spot Welder & Accumulator",
+      1,
+      "फर्स्ट इंसर्ट स्टॉपर की मूवमेंट चैक करना है  की सही से काम कर रहे ह या नहीं "
+    ],
+    [
+      null,
+      null,
+      2,
+      "सेकंड स्टॉपर  की मूवमेंट को इंसर्ट को बहार  निकल के CHECK करना है की सही से काम कर रहे है या नहीं "
+    ],
+    [
+      null,
+      null,
+      3,
+      "चेक करें की स्पॉट वेल्डर की थिम्ब्ल साफ होने चाहिये "
+    ],
+    [
+      3,
+      "Preforming Unit",
+      1,
+      "मशीन को मैन्युअल और ऑटो मोड मे चैक करना है की सही चल रही है या नहीं"
+    ],
+    [
+      null,
+      null,
+      2,
+      "चेक करें के के रोलर में स्पीड वेरिएशन  तो नहीं है "
+    ],
+    [
+      null,
+      null,
+      3,
+      "मशीन मे चैक करना है की कोई एब्नार्मल आवाज नहीं आनी  चाहिए "
+    ],
+    [
+      4,
+      "Extruder",
+      1,
+      "मशीन मे चैक करना है की कोई एब्नार्मल आवाज तो नहीं आ रही अगर आवाज आ रही है तो सुपरवाइज़र  को सूचित करे  "
+    ],
+    [
+      null,
+      null,
+      2,
+      "एक्सट्रूडर के हेड और स्क्रू को चैक करना है की सही तरीके से साफ है या नहीं "
+    ],
+    [
+      null,
+      null,
+      3,
+      "फीड रोलर और मशीन का आयल लेवल चैक करना है की आयल लेवल निर्धारित लेवल से नीचे तो नहीं है "
+    ],
+    [
+      null,
+      null,
+      4,
+      "एक्सट्रूडर मशीन को स्टार्ट करके करके  देखना  है की कोई एब्नार्मल आवाज तो नहीं आ रही "
+    ],
+    [
+      null,
+      null,
+      5,
+      "चेक करें जो पार्ट चलना है उस पार्ट की डाई सही तरीके से फिट है या नहीं और चेक करें की टारपीडो में से एयर पास हो रही है या नहीं "
+    ],
+    [
+      null,
+      null,
+      6,
+      "चेक करे की कही भी वाटर लीकेज न हो"
+    ],
+    [
+      null,
+      null,
+      7,
+      "लाइन स्टार्टअप करने से पहले कंपाउंड फीडिंग कन्वेयर चेक करें वह साफ होनी चाहिए नहीं तो प्रोडक्ट में क्योर बिट / कंटैमिनेशन की प्रॉब्लम आयेगी "
+    ],
+    [
+      null,
+      null,
+      8,
+      "पिंचिंग रोलर से एज को चेक करे शार्प है या नहीं "
+    ],
+    [
+      null,
+      null,
+      9,
+      "चेक करे प्रोफाइल के C-Zone में Minimun 2 पिंचिंग रोलर प्रोफाइल पर होने ही चाहिए "
+    ],
+    [
+      5,
+      "Scrubber ",
+      1,
+      "स्क्रबर में वाटर लेवल MINIMUM  लेवल  तक हो ( सेंसर तक पानी होना चाहिए )"
+    ],
+    [
+      null,
+      null,
+      2,
+      "स्क्रबर का इनलेट इम्प्रेचरे 90° C से कम होना चाहिए "
+    ],
+    [
+      null,
+      null,
+      3,
+      "स्क्रबर का आउटलेट इम्प्रेचरे 60° C से कम होना चाहिए "
+    ],
+    [
+      null,
+      null,
+      4,
+      "स्क्रबर के सीसे में चेक करें की स्क्रबर  में पानी उछल रहा हो "
+    ],
+    [
+      6,
+      "UHF",
+      1,
+      "UHF के टेम्प्रेचर चैक करना है की  का सेट वैल्यू और एक्चुअल वैल्यू बराबर है या नहीं "
+    ],
+    [
+      null,
+      null,
+      2,
+      "कन्वेयर के रोलर चैक करने है की साफ है या नहीं "
+    ],
+    [
+      null,
+      null,
+      3,
+      "चेक करें की ओवन के अंदर कोई अवशेष जैसे प्रोफाइल का टुकड़ा आदि ना हो "
+    ],
+    [
+      7,
+      "HAV",
+      1,
+      "चैक करना है की HAV का टेम्प्रेचर सेट वैल्यू के बराबर है या नहीं "
+    ],
+    [
+      null,
+      null,
+      2,
+      "चैक करना है की कन्वेयर के रोलर चैक करने है की साफ है या नहीं "
+    ],
+    [
+      null,
+      null,
+      3,
+      "चेक करें की ओवन के अंदर कोई अवशेष जैसे प्रोफाइल का टुकड़ा आदि ना हो "
+    ],
+    [
+      8,
+      "Silicon Booth",
+      1,
+      "एयर प्रेशर तथा पानी के साथ गन का स्प्रे चेक करें स्प्रे स्मूथ होना चाहिये ."
+    ],
+    [
+      null,
+      null,
+      2,
+      "गन में एयर प्रेशर चेक शीट के अनुसार होना चाहिये\r\n"
+    ],
+    [
+      null,
+      null,
+      3,
+      "चेक कर ले की मिक्स  किया हुआ मटेरियल दो घंटे से ज्यादा समय का न हो \r\n"
+    ],
+    [
+      9,
+      "Silicon Oven",
+      1,
+      "Silicon Oven के टेम्प्रेचर चैक करना है की  सेट वैल्यू और एक्चुअल वैल्यू बराबर है या नहीं "
+    ],
+    [
+      null,
+      null,
+      2,
+      "चेक करें की ओवन के अंदर हवा लगातार चलनी चाहिए ताकि टेम्प्रेचर न बडे "
+    ]
+  ],
+  "DPR ALL LINE.xlsx": [
+    [
+      null,
+      null,
+      "Daily Production Report For All line (Extrusion)",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "DOC. NO ",
+      null,
+      "FRM/PR-EXT/79"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.No.",
+      null,
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. Date",
+      null,
+      "13.08.2025"
+    ],
+    [
+      "Line………………",
+      null,
+      "OPT. NAME:-",
+      null,
+      null,
+      null,
+      "Date:-",
+      null,
+      null,
+      "Shift:-"
+    ],
+    [
+      "Defect name",
+      null,
+      "Part Name :-",
+      "Part Name :-",
+      "Part Name :-",
+      "Part Name :-",
+      "Part Name :-",
+      "Part Name :-",
+      "Part Name :-",
+      "Part Name :-",
+      "Part Name :-",
+      "Part Name :-"
+    ],
+    [
+      "Process defects  (IN KGS.) {A}",
+      "Secondary Receving/Q gate"
+    ],
+    [
+      null,
+      "QC Hold"
+    ],
+    [
+      null,
+      "Air Bubble(Solid)"
+    ],
+    [
+      null,
+      "Air Bubble(Sponge)"
+    ],
+    [
+      null,
+      "Contamination(Sponge)"
+    ],
+    [
+      null,
+      "Contamination(Solid)"
+    ],
+    [
+      null,
+      "Cure Bit On Solid"
+    ],
+    [
+      null,
+      "Cure Bit On Sponge"
+    ],
+    [
+      null,
+      "Compound Scorch"
+    ],
+    [
+      null,
+      "Blister"
+    ],
+    [
+      null,
+      "Porosity"
+    ],
+    [
+      null,
+      "Lip Cut(Die/Compound/Material)"
+    ],
+    [
+      null,
+      "Extruder Empty "
+    ],
+    [
+      null,
+      "Slitting Insert Scrap"
+    ],
+    [
+      null,
+      "Insert break/ Metal Insert Out"
+    ],
+    [
+      null,
+      "Cut ,Scratch , waviness , Wrinkle/ belt mark  "
+    ],
+    [
+      null,
+      "Granining problem"
+    ],
+    [
+      null,
+      "Silicon/PU Defect"
+    ],
+    [
+      null,
+      "Slip coat NG"
+    ],
+    [
+      null,
+      "Laser Marking NG"
+    ],
+    [
+      null,
+      "Profile shape variation"
+    ],
+    [
+      null,
+      "Laser Marking sample QA"
+    ],
+    [
+      null,
+      "Drill NG"
+    ],
+    [
+      null,
+      "Cutting M/C (Short length)"
+    ],
+    [
+      null,
+      "Cord Scrap"
+    ],
+    [
+      null,
+      "Other M/C"
+    ],
+    [
+      null,
+      "Line Trip(Extruder/UHF/OVEN)"
+    ],
+    [
+      null,
+      "Power cut "
+    ],
+    [
+      null,
+      "Post Forming NG"
+    ],
+    [
+      "Set-up Rejection                 (IN KGS.) {B}",
+      "Profile Shape Setting"
+    ],
+    [
+      null,
+      "Feed Roll Scrap"
+    ],
+    [
+      null,
+      "Feeding Scrap due to Spill(TPV)"
+    ],
+    [
+      null,
+      "Compound/Material Warming-up"
+    ],
+    [
+      null,
+      "Line Stop  cut and waste profile "
+    ],
+    [
+      null,
+      "Line Stop head clean waste"
+    ]
+  ],
+  "DWM Extrusion Engineer.xlsx": [
+    [
+      null,
+      null,
+      "DAILY WORK MANAGEMENT OF ENGINEER  (EXTRUSION)",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Doc.No.",
+      null,
+      null,
+      null,
+      "FRM/PR-EXT/106"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.No.",
+      null,
+      null,
+      null,
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.date",
+      null,
+      null,
+      null,
+      "23.03.2026"
+    ],
+    [
+      "S. No.",
+      "DWM POINTS( Daily)",
+      "Frequency",
+      "Timing\r\n( Min)",
+      "Documents",
+      "Reviewer",
+      "Engineer Name:-",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Month :-"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Date"
+    ],
+    [
+      1,
+      "Verification of all lines running as per plan",
+      "1/Day",
+      20,
+      "Daily log book",
+      "Production  Mgr."
+    ],
+    [
+      2,
+      "Last DayYield and issues review with Supervisor nad prepare action plan for improvement",
+      "1/Day",
+      60,
+      "Attendance register",
+      "Production  Mgr."
+    ],
+    [
+      3,
+      "Cross Verify All Safety Pokayoke",
+      "1/Day",
+      30,
+      "Check Sheet",
+      "Production  Mgr."
+    ],
+    [
+      4,
+      "4M Board Updation,Line Wise 4M Verification including signed reports",
+      "1/Day",
+      30,
+      "4M Sheets on Line",
+      "Production  Mgr."
+    ],
+    [
+      5,
+      "Skill Upgradation and review of multiskilling status",
+      "1/Day",
+      30,
+      "Skill matrix sheet",
+      "Production  Mgr."
+    ],
+    [
+      6,
+      "2S& 1Y of Shop Floor",
+      "1/Day",
+      30,
+      "Daily production report",
+      "Production  Mgr."
+    ],
+    [
+      7,
+      "Set-up Approval With QC and First Part Approval with QC and checking of insert/drill /forming/paint condition",
+      "1/Day",
+      60,
+      "Process/1st part approval check sheet",
+      "Shift Inchage"
+    ],
+    [
+      8,
+      "Daily Report Feeding In SAP System",
+      "1/Day",
+      30,
+      "Daily production report",
+      "Production  Mgr."
+    ],
+    [
+      9,
+      "Check Red Bin Availability at Inspection Stations",
+      "1/Day",
+      30,
+      "-",
+      "Shift Inchage"
+    ],
+    [
+      10,
+      "Performance Board Updation&Inventory Status Update",
+      "1/Day",
+      20,
+      "QPI / training attandance sheet",
+      "Production  Mgr."
+    ],
+    [
+      11,
+      "Material Movement As Per FIFO and inventory level as per secondary/ customer pull",
+      "1/Day",
+      20,
+      "------",
+      "Production  Mgr."
+    ],
+    [
+      12,
+      "Facility Maintenance verification (Cutting MC  ,tube light)Lip opener- No damage ,No losse ,No wear & tear Tube light:-Working properly, No damage ",
+      "1/Day",
+      20,
+      "------",
+      "Production  Mgr."
+    ],
+    [
+      "Total time(Daily Activities)",
+      null,
+      null,
+      360
+    ],
+    [
+      "DWM Points (Weekly)"
+    ],
+    [
+      1,
+      "Kaizen Activity( 2\r\nKaizen/month)",
+      "Weekly",
+      30,
+      "Kaizen Sheet",
+      "Production  Mgr."
+    ],
+    [
+      2,
+      "KY : Unsafe condition & Unsafe Act ( 2 KY/Month/Person)",
+      "Weekly",
+      20,
+      "KY Sheet",
+      "Production  Mgr."
+    ],
+    [
+      3,
+      "Skill matrix update and training to operators training",
+      "Weekly",
+      60,
+      "Skill matrix sheet",
+      "Production  Mgr."
+    ],
+    [
+      4,
+      "All poke yoke working verification, safety point inspection",
+      "Weekly",
+      30,
+      "Pokayoke, safety,process check sheet",
+      "Production  Mgr."
+    ],
+    [
+      "Total time(Weekly Activities)",
+      null,
+      null,
+      140
+    ],
+    [
+      "DWM Points (Monthly)"
+    ],
+    [
+      1,
+      "Monthly report preperation",
+      "Monthly",
+      120,
+      "Monthly Report",
+      "Production  Mgr."
+    ],
+    [
+      2,
+      "Performance analysis and countermeasure and effectiveness checking",
+      "Monthly",
+      120,
+      "KY Sheet",
+      "Production  Mgr."
+    ],
+    [
+      3,
+      "Evaluation of Kaizens and improvements done",
+      "Monthly",
+      30,
+      "Skill matrix sheet",
+      "Production  Mgr."
+    ],
+    [
+      4,
+      "Departmental  formats, displays and check sheet updation",
+      "Weekly",
+      30,
+      "Pokayoke, safety,process check sheet",
+      "Production  Mgr."
+    ],
+    [
+      "Total time(Monthly  Activities)",
+      null,
+      null,
+      300
+    ],
+    [
+      "Signature of Shift Incharge"
+    ],
+    [
+      "Revision History",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "e -Scan Note : \r\n1. Use thin tip DVD marker only to fill this check-sheet\r\n2. Fill in with neat & legible"
+    ],
+    [
+      "Rev. No.",
+      "Rev. Date",
+      "Change of Details"
+    ],
+    [
+      0,
+      "23.03.2026",
+      "Initial doc.from 19.08.2018 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)."
+    ]
+  ],
+  "Fire safety DD1  Revised 01.Aug.2025.xlsx": [
+    [
+      null,
+      null,
+      "<C02 FLOODING SYSTEM CHECK SHEET>",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Doc.No.",
+      null,
+      "FRM/PR-EXT/100"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.No.",
+      null,
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.date",
+      null,
+      "06.08.2025"
+    ],
+    [
+      "              Line No :- DD-1                                                                                                                  ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "When ok working ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Not Ok Working Then"
+    ],
+    [
+      "S.No. ",
+      "PROCESS",
+      "SAFETY POINT",
+      "FRQUENCY",
+      "Month & Year :-    ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Month & Year :-   ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Month & Year :-   "
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      "WEEK 1",
+      null,
+      "WEEK -2",
+      null,
+      "WEEK-3",
+      null,
+      "WEEK -4",
+      null,
+      "WEEK 1",
+      null,
+      "WEEK -2",
+      null,
+      "WEEK-3",
+      null,
+      "WEEK -4",
+      null,
+      "WEEK 1",
+      null,
+      "WEEK -2",
+      null,
+      "WEEK-3",
+      null,
+      "WEEK -4"
+    ],
+    [
+      1,
+      "UHF 1",
+      " Check fire cylinder  Pressure Gauge work",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder C02 gas Pressure 3 to 9.5mpa",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder  gas  Value open & close properly ",
+      "Every Monday"
+    ],
+    [
+      null,
+      null,
+      " Check Cylinder leakage problem ",
+      "Every Monday"
+    ],
+    [
+      2,
+      "HAV-1",
+      " Check fire cylinder  Pressure Gauge work",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder C02 gas Pressure 3 to 9.5mpa",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder  gas  Value open & close properly ",
+      "Every Monday"
+    ],
+    [
+      null,
+      null,
+      " Check Cylinder leakage problem ",
+      "Every Monday"
+    ],
+    [
+      3,
+      "HAV-2",
+      " Check fire cylinder  Pressure Gauge work",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder C02 gas Pressure 3 to 9.5mpa",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder  gas  Value open & close properly ",
+      "Every Monday"
+    ],
+    [
+      null,
+      null,
+      " Check Cylinder leakage problem ",
+      "Every Monday"
+    ],
+    [
+      4,
+      "HAV-3",
+      " Check fire cylinder  Pressure Gauge work",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder C02 gas Pressure 3 to 9.5mpa",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder  gas  Value open & close properly ",
+      "Every Monday"
+    ],
+    [
+      null,
+      null,
+      " Check Cylinder leakage problem ",
+      "Every Monday"
+    ],
+    [
+      5,
+      "SILICON OVEN",
+      " Check fire cylinder  Pressure Gauge work",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder C02 gas Pressure  3 to 9.5mpa",
+      "Monday  / Saturday"
+    ],
+    [
+      null,
+      null,
+      "Check cylinder  gas  Value open & close properly ",
+      "Every Monday"
+    ],
+    [
+      null,
+      null,
+      " Check Cylinder leakage problem ",
+      "Every Monday"
+    ],
+    [
+      "CHECKED BY SUPERVISOER SIGN.  "
+    ],
+    [
+      "FORTNIGHT VERIFIED BY ENGINEER "
+    ],
+    [
+      "MONTHLY BY MANAGER "
+    ],
+    [
+      "Revision History",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "e -Scan Note : -\r\n1. Use thin tip DVD marker only to fill this check-sheet\r\n2. Fill in with neat & legible"
+    ],
+    [
+      "Rev. No.",
+      "Rev. Date ",
+      "Change Of Detail"
+    ],
+    [
+      "00",
+      "06.08.2025",
+      "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)."
+    ],
+    [
+      "Upload By:Hemant Sharma  07-08-2025                                                        Checked & Approved By:Inderjeet Singh  07-08-2025                                                                                        Verified & Controlled By:Anita Singh  20-08-2025"
+    ],
+    [
+      "This is an online approved document.Consider as a Controlled Copy Document."
+    ]
+  ],
+  "INSERT MANAGEMANT.xlsx": [
+    [
+      null,
+      null,
+      null,
+      null,
+      "INSERT MANAGEMENT",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "DOC. NO",
+      null,
+      " FRM/PR-EXT/113"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. No.",
+      null,
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. Date",
+      null,
+      "13.08.2025"
+    ],
+    [
+      "Production date"
+    ],
+    [
+      "Lot No. / Lot Date.",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "lot Date:-"
+    ],
+    [
+      "Insert name",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      " "
+    ],
+    [
+      "Operator name :-                                                                                                                                       ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "  Date :-",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "shift :-"
+    ],
+    [
+      "Time:-",
+      null,
+      null,
+      "40 mint",
+      null,
+      "80 mint",
+      null,
+      "120 mint",
+      null,
+      "160 mint",
+      null,
+      "200 mint",
+      null,
+      "240 mint",
+      null,
+      null,
+      "280 mint",
+      null,
+      "320 mint",
+      null,
+      "360 mint",
+      null,
+      "400 mint",
+      null,
+      "440 mint",
+      null,
+      "480 mint"
+    ],
+    [
+      "स्लिटिंग करने के  पहले साइज",
+      null,
+      null,
+      "ROLL-1",
+      null,
+      "ROLL-2",
+      null,
+      "ROLL-3",
+      null,
+      "ROLL-4",
+      null,
+      "ROLL-5",
+      null,
+      "ROLL-6",
+      null,
+      null,
+      "ROLL-7",
+      null,
+      "ROLL-8",
+      null,
+      "ROLL-9",
+      null,
+      "ROLL-10",
+      null,
+      "ROLL-11",
+      null,
+      "ROLL-12"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Before slitting"
+    ],
+    [
+      "Light weight & Inner 34.3+ 0.2 - 0.2"
+    ],
+    [
+      "स्लिटिंग करने के  बाद साइज",
+      null,
+      null,
+      "ROLL-1",
+      null,
+      "ROLL-2",
+      null,
+      "ROLL-3",
+      null,
+      "ROLL-4",
+      null,
+      "ROLL-5",
+      null,
+      "ROLL-6",
+      null,
+      null,
+      "ROLL-7",
+      null,
+      "ROLL-8",
+      null,
+      "ROLL-9",
+      null,
+      "ROLL-10",
+      null,
+      "ROLL-11",
+      null,
+      "ROLL-12"
+    ],
+    [
+      null,
+      null,
+      null,
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      null,
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST"
+    ],
+    [
+      null,
+      null,
+      null,
+      "After Slitting"
+    ],
+    [
+      "Light weight & Inner 35.7+ 0.2 - 0.4 mm"
+    ],
+    [
+      "स्लिटिंग करने के  पहले साइज",
+      null,
+      null,
+      "ROLL-1",
+      null,
+      "ROLL-2",
+      null,
+      "ROLL-3",
+      null,
+      "ROLL-4",
+      null,
+      "ROLL-5",
+      null,
+      "ROLL-6",
+      null,
+      null,
+      "ROLL-7",
+      null,
+      "ROLL-8",
+      null,
+      "ROLL-9",
+      null,
+      "ROLL-10",
+      null,
+      "ROLL-11",
+      null,
+      "ROLL-12"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Before slitting"
+    ],
+    [
+      "YP8 O/T 35.4 + 0.2 - 0.2"
+    ],
+    [
+      "स्लिटिंग करने के  बाद साइज",
+      null,
+      null,
+      "ROLL-1",
+      null,
+      "ROLL-2",
+      null,
+      "ROLL-3",
+      null,
+      "ROLL-4",
+      null,
+      "ROLL-5",
+      null,
+      "ROLL-6",
+      null,
+      null,
+      "ROLL-7",
+      null,
+      "ROLL-8",
+      null,
+      "ROLL-9",
+      null,
+      "ROLL-10",
+      null,
+      "ROLL-11",
+      null,
+      "ROLL-12"
+    ],
+    [
+      null,
+      null,
+      null,
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      null,
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST",
+      "FIRST",
+      "LAST"
+    ],
+    [
+      null,
+      null,
+      null,
+      "After slitting"
+    ],
+    [
+      "YP8 O/T 35.9 + 02 - 0.3"
+    ],
+    [
+      "Camber",
+      "इंसर्ट केम्बर 03 एमएम से ज्यादा नहीं होना चाहिए\r\nACTUAL",
+      null,
+      "ROLL-1",
+      null,
+      "ROLL-2",
+      null,
+      "ROLL-3",
+      null,
+      "ROLL-4",
+      null,
+      "ROLL-5",
+      null,
+      "ROLL-6",
+      null,
+      null,
+      "ROLL-7",
+      null,
+      "ROLL-8",
+      null,
+      "ROLL-9",
+      null,
+      "ROLL-10",
+      null,
+      "ROLL-11",
+      null,
+      "ROLL-12"
+    ],
+    [
+      "बहार से स्लिट की हुई इन्सर्ट का इंस्पेक्शन करना ",
+      null,
+      null,
+      "ROLL-1",
+      null,
+      "ROLL-2",
+      null,
+      "ROLL-3",
+      null,
+      "ROLL-4",
+      null,
+      "ROLL-5",
+      null,
+      "ROLL-6",
+      null,
+      null,
+      "ROLL-7",
+      null,
+      "ROLL-8",
+      null,
+      "ROLL-9",
+      null,
+      "ROLL-10",
+      null,
+      "ROLL-11",
+      null,
+      "ROLL-12"
+    ],
+    [
+      "Actual Size"
+    ],
+    [
+      "*Width measurement：Use Vernier Calipper"
+    ],
+    [
+      "※Measure at the start and End（Record End Measure）"
+    ],
+    [
+      "WIDTH INSPECTION                                                                                                                                                                        CAMBER INSPECTION"
+    ],
+    [
+      "     PERPARED BY    ______________                                                                                                       CHECKED BY___________"
+    ],
+    [
+      "Revision History"
+    ],
+    [
+      "Rev. No.",
+      null,
+      "Rev. Date",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Change of Details"
+    ],
+    [
+      0,
+      null,
+      "13.08.2025",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)"
+    ],
+    [
+      1,
+      null,
+      "16.01.2026",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Insert size after sliting has been revised from 36±1mm to 35.7+ 0.2 - 0.4 mm"
+    ]
+  ],
+  "ONLINE INSPECTION DD1,2,3 GR1,2.xlsx": [
+    [
+      "          Daily Bekido check sheet LINE (………….)　　　　　　　　　　",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "DOC. NO :- FRM/PR-EXT/122/01"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "DATE:- 03.09.2014"
+    ],
+    [
+      "Operator Name ………………….",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Date:………………",
+      null,
+      null,
+      null,
+      "Shift …………."
+    ],
+    [
+      "Time",
+      null,
+      "PRODUCT NAME",
+      "PART QTY ON TROLLEY/ PALLET",
+      "TROLLEY NO",
+      "KAN BAN STATUS",
+      "EXT. TIME",
+      "SECONDRY USE TIME",
+      "Good parts production\r\n(Pcs)",
+      "CHECKED BY SUP/ENG.",
+      "NG parts production\r\n(Pcs)",
+      "change over time\r\n(min)",
+      "Reason for the line stop"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Stop time\r\n(min)",
+      "Factor（Specifically explain the reason for rejection）"
+    ],
+    [
+      "7 :00"
+    ],
+    [
+      "8：00"
+    ],
+    [
+      "9：00"
+    ],
+    [
+      "10：00"
+    ],
+    [
+      "11：00"
+    ],
+    [
+      "12：00"
+    ],
+    [
+      "13：00"
+    ],
+    [
+      "14：00"
+    ],
+    [
+      "15：00"
+    ],
+    [
+      "16：00"
+    ],
+    [
+      "17：00"
+    ],
+    [
+      "18：00"
+    ],
+    [
+      "19：00"
+    ],
+    [
+      "20：00"
+    ],
+    [
+      "21：00"
+    ],
+    [
+      "22：00"
+    ],
+    [
+      "23：00"
+    ],
+    [
+      "24：00"
+    ],
+    [
+      "1：00"
+    ],
+    [
+      "2：00"
+    ],
+    [
+      "3：00"
+    ],
+    [
+      "4：00"
+    ],
+    [
+      "5：00"
+    ],
+    [
+      "6：00"
+    ],
+    [
+      "7：00"
+    ],
+    [
+      "CHECKED BY :- SUP./ ENGINEER SIGN ….."
+    ]
+  ],
+  "Poke Yoke Verification Revised 01.Aug.2025.xlsx": [
+    [
+      null,
+      null,
+      "POKA YOKE VERIFICATION SHEET",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Doc.No.",
+      null,
+      "FRM/PR-EXT/99"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.No.",
+      null,
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.date",
+      null,
+      "01.08.2025"
+    ],
+    [
+      "Line No :- DD1",
+      null,
+      null,
+      null,
+      null,
+      null,
+      " Ok Working Then ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Not Ok Working Then"
+    ],
+    [
+      "S.No. ",
+      "PROCESS",
+      "POKA YOKE",
+      "PURPOSE OF POKA YOKE",
+      "LOCATION",
+      "FRQUENCY",
+      "Month:- ",
+      null,
+      null,
+      null,
+      "Month:- ",
+      null,
+      null,
+      null,
+      "Month:- "
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "week 1 ",
+      "week 2 ",
+      "week 3",
+      "week 4",
+      "week 1 ",
+      "week 2 ",
+      "week 3",
+      "week 4",
+      "week 1 ",
+      "week 2 ",
+      "week 3",
+      "week 4"
+    ],
+    [
+      1,
+      "Insert Accumulator ",
+      "1. During door open in runing condition line stop  ",
+      "M/C Should stop during door open in m/c runing condition",
+      "Accumulator front left door ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2. During door open in runing condition line stop  ",
+      "M/C Should stop during door open in m/c runing condition",
+      "Accumulator front right door ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "3. During door open in runing condition line stop  ",
+      "M/C Should stop during door open in m/c runing condition",
+      "Accumulator rear right right door ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "4. During door open in runing condition line stop  ",
+      "M/C Should stop during door open in m/c runing condition",
+      "Accumulator rear left  door ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "5. Emergency switch",
+      " M/c can stop during any abnormality ",
+      "front left side on pannel",
+      "EVERY MONDAY"
+    ],
+    [
+      2,
+      "Pre- Former",
+      "1. During Door open roller stop",
+      "With roller finger can pinched ",
+      "Sensor on front door ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2. Emergency switch",
+      " M/c can stop during any abnormality ",
+      "Front right Side of pannel",
+      "EVERY MONDAY"
+    ],
+    [
+      3,
+      "Auto feeder ",
+      "1.Emergency Switch ",
+      " M/c can stop during any abnormality ",
+      "Front right Side of feeder",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2. Alarm during feeding stop",
+      "During less feeding from auto feeder alarm should be come on display ",
+      "Alarm display",
+      "EVERY MONDAY"
+    ],
+    [
+      4,
+      "UHF ",
+      "1. During Door open of UHF oven UHF ( Megnatrons) stop",
+      "M/C Should stop during door open in m/c runing condition",
+      "UHF Door Each Zone ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2.Emergency switch ",
+      " M/c can stop during any abnormality ",
+      "End of UHF on pannel",
+      "EVERY MONDAY"
+    ],
+    [
+      5,
+      "Main Puller",
+      "1. During puller door open In runing condition line stop",
+      "M/C Should stop during door open in m/c runing condition",
+      "front door of puller",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2 . Emergency switch ",
+      " M/c can stop during any abnormality ",
+      "Front right side of Pannel",
+      "EVERY MONDAY"
+    ],
+    [
+      6,
+      "Laser marking ",
+      "1. During door open Laser marking m/c stop",
+      "M/C Should stop during door open in m/c runing condition",
+      "Front door of laser marking M/c ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2. Emergency switch ",
+      " M/c can stop during any abnormality ",
+      "Bottom Side of laser marking pannel",
+      "EVERY MONDAY"
+    ],
+    [
+      7,
+      "link breaking M/C",
+      "1. If Any Body Cross The Sensor then Machine   stop",
+      "M/C Should stop during door open in m/c runing condition",
+      "link breaking front LH /RH both Side ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2. Emergency Switch",
+      " M/c can stop during any abnormality ",
+      "Front side of m/c on inching button",
+      "EVERY MONDAY"
+    ],
+    [
+      8,
+      "Post forming M/c",
+      "1.If Any Body Cross The Sensor then Machine   stop",
+      "M/C Should stop during door open in m/c runing condition",
+      "front LH / RH both side of m/c ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2. Emergency Switch",
+      " M/c can stop during any abnormality ",
+      "Both side of m/c F/L , F/ R",
+      "EVERY MONDAY"
+    ],
+    [
+      9,
+      "Drilling / Puller ",
+      "1. During door open in m/c runing condition m/c stop ",
+      "M/C Should stop during door open in m/c runing condition",
+      "Front door of puller and drilling m/c ",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2. Emergency switch",
+      " M/c can stop during any abnormality ",
+      "Both sode of m/c FL / FR ",
+      "EVERY MONDAY"
+    ],
+    [
+      10,
+      "Cutting m/c ",
+      "1.If Any Body Cross The Sensor then Machine   stop",
+      "M/C Should stop during door open in m/c runing condition",
+      "Front side of cutting m/c",
+      "EVERY MONDAY"
+    ],
+    [
+      null,
+      null,
+      "2. Emergency switch ",
+      " M/c can stop during any abnormality ",
+      "Both sode of m/c FL / FR ",
+      "EVERY MONDAY"
+    ],
+    [
+      "CHECKED BY SHIFT SUPERVISOER SIGN.  ( WEEKLY )"
+    ],
+    [
+      "VERIFIED BY ENGINEER "
+    ],
+    [
+      "FORTNIGHT VERIFIED BY MANAGER "
+    ],
+    [
+      "Revision History",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "e -Scan Note : -\r\n1. Use thin tip DVD marker only to fill this check-sheet\r\n2. Fill in with neat & legible"
+    ],
+    [
+      "Rev. No",
+      "Revision Date ",
+      "Change Of Detail"
+    ],
+    [
+      0,
+      "01.08.2025",
+      "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)"
+    ],
+    [
+      "Upload By:Hemant Sharma  07-08-2025                                                           Checked & Approved By:Inderjeet Singh  07-08-2025                                               Verified & Controlled By:Anita Singh  20-08-2025"
+    ],
+    [
+      "This is an online approved document.Consider as a Controlled Copy Document."
+    ]
+  ],
+  "Shadowgraph check sheet all line.xlsx": [
+    [
+      null,
+      null,
+      " Shadowgraph Check Sheet",
+      null,
+      null,
+      null,
+      "DOC. NO ",
+      "FRM/PR-EXT/80"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. No.",
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. Date",
+      "13.08.2025"
+    ],
+    [
+      "Line :- ",
+      "Quality Inspector Name :-",
+      null,
+      null,
+      null,
+      "Part Name "
+    ],
+    [
+      "Operator Name :-",
+      null,
+      null,
+      "Date  :-",
+      null,
+      null,
+      "Shift :-"
+    ],
+    [
+      "Time",
+      "Part name",
+      null,
+      null,
+      "Extrusion check Status",
+      null,
+      "QC check Status"
+    ],
+    [
+      "Supervisior /Engineer SIGN. -………………….."
+    ],
+    [
+      "Revision History"
+    ],
+    [
+      "Rev. No.",
+      "Rev. Date",
+      "Change of Details"
+    ],
+    [
+      0,
+      "13.08.2025",
+      "Initial doc.from 12.08.2024 (1st edition after company name changed from TGMIN to TGUMI consider as a initial document)."
+    ],
+    [
+      "Upload By:Hemant Sharma  13-08-2025    Checked & Approved By:Inderjeet Singh  19-08-2025    Verified & Controlled By:Anita Singh  20-08-2025"
+    ],
+    [
+      "This is an online approved document.Consider as a Controlled Copy Document."
+    ]
+  ],
+  "Shift engineer check point.xlsx": [
+    [
+      null,
+      null,
+      "EXTRUSION ENGINEER CHECK SHEET ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "MONTH:-                                  Line:-",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Doc.No.",
+      null,
+      "FRM/PR-EXT/122"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.No.",
+      null,
+      "01"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.date",
+      null,
+      "19.03.2026"
+    ],
+    [
+      null,
+      1,
+      "MUST READ AND WRITE THE LOG BOOK DAILY"
+    ],
+    [
+      null,
+      2,
+      "CHECK 2S 1 Y STATUS IN ALL EXTRUSION AREA"
+    ],
+    [
+      null,
+      3,
+      "CHECK ALL LINE PROCESS STANDARD V/S ACTUAL AND SIGNED IT"
+    ],
+    [
+      null,
+      4,
+      "CHECK NEXT PLAN OF EXTRUSION LINE"
+    ],
+    [
+      null,
+      5,
+      "CHECK NEXT PLAN DIE & INSERT AVAILABLITY"
+    ],
+    [
+      null,
+      6,
+      "CHECK THAT ALL OPERATORS ARE USING PPE DURING THE PROCESS"
+    ],
+    [
+      null,
+      7,
+      "CHECK HOLD PROFILE STATUS HOLD PROFILE SHOULD NOT BE LAYING ON FLOOR"
+    ],
+    [
+      null,
+      8,
+      "CHECK READY PU PAINT STATUS THIS SHOULD NOT BE MORE THEN TWO HOUR"
+    ],
+    [
+      null,
+      9,
+      "CHECK ALL WIP PROFILE KAN BAN MUST BE AVLABLE"
+    ],
+    [
+      null,
+      10,
+      "CHECK ALL WIP PROFILE STORAGE SHOULD BE IN PROPER WAY ( PALLET STATUS )"
+    ],
+    [
+      null,
+      11,
+      "CHECK THE FIFO SYSTEM IN WIP STORAGE"
+    ],
+    [
+      null,
+      12,
+      "CHECK ON LINE CUTTING LENGTH AT ALL LINE IT SHOULD BE WITH IN SPEC."
+    ],
+    [
+      null,
+      null,
+      "SUP./ ENGINEER SIGN."
+    ],
+    [
+      "SHIFT B",
+      "EXTRUSION ENGINEER CHECK SHEET"
+    ],
+    [
+      null,
+      1,
+      "MUST READ AND WRITE THE LOG BOOK DAILY"
+    ],
+    [
+      null,
+      2,
+      "CHECK 2S 1 Y STATUS IN ALL EXTRUSION AREA"
+    ],
+    [
+      null,
+      3,
+      "CHECK ALL LINE PROCESS STANDARD V/S ACTUAL AND SIGNED IT"
+    ],
+    [
+      null,
+      4,
+      "CHECK NEXT PLAN OF EXTRUSION LINE"
+    ],
+    [
+      null,
+      5,
+      "CHECK NEXT PLAN DIE & INSERT AVAILABLITY"
+    ],
+    [
+      null,
+      6,
+      "CHECK THAT ALL OPERATORS ARE USING PPE DURING THE PROCESS"
+    ],
+    [
+      null,
+      7,
+      "CHECK HOLD PROFILE STATUS HOLD PROFILE SHOULD NOT BE LAYING ON FLOOR"
+    ],
+    [
+      null,
+      8,
+      "CHECK READY PU PAINT STATUS THIS SHOULD NOT BE MORE THEN TWO HOUR"
+    ],
+    [
+      null,
+      9,
+      "CHECK ALL WIP PROFILE KAN BAN MUST BE AVLABLE"
+    ],
+    [
+      null,
+      10,
+      "CHECK ALL WIP PROFILE STORAGE SHOULD BE IN PROPER WAY ( PALLET STATUS )"
+    ],
+    [
+      null,
+      11,
+      "CHECK THE FIFO SYSTEM IN WIP STORAGE"
+    ],
+    [
+      null,
+      12,
+      "CHECK ON LINE CUTTING LENGTH AT ALL LINE IT SHOULD BE WITH IN SPEC."
+    ],
+    [
+      null,
+      null,
+      "SUP./ENGINEER SIGN."
+    ],
+    [
+      "SHIFT C",
+      "EXTRUSION ENGINEER CHECK SHEET"
+    ],
+    [
+      null,
+      1,
+      "MUST READ AND WRITE THE LOG BOOK DAILY"
+    ],
+    [
+      null,
+      2,
+      "CHECK 2S 1 Y STATUS IN ALL EXTRUSION AREA"
+    ],
+    [
+      null,
+      3,
+      "CHECK ALL LINE PROCESS STANDARD V/S ACTUAL AND SIGNED IT"
+    ],
+    [
+      null,
+      4,
+      "CHECK NEXT PLAN OF EXTRUSION LINE"
+    ],
+    [
+      null,
+      5,
+      "CHECK NEXT PLAN DIE & INSERT AVAILABLITY"
+    ],
+    [
+      null,
+      6,
+      "CHECK THAT ALL OPERATORS ARE USING PPE DURING THE PROCESS"
+    ],
+    [
+      null,
+      7,
+      "CHECK HOLD PROFILE STATUS HOLD PROFILE SHOULD NOT BE LAYING ON FLOOR"
+    ],
+    [
+      null,
+      8,
+      "CHECK READY PU PAINT STATUS THIS SHOULD NOT BE MORE THEN TWO HOUR"
+    ],
+    [
+      null,
+      9,
+      "CHECK ALL WIP PROFILE KAN BAN MUST BE AVAILABLE"
+    ]
+  ],
+  "Updated_excel_4M change Tracking sheet.xlsx": [
+    [
+      null,
+      null,
+      null,
+      "       4 M CHANGE TRACKING SHEET ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Doc. No.",
+      null,
+      "FRM/PR/06"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. No.",
+      null,
+      "00"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev. Date",
+      null,
+      "19.08.2025"
+    ],
+    [
+      "Sr.No.",
+      "Type of change ",
+      null,
+      "Line Name",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Month :- ",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Year :- "
+    ],
+    [
+      1,
+      "Man ",
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      2,
+      "Machine",
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      3,
+      "Material ",
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      4,
+      "Method",
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      5,
+      "Mould & Die",
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      6,
+      "Measuring Instrument",
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      7,
+      "Abnormnality",
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      "Production Supervior / Engineer Sign.",
+      null,
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      "QC Supervior / Engineer Sign.",
+      null,
+      null,
+      "A"
+    ],
+    [
+      null,
+      null,
+      null,
+      "B"
+    ],
+    [
+      null,
+      null,
+      null,
+      "C"
+    ],
+    [
+      "Summary of Changes / Abnormal Situations and Handling Actions"
+    ],
+    [
+      "Sr. No",
+      "Date",
+      "Start",
+      null,
+      "Line / \r\nStation No. / Machine No.",
+      null,
+      "Type of Change\r\n(Man,M/C,Mat,Meth. Mould & Die , MI & Abn.)",
+      "Major/Minor",
+      "Model / Part Name/Part No.",
+      null,
+      "Description for Change/ Abnormal condition",
+      null,
+      null,
+      null,
+      "Type of Cat.",
+      "Action Taken",
+      null,
+      null,
+      null,
+      null,
+      "Set up",
+      null,
+      null,
+      null,
+      "Retroactive ",
+      null,
+      null,
+      null,
+      "Containment Action (Suspected)",
+      null,
+      null,
+      null,
+      "Lot  Tracebility ",
+      null,
+      null,
+      null,
+      "Inform to Customer",
+      "Prod. Sr.Engineer / AM / Mgr",
+      null,
+      "QA & QC Sr.Engineer / AM / Mgr"
+    ],
+    [
+      null,
+      null,
+      "Shift",
+      "Time",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Planned/Unplanned/Abnormality",
+      "Set up Approval",
+      "Retro Inspection",
+      "Containment  (Suspected)",
+      "Training",
+      "Patrolling",
+      "Total Inspected Qty.",
+      "Total OK Qty.",
+      "Total NG Qty.",
+      "Result of set-up check (OK/NG) ",
+      "Total Inspected Qty.",
+      "Total OK Qty.",
+      "Total NG Qty.",
+      "Result of retroactive check (OK/NG) ",
+      "Total Inspected Qty.",
+      "Total OK Qty.",
+      "Total NG Qty.",
+      "Result of retroactive check (OK/NG) ",
+      "Invoice No",
+      "Dispatch Date",
+      "Dispatch Qty.",
+      "Lot No. / Batch Code No. / Laser Marking"
+    ],
+    [
+      "Legend :-",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Revision History"
+    ],
+    [
+      null,
+      null,
+      "NO CHANGE (GREEN COLOR)",
+      null,
+      null,
+      null,
+      "CHANGE (RED COLOR)",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "NO PLAN",
+      null,
+      null,
+      null,
+      "Rev. No.",
+      null,
+      "Rev. Date",
+      null,
+      null,
+      "Details of Change",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "e-Scan Note:- \r\n1. Use thin tip DVD marker only to fill this check-sheet\r\n 2. Fill in with neat & legible                                                                                                                                                                                                                                    "
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "00",
+      null,
+      "19.08.2025",
+      null,
+      null,
+      "Initial doc. From 01.09.2017 ( 1st edition after Company name changed from TGMIN to TGUMI consider as a initial doc.) "
+    ],
+    [
+      "TOTAL NO. OF CHANGE IN MONTH :- ",
+      null,
+      null,
+      null,
+      null,
+      "MAN",
+      null,
+      "MACHINE",
+      null,
+      "MATERIAL",
+      null,
+      "METHOD",
+      null,
+      "ABNORMALITY"
+    ]
+  ],
+  "YL1 OT  DD1 18mPm.xlsx": [
+    [
+      null,
+      null,
+      null,
+      "Process Check Sheet",
+      null,
+      null,
+      null,
+      "Doc.No.",
+      "FRM/PR-EXT/01"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.No.",
+      "01"
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Rev.date",
+      "16.01.2026"
+    ],
+    [
+      "Process",
+      null,
+      null,
+      "Extrusion",
+      "Part Name :-YL1 Opening Trim",
+      null,
+      " Shift:-",
+      " Line-DD1",
+      "Line speed -18 mpm"
+    ],
+    [
+      "Special characteristics ",
+      null,
+      null,
+      null,
+      "Operator Name:-",
+      null,
+      null,
+      "Date:-"
+    ],
+    [
+      "No.",
+      "Process",
+      "Check Points",
+      "Specification with tolerance and unit",
+      "Checking Method",
+      "Responsibility",
+      "First Time ",
+      "Last Time"
+    ],
+    [
+      1,
+      "INSERT",
+      "Accumulator air pressure",
+      "0.2±0.02 Mpa",
+      "Visual",
+      "Operator"
+    ],
+    [
+      1,
+      null,
+      "Insert size",
+      "36±1 mm",
+      "Varnier",
+      "Operator"
+    ],
+    [
+      2,
+      null,
+      "Slitted insert weight",
+      "Weight should be  70-76 g/meter",
+      "Weighing scale",
+      "Operator"
+    ],
+    [
+      3,
+      null,
+      "Preformer unit should be YL1 O/T",
+      "YL1 O/T / DD-1",
+      "Visual",
+      "Operator"
+    ],
+    [
+      1,
+      "90 MM Extruder",
+      "Compound Grade",
+      "3860-000-712",
+      "Visual",
+      "Operator"
+    ],
+    [
+      2,
+      null,
+      "Head Temp.",
+      "65± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      3,
+      null,
+      "Cylinder-1 Temp.",
+      "60± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      4,
+      null,
+      "Cylinder-2 Temp.",
+      "60± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      5,
+      null,
+      "Cylinder-3 Temp.",
+      "60± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      6,
+      null,
+      "Screw Temp.",
+      "55± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      7,
+      null,
+      "Extruder RPM",
+      "16±5 rpm",
+      "Visual",
+      "Operator"
+    ],
+    [
+      8,
+      null,
+      "Back Pressure (Mpa) \"Ref. Value",
+      19.1,
+      "Visual",
+      "Operator"
+    ],
+    [
+      9,
+      null,
+      "Feed Roll RPM *Ref. Value",
+      43,
+      "Visual",
+      "Operator"
+    ],
+    [
+      1,
+      "70 MM Extruder",
+      "Compound Grade",
+      "3800-000-761",
+      "Visual",
+      "Operator"
+    ],
+    [
+      2,
+      null,
+      "Cylinder-1 Temp.",
+      "55± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      3,
+      null,
+      "Cylinder-2 Temp.",
+      "55± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      4,
+      null,
+      "Screw Temp.",
+      "50± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      5,
+      null,
+      "Extruder RPM",
+      "17±5 rpm",
+      "Visual",
+      "Operator"
+    ],
+    [
+      6,
+      null,
+      "Back Pressure (Mpa) \"Ref. Value",
+      36,
+      "Visual",
+      "Operator"
+    ],
+    [
+      7,
+      null,
+      "Feed Roll RPM *Ref. Value",
+      25,
+      "Visual",
+      "Operator"
+    ],
+    [
+      1,
+      "45 MM Extruder",
+      "Compound Grade",
+      "3870-000-770",
+      "Visual",
+      "Operator"
+    ],
+    [
+      2,
+      null,
+      "Cylinder-1 Temp.",
+      "55± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      3,
+      null,
+      "Screw Temp.",
+      "50± 5˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      4,
+      null,
+      "Extruder RPM",
+      "15±5 rpm",
+      "Visual",
+      "Operator"
+    ],
+    [
+      5,
+      null,
+      "Back Pressure (Mpa) \"Ref. Value",
+      28.4,
+      "Visual",
+      "Operator"
+    ],
+    [
+      6,
+      null,
+      "Feed Roll RPM *Ref. Value",
+      32,
+      "Visual",
+      "Operator"
+    ],
+    [
+      1,
+      "UHF Oven",
+      "UHF Temp",
+      "250±10˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      2,
+      null,
+      "UHF Power ",
+      "8±3 kw",
+      "Visual",
+      "Operator"
+    ],
+    [
+      1,
+      "HAV Oven",
+      "HAV-1",
+      "200±10˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      2,
+      null,
+      "HAV-2",
+      "220±10˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      3,
+      null,
+      "HAV-3",
+      "250±10˚C",
+      "Visual",
+      "Operator"
+    ],
+    [
+      1,
+      "Silicon   coating",
+      "Silicon type",
+      "AQ-06",
+      "Visual",
+      "Operator"
+    ],
+    [
+      2,
+      null,
+      "Air Pressure Of spray Gun-1\r\n(Mpa)",
+      "0.07± 0.05 Mpa",
+      "Visual",
+      "Operator"
+    ],
+    [
+      3,
+      null,
+      "Air Pressure Of spray Gun-2\r\n(Mpa)",
+      "0.07± 0.05 Mpa",
+      "Visual",
+      "Operator"
+    ]
+  ]
+}

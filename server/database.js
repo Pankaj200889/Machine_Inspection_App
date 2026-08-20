@@ -407,15 +407,15 @@ async function initPg() {
                 await query(`ALTER TABLE ${table} ADD COLUMN organization_id INTEGER REFERENCES organization_settings(id)`);
                 if (table === 'users') {
                     await query(`UPDATE users SET organization_id = 1 WHERE organization_id IS NULL AND role != 'super_admin'`);
-        try { await query(`UPDATE organization_settings SET subdomain = 'siddhi' WHERE id = 1`); } catch(e) {}
-                } else {
+                    try { await query(`UPDATE organization_settings SET subdomain = 'siddhi' WHERE id = 1`); } catch(e) {}
+                } else if (table !== 'checklist_templates') {
                     await query(`UPDATE ${table} SET organization_id = 1 WHERE organization_id IS NULL`);
                 }
             } catch(e) {
                 try {
                     if (table === 'users') {
                         await query(`UPDATE users SET organization_id = 1 WHERE organization_id IS NULL AND role != 'super_admin'`);
-                    } else {
+                    } else if (table !== 'checklist_templates') {
                         await query(`UPDATE ${table} SET organization_id = 1 WHERE organization_id IS NULL`);
                     }
                 } catch(err) {}

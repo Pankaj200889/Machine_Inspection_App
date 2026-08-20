@@ -174,7 +174,7 @@ router.get('/templates', verifyUser, async (req, res) => {
 router.get('/templates/:id', verifyUser, async (req, res) => {
     const templateId = req.params.id;
     try {
-        const tResult = await db.query("SELECT * FROM checklist_templates WHERE id = ? AND organization_id = ?", [templateId, req.user.organization_id]);
+        const tResult = await db.query("SELECT * FROM checklist_templates WHERE id = ? AND (organization_id = ? OR organization_id IS NULL)", [templateId, req.user.organization_id]);
         const template = tResult.rows[0];
         if (!template) return res.status(404).json({ error: 'Template not found' });
 
@@ -277,14 +277,15 @@ router.post('/', verifyUser, uploadCloudinary.fields([
 
             const subSql = `
                 INSERT INTO checklist_submissions (
-                    template_id, machine_id, user_id, shift, part_name, line_speed, image_url, image2_url, signature_url, comments, submitted_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                    template_id, machine_id, user_id, organization_id, shift, part_name, line_speed, image_url, image2_url, signature_url, comments, submitted_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
                 ${process.env.DATABASE_URL ? 'RETURNING id' : ''}
             `;
             const subResult = await db.query(subSql, [
                 template_id, 
                 machine_id, 
                 user_id, 
+                req.user.organization_id, 
                 shift, 
                 part_name ?? '', 
                 line_speed ?? '', 
@@ -344,13 +345,13 @@ router.post('/', verifyUser, uploadCloudinary.fields([
 
             const legSql = `
                 INSERT INTO checklists (
-                    machine_id, user_id, ok_quantity, ng_quantity, total_quantity, 
+                    machine_id, user_id, organization_id, ok_quantity, ng_quantity, total_quantity, 
                     avg_ng_percent, bekido_percent, image_path, device_info, location, shift, submission_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ${process.env.DATABASE_URL ? 'RETURNING id' : ''}
             `;
             const legResult = await db.query(legSql, [
-                machine_id, user_id, legacy_ok, legacy_ng, legacy_total, 
+                machine_id, user_id, req.user.organization_id, legacy_ok, legacy_ng, legacy_total, 
                 avg_ng_percent.toFixed(2), bekido_percent.toFixed(2), image_path, 
                 device_info || 'Mobile App', location || 'N/A', shift, submission_id
             ]);

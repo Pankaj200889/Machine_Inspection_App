@@ -233,13 +233,13 @@ router.post('/seed-templates', verifySuperAdmin, async (req, res) => {
         }
 
         for (let t of templates) {
-            const check = await db.query("SELECT * FROM checklist_templates WHERE template_name = ?", [t.name]);
-            if (check.rows.length === 0) {
-                const tr = await db.query("INSERT INTO checklist_templates (template_name, doc_no, frequency) VALUES (?, ?, ?) RETURNING id", [t.name, t.doc_no, t.freq]);
-                const tId = tr.rows ? tr.rows[0].id : tr.lastID;
-                
-                if (t.sections) {
-                    // new format with multiple sections
+            await db.query("DELETE FROM checklist_templates WHERE template_name = ?", [t.name]);
+            
+            const tr = await db.query("INSERT INTO checklist_templates (template_name, doc_no, frequency) VALUES (?, ?, ?) RETURNING id", [t.name, t.doc_no, t.freq]);
+            const tId = tr.rows ? tr.rows[0].id : tr.lastID;
+            
+            if (t.sections) {
+                // new format with multiple sections
                     for (let sec of t.sections) {
                         const sr = await db.query("INSERT INTO template_sections (template_id, section_name) VALUES (?, ?) RETURNING id", [tId, sec.name]);
                         const sId = sr.rows ? sr.rows[0].id : sr.lastID;
@@ -258,7 +258,6 @@ router.post('/seed-templates', verifySuperAdmin, async (req, res) => {
                         await db.query("INSERT INTO template_items (section_id, check_point, input_type) VALUES (?, ?, ?)", [sId, cp, type]);
                     }
                 }
-            }
         }
         res.json({ message: 'All templates seeded successfully' });
     } catch (err) {

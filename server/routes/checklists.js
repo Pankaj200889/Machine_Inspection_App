@@ -145,8 +145,8 @@ router.get('/stats/efficiency', verifyUser, async (req, res) => {
 // Get templates for a machine
 router.get('/templates', verifyUser, async (req, res) => {
     const { machine_id } = req.query;
-    let sql = `SELECT * FROM checklist_templates`;
-    let params = [];
+    let sql = `SELECT * FROM checklist_templates WHERE organization_id = ? OR organization_id IS NULL`;
+    let params = [req.user.organization_id];
     if (machine_id) {
         sql = `
             SELECT t.* 
@@ -161,7 +161,7 @@ router.get('/templates', verifyUser, async (req, res) => {
         
         // Fallback: If a new machine has no templates mapped, return all templates by default
         if (result.rows.length === 0 && machine_id) {
-            result = await db.query(`SELECT * FROM checklist_templates WHERE organization_id = ?`, [req.user.organization_id]);
+            result = await db.query(`SELECT * FROM checklist_templates WHERE organization_id = ? OR organization_id IS NULL`, [req.user.organization_id]);
         }
         
         res.json(result.rows);

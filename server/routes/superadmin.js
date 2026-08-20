@@ -112,5 +112,39 @@ router.delete('/organizations/:id', verifySuperAdmin, async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+// Seed All Checklists
+router.post('/seed-templates', verifySuperAdmin, async (req, res) => {
+    try {
+        const templates = [
+            { name: 'DWM Extrusion Engineer', doc_no: 'DOC-106', freq: 'Daily', section: 'Daily Management', items: ['Verification of all lines running as per plan', 'Cross Verify All Safety Pokayoke', 'Skill Upgradation'] },
+            { name: 'COMPOUND CONSUMPTION DETAIL', doc_no: 'DOC-111', freq: 'Batch', section: 'Raw Material', items: ['Batch No', 'Mixing Date', 'Expire Date', 'Batch Qty In Kg'] },
+            { name: 'INSERT MANAGEMENT', doc_no: 'DOC-113', freq: 'Shift', section: 'Insert Details', items: ['Insert weight before slitting', 'Insert size before slitting', 'Insert weight after slitting'] },
+            { name: 'Shift engineer check point', doc_no: 'DOC-122', freq: 'Shift', section: 'Handover', items: ['MUST READ AND WRITE THE LOG BOOK', 'CHECK 2S 1Y STATUS', 'CHECK NEXT PLAN OF EXTRUSION LINE'] },
+            { name: 'DAILY PRODUCTION LOG SHEET', doc_no: 'DOC-076', freq: 'Hourly', section: 'Production', items: ['Time Minutes', 'PRODUCT NAME', 'PART QTY PER BIN', 'KAN BAN CHECK STATUS'] },
+            { name: 'ONLINE INSPECTION DD1', doc_no: 'DOC-078', freq: 'Shift', section: 'QC', items: ['PART QTY ON TROLLEY', 'TROLLEY NO', 'KAN BAN STATUS'] },
+            { name: 'DPR ALL LINE', doc_no: 'DOC-079', freq: 'Daily', section: 'Defects', items: ['QC Hold', 'Air Bubble(Solid)', 'Contamination(Sponge)', 'Porosity'] },
+            { name: 'Shadowgraph check sheet', doc_no: 'DOC-080', freq: 'Batch', section: 'Precision', items: ['Quality Inspector Name', 'Extrusion check Status', 'QC check Status'] },
+            { name: 'AQ 06 chemical Check Sheet', doc_no: 'DOC-096', freq: 'Hourly', section: 'Chemical Prep', items: ['Tank Temp', 'Concentration', 'Water Level'] },
+            { name: 'Poke Yoke Verification', doc_no: 'DOC-099', freq: 'Shift', section: 'Sensors', items: ['Sensor Trigger Test', 'Accumulator Sensor', 'Cutter Sensor'] },
+            { name: '4M change Tracking sheet', doc_no: 'DOC-006', freq: 'Event', section: 'Tracking', items: ['Man Change', 'Machine Change', 'Material Change', 'Method Change'] }
+        ];
+
+        for (let t of templates) {
+            const check = await db.query("SELECT * FROM checklist_templates WHERE template_name = ?", [t.name]);
+            if (check.rows.length === 0) {
+                const tr = await db.query("INSERT INTO checklist_templates (template_name, doc_no, frequency) VALUES (?, ?, ?) RETURNING id", [t.name, t.doc_no, t.freq]);
+                const tId = tr.rows ? tr.rows[0].id : tr.lastID;
+                const sr = await db.query("INSERT INTO template_sections (template_id, section_name) VALUES (?, ?) RETURNING id", [tId, t.section]);
+                const sId = sr.rows ? sr.rows[0].id : sr.lastID;
+                for (let i of t.items) {
+                    await db.query("INSERT INTO template_items (section_id, check_point, input_type) VALUES (?, ?, 'text')", [sId, i]);
+                }
+            }
+        }
+        res.json({ message: 'All templates seeded successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 module.exports = router;

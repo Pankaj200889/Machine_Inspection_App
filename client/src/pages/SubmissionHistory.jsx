@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api, { STATIC_BASE_URL } from '../api';
-import { ArrowLeft, Camera, Upload, CheckCircle, AlertCircle, X, Aperture, RefreshCw } from 'lucide-react';
-
+import { ArrowLeft, Camera, Upload, CheckCircle, AlertCircle, X, Aperture, RefreshCw, Printer } from 'lucide-react';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 const SubmissionHistory = () => {
     const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,6 +22,90 @@ const SubmissionHistory = () => {
         fetchHistory();
         return () => stopCamera();
     }, []);
+
+    const generateSinglePDF = async (submission) => {
+        try {
+            const doc = new jsPDF();
+            
+            let details = null;
+            if (submission.submission_id) {
+                const res = await api.get(`/checklists/submissions/${submission.submission_id}`);
+                details = res.data;
+            }
+
+            doc.setFillColor(28, 63, 170);
+            doc.rect(0, 0, 210, 40, 'F');
+            doc.setFontSize(20);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.text((submission.template_name || "EQUIPGUARD COMPLIANCE REPORT").toUpperCase(), 14, 25);
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(200, 220, 255);
+            doc.text(`Doc No: ${details?.doc_no || 'EG/OPS/QA/00'} | Rev: ${details?.rev_no || '00'} | Date: ${details?.rev_date || '-'}`, 14, 32);
+
+            autoTable(doc, {
+                startY: 45,
+                head: [['Metadata Field', 'Value', 'Metadata Field', 'Value']],
+                body: [
+                    ['Checklist Name', submission.template_name || 'Standard Checklist', 'Audit Date/Time', new Date(submission.submitted_at).toLocaleString()],
+                    ['Machine No', submission.machine_no, 'Inspector Name', submission.username || 'Operator'],
+                    ['Machine Model', submission.model || 'N/A', 'Audit Date/Time', new Date(submission.submitted_at).toLocaleString()],
+                    ['Shift / Run', `Shift ${submission.shift}`, 'Line Speed', details?.line_speed || '-'],
+                    ['Part Name', details?.part_name || '-', 'Location (GPS)', submission.location || 'N/A']
+                ],
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 2.5 },
+                headStyles: { fillColor: [59, 130, 246] }
+            });
+
+            let yPos = doc.lastAutoTable.finalY + 10;
+
+            if (details && details.sections) {
+                details.sections.forEach(section => {
+                    if (yPos > 250) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    doc.setFontSize(11);
+                    doc.setTextColor(30, 41, 59);
+                    doc.setFont("helvetica", "bold");
+                    doc.text(section.section_name.toUpperCase(), 14, yPos);
+                    yPos += 4;
+
+                    const tableBody = section.items.map(item => [
+                        item.check_point,
+                        item.specification || '-',
+                        item.actual_value || '-',
+                        item.is_ok ? 'OK' : 'NG',
+                        item.remarks || '-'
+                    ]);
+
+                    autoTable(doc, {
+                        startY: yPos,
+                        head: [['Check Point', 'Spec', 'Actual', 'Result', 'Remarks']],
+                        body: tableBody,
+                        theme: 'grid',
+                        styles: { fontSize: 8 },
+                        headStyles: { fillColor: [71, 85, 105] },
+                        columnStyles: { 3: { fontStyle: 'bold' } },
+                        didParseCell: function(data) {
+                            if (data.section === 'body' && data.column.index === 3) {
+                                if (data.cell.raw === 'OK') data.cell.styles.textColor = [22, 163, 74];
+                                else if (data.cell.raw === 'NG') data.cell.styles.textColor = [220, 38, 38];
+                            }
+                        }
+                    });
+                    yPos = doc.lastAutoTable.finalY + 10;
+                });
+            }
+
+            doc.save(`${submission.template_name || 'Checklist'}_${submission.machine_no}.pdf`);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert('Failed to generate PDF report.');
+        }
+    };
 
     const fetchHistory = async () => {
         try {
@@ -171,6 +256,15 @@ const SubmissionHistory = () => {
                                                 "{item.remarks}"
                                             </div>
                                         )}
+                                        
+                                        <div className="mt-3">
+                                            <button 
+                                                onClick={() => generateSinglePDF(item)}
+                                                className="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded flex items-center gap-2 font-semibold transition"
+                                            >
+                                                <Printer className="w-3.5 h-3.5" /> Download / Print PDF
+                                            </button>
+                                        </div>
 
                                         {/* Camera Logic Inline */}
                                         {editingId === item.id && (
